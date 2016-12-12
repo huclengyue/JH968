@@ -1,0 +1,49 @@
+package com.sunteam.alarm.utils;
+
+import android.util.Log;
+
+public class Global {
+	public static final String TAG = "zbc";
+	
+	public static final int ALARM_INTERFACE = 1;	// 定时闹钟界面
+	public static final int ANNIVERSARY_INTERFACE = 2;	// 纪念日界面
+	public static final int COUNTDOWN_INTERFACE = 3;	// 倒计时界面
+	
+	public static final int ALARM_INFO_INTERFACE = 4;	// 定时闹钟详情界面
+	public static final int ANNIVERSARY_INFO_INTERFACE = 5;	// 纪念日详情界面
+	public static final int COUNTDOWN_INFO_INTERFACE = 6;	// 倒计时界面
+		
+	public static final int FLAG_CODE = 0x100;   // 界面跳转标志
+	public static final int FLAG_CODE_SET_LIST = 0x101;   // 界面跳转标志 列表模式
+	
+	public static final int ALARM_SET_TIME = 0;  // 时间
+	public static final int ALARM_SET_MUSIC = 1;  // 音乐
+	public static final int ALARM_SET_TYPE = 2;  // 类型
+	public static final int ALARM_SET_ONOFF = 3;  // 开关
+	
+	public static final int ANNIVERSARY_SET_TIME = 1;  // 时间
+	public static final int ANNIVERSARY_SET_MUSIC = 2;  // 音乐
+	public static final int ANNIVERSARY_SET_DATE = 0;  // 日期
+	public static final int ANNIVERSARY_SET_ONOFF = 3;  // 开关
+	
+	public static final int ALARM_TYPE_ALARM = 1;  // 闹钟
+	public static final int ALARM_TYPE_ANN = 2;  // j纪念日
+	public static final int ALARM_TYPE_REMIND = 3;  // 行程提醒
+	public static final int COUNTDOWN_MAX_TIME = 6*60;  // 行程提醒
+	
+	public static int COUNT_DOWN_ID0 = 0;
+	public static int COUNT_DOWN_ID1 = 1;
+	public static int COUNT_DOWN_ID2 = 2;
+	public static int COUNT_DOWN_ID3 = 3;
+	public static int COUNT_DOWN_ID4 = 4;
+	
+	public static int TIME_LEN0 = 30*60;
+	public static int TIME_LEN1 = 60*60;
+	public static int TIME_LEN2 = 90*60;
+	public static int TIME_LEN3 = 120*60;
+	
+	public static void debug(String s) {
+		Log.d(TAG, s);
+	}
+	
+}

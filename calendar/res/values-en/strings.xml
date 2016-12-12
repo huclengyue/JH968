@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">万年历</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="week0">日</string>
+    <string name="week1">一</string>
+    <string name="week2">二</string>
+    <string name="week3">三</string>
+    <string name="week4">四</string>
+    <string name="week5">五</string>
+    <string name="week6">六</string>
+    <string name="wk0">星期日</string>
+    <string name="wk1">星期一</string>
+    <string name="wk2">星期二</string>
+    <string name="wk3">星期三</string>
+    <string name="wk4">星期四</string>
+    <string name="wk5">星期五</string>
+    <string name="wk6">星期六</string>
+    <string name="solarcalendar">阳历</string>
+    <string name="lunarlendar">阴历</string>
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="title_menu">功能菜单</string>
+
+    <string-array name="menu_list">
+        <item>查看提醒</item>
+        <item>删除提醒</item>
+    </string-array>
+
+    <string name="title_remind">语音提醒</string>
+
+    <string-array name="remind_list">
+        <item>录音：</item>
+        <item>时间：</item>
+        <item>提醒：</item>
+    </string-array>
+
+    <string name="remind_on">开</string>
+    <string name="remind_off">关</string>
+    <string name="remind_noFile">无文件</string>
+    <string name="title_activity_record">RecordActivity</string>
+    <string name="title_record">录音</string>
+    <string name="start_record">开始录音</string>
+    <string name="title_time_set">时间</string>
+    <string name="hour">点</string>
+    <string name="minute">分钟</string>
+    <string name="time_after">设置时间再当前时间之后，请重新设置！</string>
+    <string name="no_remind">无提醒</string>
+    <string name="list_remind">查看提醒</string>
+    <string name="del_remind">删除提醒</string>
+    <string name="add_ok">数据已添加！</string>
+    <string name="del_ok">数据已删除！</string>
+    <string name="title_activity_onoff_set">OnoffSetActivity</string>
+    
+    <string name="canel_set">退出前是否保存数据？</string>
+    <string name="canel">否</string>
+    <string name="ok">是</string>
+    
+
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">定時鬧鐘</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string-array name="main_list">
+        <item>鬧鐘</item>
+        <item>紀念日</item>
+        <item>倒計時</item>
+    </string-array>
+    <string-array name="countdown_list">
+        <item>30分鐘</item>
+        <item>1小時</item>
+        <item>1小時30分鐘</item>
+        <item>2小時</item>
+        <item>自定義：5分鐘</item>
+    </string-array>
+
+    <string name="alarm">鬧鐘設置</string>
+    <string name="annive">紀念日</string>
+    <string name="countdown">倒計時</string>
+    <string name="time">時間：</string>
+    <string name="music">音樂：</string>
+    <string name="onoff">開關：</string>
+    <string name="on">開</string>
+    <string name="off">關</string>
+    <string name="date">日期：</string>
+    <string name="type">類型：</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="type1">僅鬧一次</string>
+    <string name="type2">工作日</string>
+    <string name="time_title">時間</string>
+    <string name="date_title">日期</string>
+    <string name="music_title">音樂</string>
+    <string name="onoff_title">開關</string>
+    <string name="type_title">類型</string>
+    <string name="set_ok">設置成功！</string>
+    <string name="canel_set">退出前是否保存數據？</string>
+    <string name="canel">否</string>
+    <string name="ok">是</string>
+    <string name="title_activity_alarm_setting">AlarmSettingActivity</string>
+    <string name="title_activity_alarm_countdown">Alarm_countdownActivity</string>
+    <string name="countdown_start">倒計時開始</string>
+    <string name="countdown_end">倒計時結束</string>
+    <string name="alarm_title">鬧鐘</string>
+    <string name="remid_title">行程提醒</string>
+
+</resources>

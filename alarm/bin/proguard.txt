@@ -1,0 +1,24 @@
+# view AndroidManifest.xml #generated:67
+-keep class com.sunteam.alarm.Alarm_CountDownSetActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:29
+-keep class com.sunteam.alarm.Alarm_MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:51
+-keep class com.sunteam.alarm.Alarm_SetInfoActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:40
+-keep class com.sunteam.alarm.Alarm_SettingActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:46
+-keep class com.sunteam.alarm.Alarm_countdownActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:72
+-keep class com.sunteam.menu.receiver.BootCompletedReceiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:57
+-keep class com.sunteam.receiver.Alarm_Receiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:62
+-keep class com.sunteam.receiver.Alarm_receiver_Activity { <init>(...); }
+

@@ -1,0 +1,18 @@
+# view AndroidManifest.xml #generated:27
+-keep class com.sunteam.music.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:57
+-keep class com.sunteam.music.MenuPalyMenuActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:43
+-keep class com.sunteam.music.MusicPlayActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:38
+-keep class com.sunteam.music.PlayActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:53
+-keep class com.sunteam.music.PlayMenuActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:48
+-keep class com.sunteam.music.SaveMenuActivity { <init>(...); }
+

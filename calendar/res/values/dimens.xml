@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">0dp</dimen>
+    <dimen name="activity_vertical_margin">0dp</dimen>
+
+    <!-- padding -->
+    <dimen name="calendar_left_padding">5px</dimen>
+    <dimen name="calendar_right_padding">5px</dimen>
+    <dimen name="calendar_top_padding">2px</dimen>
+    <dimen name="calendar_bottom_padding">2px</dimen>
+
+    <!-- text font -->
+    <dimen name="calendar_text_size">24px</dimen>
+    <dimen name="lunar_text_size">26px</dimen>
+    <dimen name="massage_text_size">48px</dimen>
+
+</resources>

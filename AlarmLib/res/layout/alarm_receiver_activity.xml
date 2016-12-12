@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textSize="@dimen/title_text_size"
+             />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_gravity="bottom"
+            android:background="@android:color/black" />
+    </FrameLayout>
+    
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
+        android:layout_weight="1" >
+
+         <TextView
+            android:id="@+id/test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+  			android:layout_weight="10"
+            android:gravity="center_vertical"
+
+             />
+         
+        <TextView
+            android:id="@+id/date_tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="08"
+            android:background="@android:color/transparent"           
+            android:textSize="@dimen/text_big_size_px"
+             />
+<!--  -->
+        <TextView
+            android:id="@+id/date_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="-"
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/text_big_size_px"
+             />
+
+        <TextView
+            android:id="@+id/date_tv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="02"
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/text_big_size_px" />
+        
+         <TextView
+            android:id="@+id/test1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10" 
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+              
+    
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
+        android:layout_weight="1" >
+
+         <TextView
+            android:id="@+id/test11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+  			android:layout_weight="10"
+            android:gravity="center_vertical"
+
+             />
+         
+        <TextView
+            android:id="@+id/time_tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="08"
+            android:background="@android:color/transparent"           
+            android:textSize="@dimen/text_big_size_px"
+             />
+<!--  -->
+        <TextView
+            android:id="@+id/time_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="-"
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/text_big_size_px"
+             />
+
+        <TextView
+            android:id="@+id/time_tv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="02"
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/text_big_size_px" />
+        
+         <TextView
+            android:id="@+id/test12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10" 
+            android:gravity="center"/>
+
+    </LinearLayout>
+    
+
+    
+		<LinearLayout
+        android:id="@+id/linearLayout11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
+        android:layout_weight="1" >
+
+         <TextView
+            android:id="@+id/test111"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+  			android:layout_weight="10"
+            android:gravity="center_vertical"
+            />
+<!--  -->
+        <TextView
+            android:id="@+id/filname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="test.mp3"
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/text_big_size"
+             />
+
+    
+        
+         <TextView
+            android:id="@+id/test112"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10" 
+            android:gravity="center"/>
+
+    </LinearLayout>
+          
+</LinearLayout>

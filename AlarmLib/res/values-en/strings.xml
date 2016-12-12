@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ 
+
+    <string name="annive_title">纪念日</string>
+    <string name="alarm_title">闹钟</string>
+    <string name="remid_title">行程提醒</string>
+
+</resources>

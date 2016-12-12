@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="app_name">主按摩管理</string>
+    <string name="word"> Nothing is impossible to a willing heart.</string>
+    <string name="main_title">按摩管理</string>
+    <string name="menu_title">功能菜單</string>
+    <string name="title_activity_user">用戶</string>
+    <string name="title_all_user">全部用戶</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="cur_date">當前日期：</string>
+    <string name="cur_forTime">今日排鍾：</string>
+    <string name="cur_overTime">今日點鐘：</string>
+    <string name="cur_money">今日金額：</string>
+    <string name="cur_date_title">當前日期</string>
+    <string name="cur_forTime_title">今日排鍾</string>
+    <string name="cur_overTime_title">今日點鐘</string>
+    <string name="cur_money_title">今日金額</string>
+    <string name="forTime">排鍾</string>
+    <string name="overTime">點鐘</string>
+    <string name="workTime">上鍾</string>
+    <string name="money">金額</string>
+    <string name="hour">小時</string>
+    <string name="year">年</string>
+    <string name="day">日</string>
+    <string name="yuan">元</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="input_date">請輸入日期</string>
+    <string name="input_date_check">超出有效範圍，將自動糾正</string>
+    <string name="noinstalled">沒有安裝</string>
+    <string name="title_setting">SettingActivity</string>
+    <string name="clear_data">確認清空該用戶按摩數據？</string>
+    <string name="clear_all_data">確認清空所有用戶按摩數據？</string>
+    <string name="data_to_me">該用戶按摩數據將被覆蓋，確認導入</string>
+    <string name="data_to_me_ok">數據已導入</string>
+    <string name="data_all_to_me">所有用戶按摩數據將被覆蓋，確認導入</string>
+    <string name="data_to_TF">確認導出該用戶按摩數據到存儲卡</string>
+    <string name="data_all_to_TF">確認導出所有用戶按摩數據到存儲卡</string>
+    <string name="data_to_TF_OK">數據已導出</string>
+    <string name="tf_notexit">存儲卡不存在，請插入！</string>
+    <string name="data_to_me_tfnotexit">存儲卡不存在，數據導入失敗</string>
+    <string name="data_to_tf_tfnotexit">存儲卡不存在，數據導出失敗</string>
+    <string name="ok">確認</string>
+    <string name="cancel">取消</string>
+    <string name="clear_data_Ok">數據已清空</string>
+    
+    
+     <string-array name="main_list">
+    	<item>用戶1</item>
+    	<item>用戶2</item>
+    	<item>用戶3</item>
+    	<item>用戶4</item>
+    	<item>用戶5</item>
+    	<item>用戶6</item>
+    	<item>用戶7</item>
+    	<item>用戶8</item>
+    	<item>用戶9</item>
+    	<item>用戶10</item>
+    	<item>全部用戶</item>
+    </string-array>
+       
+    <string-array name="menu_list">
+    	<item>清空數據</item>
+    	<item>導入存儲卡數據</item>
+    	<item>導出數據到存儲卡</item>
+    </string-array>
+    
+    <string-array name="month">
+        <item>0月</item>
+    	<item>1月</item>
+    	<item>2月</item>
+    	<item>3月</item>
+    	<item>4月</item>
+    	<item>5月</item>
+    	<item>6月</item>
+    	<item>7月</item>
+    	<item>8月</item>
+    	<item>9月</item>
+    	<item>10月</item>
+    	<item>11月</item>
+    	<item>12月</item>
+    	
+    </string-array>
+  
+    
+    
+</resources>
+

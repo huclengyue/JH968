@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">定时闹钟</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string-array name="main_list">
+        <item>闹钟</item>
+        <item>纪念日</item>
+        <item>倒计时</item>
+    </string-array>
+    <string-array name="countdown_list">
+        <item>30分钟</item>
+        <item>1小时</item>
+        <item>1小时30分钟</item>
+        <item>2小时</item>
+        <item>自定义</item>
+    </string-array>
+
+    <string name="alarm">闹钟设置</string>
+    <string name="annive">纪念日</string>
+    <string name="countdown">倒计时</string>
+    <string name="time">时间：</string>
+    <string name="music">音乐：</string>
+    <string name="onoff">开关：</string>
+    <string name="on">开启</string>
+    <string name="off">关闭</string>
+    <string name="date">日期：</string>
+    <string name="type">类型：</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="type1">仅闹一次</string>
+    <string name="type2">工作日</string>
+    <string name="type3">每天</string>
+    <string name="time_title">时间</string>
+    <string name="date_title">日期</string>
+    <string name="music_title">音乐</string>
+    <string name="onoff_title">开关</string>
+    <string name="type_title">类型</string>
+    <string name="set_ok">设定成功！</string>
+    <string name="canel_set">退出前保存</string>
+    <string name="canel">否</string>
+    <string name="ok">是</string>
+    <string name="title_activity_alarm_setting">AlarmSettingActivity</string>
+    <string name="title_activity_alarm_countdown">Alarm_countdownActivity</string>
+    <string name="countdown_start">倒计时开始</string>
+    <string name="countdown_Pause">倒计时暂停</string>
+    <string name="countdown_resum">倒计时恢复</string>
+    
+    <string name="countdown_end">倒计时结束</string>
+    <string name="countdown_starting">倒计时正在进行，是否停止</string>
+    <string name="alarm_title">闹钟</string>
+    <string name="remid_title">行程提醒</string>
+    <string name="title_activity_alarm__count_down_set">Alarm_CountDownSetActivity</string>
+    <string name="min_time">分钟</string>
+    <string name="hour_time">小时</string>
+    <string name="hour_time1">点</string>
+    <string name="time_self">自定义</string>
+    <string name="no_file">无文件</string>
+
+</resources>

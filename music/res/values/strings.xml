@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">音频播放</string>
+    <string name="title_main">音频播放</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_menu">功能菜单</string>
+    <string name="dir_list">目录浏览</string>
+
+    <string-array name="main_list">
+        <item>目录浏览</item>
+        <item>我的收藏</item>
+        <item>最近使用文件</item>
+    </string-array>
+
+    <string name="my_save">我的收藏</string>
+    <string name="my_play">最近使用文件</string>
+    <string name="file_add_ok">成功添加到我的收藏</string>
+    <string name="file_exists">添加我的收藏失败，文件已存在</string>
+    <string name="Menu_Title">功能菜单</string>
+    <string name="file_del">删除成功</string>
+    <string name="file_del_all">清空成功</string>
+    <string name="file_del_error">文件删除失败</string>
+
+    <string-array name="main1_list">
+        <item>内存</item>
+        <item>存储卡</item>
+        <item>优盘</item>
+    </string-array>
+    <string-array name="menu_list">
+        <item>删除文件</item>
+        <item>清空列表</item>
+    </string-array>
+    <string-array name="play_menu_list">
+        <item>删除文件</item>
+        <item>清空列表</item>
+        <item>添加到我的收藏</item>
+    </string-array>
+
+    <string name="rootdisk">内存</string>
+    <string name="tf_disk">存储卡</string>
+    <string name="usb_disk">优盘</string>
+    
+    <string name="del_ask">确认删除</string>
+    <string name="del_all_ask">确认清空</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="title_activity_music_play">MusicPlayActivity</string>
+    <string name="timer_format_hms" translatable="false"><xliff:g id="format">%02d:%02d:%02d</xliff:g></string>
+    <string name="timer_format_ms" translatable="false"><xliff:g id="format">%02d:%02d</xliff:g></string>
+    <string name="error_lack_space">录音保存失败</string>
+    <string name="error_no_sdcard">存储卡不存在，请插入</string>
+    <string name="error_no_udisk">优盘不存在，请插入</string>
+    <string name="error_state_record">正在录音中，请先停止录音</string>
+    <string name="error_unknown">无法识别的错误</string>
+    <string name="error_file">文件损坏，无法播放</string>
+    <string name="error_app_internal">内部应用程序错误</string>
+    <string name="file_end">文件到结尾</string>
+    <string name="file_start">文件到开头</string>
+    <string name="no_file">无文件</string>
+    <string name="bat_lv0">电池电压低，无法播放</string>
+    
+    <string name="mode_A">A点选定</string>
+    <string name="mode_AB">AB复读</string>
+    <string name="mode_off">AB复读关闭</string>
+    
+    <string name="set_ok">设定成功</string>
+   
+    
+    
+    <!-- 播放界面 menu -->
+    <string-array name="play_menu_play">
+        <item>全部循环</item>
+        <item>单曲循环</item>
+        <item>随机播放</item>
+        <item>添加到我的收藏</item>
+    </string-array>
+
+    <string name="title_activity_menu_paly_menu">MenuPalyMenuActivity</string>
+
+</resources>

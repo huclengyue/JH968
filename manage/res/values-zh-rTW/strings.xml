@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">文件管理</string>
+    <string name="phone">內存</string>
+    <string name="sdcard">存儲卡</string>
+    <string name="udisk">優盤</string>
+    <string name="limits">對不起，您的訪問權限不足!</string>
+    <string name="Menu_Title">功能菜單</string>
+
+    <string-array name="menu_list">
+        <item>複製</item>
+        <item>剪切</item>
+        <item>刪除</item>
+        <item>粘貼</item>
+    </string-array>
+
+    <string name="menu_copy">複製</string>
+    <string name="menu_cut">剪切</string>
+    <string name="menu_del">刪除</string>
+    <string name="menu_palse">粘貼</string>
+    <string name="ok">確認</string>
+    <string name="cancel">取消</string>
+    <string name="copy_ok">文件以複製</string>
+    <string name="copying">正在複製</string>
+    <string name="copy_finsh">複製完成</string>
+    <string name="pasteing">正在粘貼</string>
+    <string name="paste_finsh">粘貼完成</string>
+    <string name="del_ask">請確認是否刪除？</string>
+    <string name="del_finsh">文件已刪除</string>
+    <string name="cut_finsh">文件已剪切</string>
+    <string name="paste_check">請檢查粘貼路徑是否正確？</string>
+    <string name="paste_Not_support">不支持複製和剪切目錄！</string>
+    <string name="first_id">已經到開頭！</string>
+    <string name="end_id">已經到結尾！</string>
+    <string name="tf_notexit">存儲卡不存在，請插入！</string>
+    <string name="usb_notexit">優盤不存在，請插入！</string>
+    <string name="title_activity_manage_menu">ManageMenuActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>

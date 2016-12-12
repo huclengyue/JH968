@@ -1,0 +1,1152 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="30" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="left|center_vertical"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="@string/app_name"
+                android:textSize="@dimen/lunar_text_size" />
+
+            <TextView
+                android:id="@+id/year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingBottom="@dimen/calendar_bottom_padding"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:paddingTop="@dimen/calendar_top_padding"
+                android:text="2016"
+                android:textSize="@dimen/lunar_text_size" />
+
+            <TextView
+                android:id="@+id/year_str"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:text="年"
+                android:textSize="@dimen/lunar_text_size" />
+
+            <TextView
+                android:id="@+id/month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingBottom="@dimen/calendar_bottom_padding"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:paddingTop="@dimen/calendar_top_padding"
+                android:text="8"
+                android:textSize="@dimen/lunar_text_size" />
+
+            <TextView
+                android:id="@+id/month_str"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:text="月"
+                android:textSize="@dimen/lunar_text_size" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="@android:color/white" />
+    </FrameLayout>
+
+    <!-- 显示一月日历，共7行 -->
+    <!-- 第一行：星期 -->
+
+    <LinearLayout
+        android:id="@+id/week"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="26"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h0"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="@string/week0"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="@string/week1"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="@string/week2"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="@string/week3"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="@string/week4"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="@string/week5"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="@string/week6"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 日期第一行 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="24"
+        android:baselineAligned="false" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h8"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="1"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h9"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="2"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h10"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="3"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h11"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="4"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h12"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="5"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h13"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="6"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 日期第二行 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="26"
+        android:baselineAligned="false" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h14"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="7"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h15"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="8"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h16"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="9"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h17"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="10"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h18"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="11"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h19"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="12"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h20"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="13"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 日期第三行 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="26" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h21"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="14"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h22"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="15"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h23"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="16"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h24"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="17"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h25"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="18"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h26"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="19"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h27"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="20"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 日期第四行 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="26"
+        android:baselineAligned="false" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h28"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="21"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h29"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="22"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h30"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="23"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h31"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="24"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h32"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="25"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h33"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="26"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h34"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="27"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 日期第五行 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="26"
+        android:baselineAligned="false" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h35"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="28"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h36"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="29"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h37"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="30"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h38"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text="31"
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h39"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h40"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h41"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 日期第六行 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="24"
+        android:baselineAligned="false" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h42"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h43"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h44"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h45"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h46"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h47"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/h48"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingLeft="@dimen/calendar_left_padding"
+                android:paddingRight="@dimen/calendar_right_padding"
+                android:text=""
+                android:textSize="@dimen/calendar_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 显示农历 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="28" >
+
+        <TextView
+            android:id="@+id/lunarinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:gravity="left|center_vertical"
+            android:includeFontPadding="false"
+            android:paddingLeft="@dimen/calendar_left_padding"
+            android:paddingRight="@dimen/calendar_right_padding"
+            android:text="农历"
+            android:textSize="@dimen/lunar_text_size" />
+    </LinearLayout>
+
+</LinearLayout>

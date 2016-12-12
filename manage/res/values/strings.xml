@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">文件管理</string>
+    <string name="phone">内存</string>
+    <string name="sdcard">存储卡</string>
+    <string name="udisk">优盘</string>
+    <string name="limits">路径不存在，请核查路径!</string>
+    <string name="Menu_Title">功能菜单</string>
+
+    <string-array name="menu_list">
+        <item>复制</item>
+        <item>剪切</item>
+        <item>删除</item>
+        <item>粘贴</item>
+    </string-array>
+
+    <string name="menu_copy">复制</string>
+    <string name="menu_cut">剪切</string>
+    <string name="menu_del">删除</string>
+    <string name="menu_palse">粘贴</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+    <string name="copy_ok">文件以复制</string>
+    <string name="copying">正在复制</string>
+    <string name="copy_finsh">复制完成</string>
+    <string name="pasteing">正在粘贴</string>
+    <string name="paste_finsh">粘贴完成</string>
+    <string name="del_ask">请确认是否删除</string>
+    <string name="del_finsh">文件已删除</string>
+    <string name="cut_finsh">文件已剪切</string>
+    <string name="paste_check">请检查粘贴路径是否正确</string>
+    <string name="paste_Not_support">不支持复制和剪切目录</string>
+    <string name="first_id">已经到开头</string>
+    <string name="end_id">已经到结尾</string>
+    <string name="tf_notexit">存储卡不存在，请插入</string>
+    <string name="usb_notexit">优盘不存在，请插入</string>
+    <string name="title_activity_manage_menu">ManageMenuActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="no_file">无文件</string>
+    <string name="past_error">操作无效,没有可粘贴的文件</string>
+    <string name="cut_error">操作无效,请检查剪切路径</string>
+    <string name="file_error">文件不存在</string>
+    
+    <string name="past_exit">文件正在复制是否退出</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+   
+
+</resources>

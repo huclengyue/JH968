@@ -1,0 +1,23 @@
+# view res/xml/fm_radio_preferences.xml #generated:144
+-keep class com.sunteam.bt.app.fm.FmSnrThresholdBar { <init>(...); }
+
+# view res/xml/fm_radio_preferences.xml #generated:57
+# view res/xml/fm_radio_preferences.xml #generated:65
+-keep class com.sunteam.bt.app.fm.rx.CyclingPreference { <init>(...); }
+
+# view AndroidManifest.xml #generated:94
+-keep class com.sunteam.fmradio.activity.FmRadio { <init>(...); }
+
+# view AndroidManifest.xml #generated:106
+-keep class com.sunteam.fmradio.activity.FmRadioSettings { <init>(...); }
+
+# view res/layout/fmradio_main.xml #generated:92
+# view res/layout/fmradio_rx.xml #generated:92
+# view res/layout/radio_rx.xml #generated:92
+-keep class com.sunteam.fmradio.rx.FmRadioFrequencySlider { <init>(...); }
+
+# view res/layout/fmradio_main.xml #generated:46
+# view res/layout/fmradio_rx.xml #generated:46
+# view res/layout/radio_rx.xml #generated:46
+-keep class com.sunteam.fmradio.rx.FmReceiveView { <init>(...); }
+

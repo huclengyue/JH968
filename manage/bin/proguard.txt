@@ -1,0 +1,6 @@
+# view AndroidManifest.xml #generated:26
+-keep class com.sunteam.manage.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:39
+-keep class com.sunteam.manage.ManageMenuActivity { <init>(...); }
+

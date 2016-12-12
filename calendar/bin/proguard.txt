@@ -1,0 +1,27 @@
+# view AndroidManifest.xml #generated:27
+-keep class com.sunteam.calendar.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:72
+-keep class com.sunteam.calendar.OnoffSetActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:61
+-keep class com.sunteam.calendar.RecordActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:49
+-keep class com.sunteam.calendar.RemindActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:67
+-keep class com.sunteam.calendar.TimeSetActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:38
+-keep class com.sunteam.calendar.calendarMenuActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:93
+-keep class com.sunteam.receiver.Alarm_Receiver { <init>(...); }
+
+# view AndroidManifest.xml #generated:86
+-keep class com.sunteam.receiver.Alarm_receiver_Activity { <init>(...); }
+
+# view AndroidManifest.xml #generated:78
+-keep class com.sunteam.recorder.activity.RecordActivity { <init>(...); }
+
