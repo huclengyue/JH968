@@ -48,7 +48,7 @@
     package="com.sunteam.fmradio"
     android:minSdkVersion="5"
     android:versionCode="1"
-    android:versionName="1.0.0.161212" >
+    android:versionName="1.0.0.161207" >
     
 	<uses-sdk
         android:minSdkVersion="19"
