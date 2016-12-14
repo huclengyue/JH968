@@ -142,7 +142,6 @@ public final class R {
         public static int common_menu_view_line=0x7f090024;
         public static int common_menu_view_menu_list=0x7f090025;
         public static int common_menu_view_title=0x7f090023;
-        public static int common_toast_layout_tv=0x7f090026;
         public static int date_tv1=0x7f090004;
         public static int date_tv2=0x7f090005;
         public static int date_tv3=0x7f090006;
@@ -171,16 +170,17 @@ public final class R {
         public static int common_menu_activity=0x7f030005;
         public static int common_menu_item=0x7f030006;
         public static int common_menu_view=0x7f030007;
-        public static int common_toast_layout=0x7f030008;
     }
     public static final class string {
-        public static int alarm_title=0x7f070006;
-        public static int annive_title=0x7f070005;
-        public static int common_delete=0x7f070002;
-        public static int common_dialog_confirm_cancel=0x7f070004;
-        public static int common_dialog_confirm_ok=0x7f070003;
-        public static int common_functionmenu=0x7f070001;
-        public static int remid_title=0x7f070007;
+        public static int alarm_title=0x7f070008;
+        public static int annive_title=0x7f070007;
+        public static int common_delete=0x7f070004;
+        public static int common_dialog_confirm_cancel=0x7f070006;
+        public static int common_dialog_confirm_ok=0x7f070005;
+        public static int common_functionmenu=0x7f070003;
+        public static int remid_title=0x7f070009;
+        public static int settings_wifi_cancel=0x7f070002;
+        public static int settings_wifi_connect=0x7f070001;
         public static int speech_app_id=0x7f070000;
     }
     public static final class style {
