@@ -142,7 +142,6 @@ public final class R {
         public static int common_menu_view_line=0x7f090012;
         public static int common_menu_view_menu_list=0x7f090013;
         public static int common_menu_view_title=0x7f090011;
-        public static int common_toast_layout_tv=0x7f090014;
     }
     public static final class layout {
         public static int common_dialog_confirm=0x7f030000;
@@ -152,13 +151,14 @@ public final class R {
         public static int common_menu_activity=0x7f030004;
         public static int common_menu_item=0x7f030005;
         public static int common_menu_view=0x7f030006;
-        public static int common_toast_layout=0x7f030007;
     }
     public static final class string {
-        public static int common_delete=0x7f070002;
-        public static int common_dialog_confirm_cancel=0x7f070004;
-        public static int common_dialog_confirm_ok=0x7f070003;
-        public static int common_functionmenu=0x7f070001;
+        public static int common_delete=0x7f070004;
+        public static int common_dialog_confirm_cancel=0x7f070006;
+        public static int common_dialog_confirm_ok=0x7f070005;
+        public static int common_functionmenu=0x7f070003;
+        public static int settings_wifi_cancel=0x7f070002;
+        public static int settings_wifi_connect=0x7f070001;
         public static int speech_app_id=0x7f070000;
     }
     public static final class style {
