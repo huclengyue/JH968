@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lh.androidrecorder.MainActivity" >
+
+    <com.sunteam.recorder.textview.CustomTextView
+        android:id="@+id/tv_playback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/textsize"
+        android:text="@string/playback" />
+    <com.sunteam.recorder.view.Partingline
+        android:id="@+id/partingline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_below="@+id/tv_playback"/>
+    <com.sunteam.recorder.listview.CustomListview
+        android:id="@+id/main_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/partingline"
+        android:listSelector="@android:color/transparent"
+        android:fastScrollEnabled="false"/>
+
+</RelativeLayout>

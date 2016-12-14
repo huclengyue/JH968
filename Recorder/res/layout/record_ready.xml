@@ -1,0 +1,97 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sunteam.recorder.activity.RecordActivity" >
+
+    <com.sunteam.recorder.textview.CustomTextView
+        android:id="@+id/tv_recorde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/record"
+        android:textSize="@dimen/textsize" />
+
+    <com.sunteam.recorder.view.Partingline
+        android:id="@+id/partingline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_recorde"
+        android:background="@color/black" />
+
+    <RelativeLayout
+        android:id="@+id/ll_ready_center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_timeLeft"
+        android:layout_below="@+id/partingline" >
+
+        <com.sunteam.recorder.textview.CustomTextView
+            android:id="@+id/tv_parameter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/parameter"
+            android:textSize="@dimen/textsize" />
+        <com.sunteam.recorder.textview.CustomTextView
+            android:id="@+id/tv_filename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_parameter"
+            android:layout_centerHorizontal="true"
+            android:singleLine="true"
+    		android:ellipsize="marquee"
+    		android:focusable="true" 
+			android:focusableInTouchMode="true"
+            android:text="@string/recording"
+            android:visibility="gone"
+            android:textSize="@dimen/textsize" />
+	<RelativeLayout android:id="@+id/rl_recording"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:visibility="visible">
+            <com.sunteam.recorder.textview.CustomTextView
+            android:id="@+id/tv_recordtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recording"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:textSize="@dimen/textsize" />
+		</RelativeLayout> 
+        <com.sunteam.recorder.textview.CustomTextView
+            android:id="@+id/tv_ready"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/ready"
+            android:textSize="@dimen/textsize" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_timeLeft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <com.sunteam.recorder.textview.CustomTextView
+            android:id="@+id/tv_timeLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/timeLeft"
+            android:textSize="@dimen/textsize" />
+
+        <com.sunteam.recorder.textview.CustomTextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/time"
+            android:textSize="@dimen/textsize" />
+    </RelativeLayout>
+
+</RelativeLayout>

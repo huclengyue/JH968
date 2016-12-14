@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppBaseTheme" parent="android:Theme.Black"></style>
+
+    <style name="BlackWhiteTheme" parent="AppBaseTheme">
+        <item name="text_cl">#ffffff</item>
+        <item name="button_bg">#000000</item>
+        <item name="activity_bg">#ffffff</item>
+    </style>
+
+    <style name="WhiteBlackTheme" parent="AppBaseTheme">
+        <item name="text_cl">#000000</item>
+        <item name="button_bg">#ffffff</item>
+        <item name="activity_bg">#000000</item>
+    </style>
+
+    <style name="GreenBlackTheme" parent="AppBaseTheme">
+        <item name="text_cl">#000000</item>
+        <item name="button_bg">#ffffff</item>
+        <item name="activity_bg">#000000</item>
+    </style>
+
+    <style name="BlackGreenTheme" parent="AppBaseTheme">
+        <item name="text_cl">#000000</item>
+        <item name="button_bg">#ffffff</item>
+        <item name="activity_bg">#000000</item>
+    </style>
+
+    <style name="BlueWhiteTheme" parent="AppBaseTheme" >
+        <item name="text_cl">#000000</item>
+        <item name="button_bg">#0000ff</item>
+        <item name="activity_bg">#0000ff</item>
+        <item name="android:background">#0000ff</item>
+        <item name="android:windowBackground">@color/blue</item>
+        <item name="android:colorBackground">@color/blue</item>
+    </style>
+
+    <style name="WhiteBlueTheme" parent="AppBaseTheme">
+        <item name="text_cl">#0000ff</item>
+        <item name="button_bg">#000000</item>
+        <item name="activity_bg">#000000</item>
+        <item name="android:background">#000000</item>
+    </style>
+
+    <style name="YellowBlueTheme" parent="AppBaseTheme">
+        <item name="text_cl">#ffffff</item>
+        <item name="button_bg">#000000</item>
+        <item name="activity_bg">#ffffff</item>
+    </style>
+
+    <style name="BlueYellowTheme" parent="AppBaseTheme">
+        <item name="text_cl">#000000</item>
+        <item name="button_bg">#ffffff</item>
+        <item name="activity_bg">#000000</item>
+    </style>
+
+</resources>

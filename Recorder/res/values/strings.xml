@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">录音机</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="recorder">录音机</string>
+    <string name="playback">录音回放</string>
+    <string name="record">录音</string>
+    <string name="parameter">16kHz  512Kbps</string>
+    <string name="timeLeft">剩余时间</string>
+    <string name="time">HH:MM:SS</string>
+    <string name="ready">准备就绪</string>
+    <string name="recording">录音中…</string>
+    <string name="startRecord">开始录音</string>
+    <string name="zero">零</string>
+    <string name="one">一</string>
+    <string name="two">二</string>
+    <string name="three">三</string>
+    <string name="four">四</string>
+    <string name="five">五</string>
+    <string name="six">六</string>
+    <string name="seven">七</string>
+    <string name="eight">八</string>
+    <string name="nine">九</string>
+	<string name="ten">十</string>
+	<string name="hundred">百</string>
+	<string name="hour">小时</string>
+	<string name="minute">分钟</string>
+	<string name="second">秒</string>
+	<string name="error_lack_space">录音保存失败</string>
+	<string name="error_no_sdcard">存储卡不存在，请插入</string>
+    <string name="error_state_record">正在录音中，请先停止录音</string>
+    <string name="error_unknown">无法识别的错误</string>	
+    <string name="error_file">文件损坏，无法播放</string>
+    <string name="error_app_internal">内部应用程序错误</string>
+	<string name="storage">录音</string>
+	<string name="button_ok">OK</string>
+	<string name="yes">是</string>
+	<string name="no">否</string>
+	<string name="save_success">保存成功</string>
+	<string name="saveAndexit">录音结束，保存成功</string>
+	<string name="whether_save">录音结束，保存并退出</string>
+	<string name="turn2start">已经到结尾，跳到开头</string>
+	<string name="turn2end">已经到开头，跳到结尾</string>
+	<string name="no_file">无文件</string>	
+	<string name="invalid_file">无效录音文件，不保存</string>	
+	<string name="low_battery">电池电量低，请及时充电</string>
+	<string name="cannot_play">电池电量低，无法播放音频</string>
+	<string name="stop_record">电池电量低，停止录音</string>
+	<string name="cannot_record">电池电量低，无法录音</string>
+	<string name="not_enough_space_stop_record">剩余空间不足，停止录音</string>
+	<string name="not_enough_space_cannot_record">剩余空间不足，无法录音</string>
+	<string name="rewind2start">已经到开头</string>
+	<string name="speed2end">已经到结尾</string>
+   <string name="timer_format_hms" translatable="false"><xliff:g id="format">%02d:%02d:%02d</xliff:g></string>
+   <string name="timer_format_ms" translatable="false"><xliff:g id="format">%02d:%02d</xliff:g></string>
+</resources>

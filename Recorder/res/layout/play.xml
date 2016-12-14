@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lh.androidrecorder.MainActivity" >
+
+    <com.sunteam.recorder.textview.CustomTextView
+        android:id="@+id/tv_recorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/playback"
+        android:textSize="@dimen/textsize" />
+
+    <com.sunteam.recorder.view.Partingline
+        android:id="@+id/partingline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_recorder"
+        android:background="@color/black" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/play_seek_bar_layout"
+        android:layout_below="@+id/partingline"
+        android:orientation="vertical" >
+
+        <ImageButton
+            android:id="@+id/ib_paly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/play" />
+
+        <com.sunteam.recorder.textview.CustomTextView
+            android:id="@+id/filename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            android:text="filename"
+            android:textSize="@dimen/textsize" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/play_seek_bar_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <com.sunteam.recorder.textview.CustomTextView
+                android:id="@+id/starttime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textSize="@dimen/textsize" />
+
+            <com.sunteam.recorder.textview.CustomTextView
+                android:id="@+id/totaltime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="@dimen/textsize" />
+        </RelativeLayout>
+
+        <SeekBar
+            android:id="@+id/play_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:orientation="horizontal" />
+    </LinearLayout>
+
+</RelativeLayout>
