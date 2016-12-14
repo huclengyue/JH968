@@ -5,6 +5,17 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.menu.menulistadapter.ShowView;
+import com.sunteam.common.utils.ArrayUtils;
+import com.sunteam.common.utils.PromptDialog;
+import com.sunteam.common.utils.SharedPrefUtils;
+import com.sunteam.common.utils.Tools;
+import com.sunteam.common.utils.dialog.PromptListener;
+import com.sunteam.music.dao.GetDbInfo;
+import com.sunteam.music.dao.MusicInfo;
+import com.sunteam.music.utils.Global;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -21,17 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.sunteam.common.menu.MenuActivity;
-import com.sunteam.common.menu.menulistadapter.ShowView;
-import com.sunteam.common.utils.ArrayUtils;
-import com.sunteam.common.utils.PromptDialog;
-import com.sunteam.common.utils.SharedPrefUtils;
-import com.sunteam.common.utils.Tools;
-import com.sunteam.common.utils.dialog.PromptListener;
-import com.sunteam.music.dao.GetDbInfo;
-import com.sunteam.music.dao.MusicInfo;
-import com.sunteam.music.utils.Global;
 
 public class MainActivity extends MenuActivity implements ShowView {
 	// 全局保存文件名

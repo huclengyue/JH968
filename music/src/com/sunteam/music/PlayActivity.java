@@ -236,9 +236,9 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			//String path = gPlayListPaths.get(currentIndex)+"/"+ gPlayListName.get(currentIndex);
 			String path = gPlayListPaths.get(currentIndex);
 			Global.debug("\r\n path ==" + path + " Global.FristString =="+Global.FristString );
-			if((Global.FristString != null) && (Global.FristString.equals(path))){
+			//if((Global.FristString != null) && (Global.FristString.equals(path))){
 				myPlayer.SeekToTime(Global.GetPalyFristSeekTime(this, path));
-			}
+		//	}
 			Global.debug("onCreate =====4444===");
 			
 			updateUI();
