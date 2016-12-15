@@ -24,6 +24,8 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -36,7 +38,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 	
 	private MyPlayer myPlayer = null;
 	private static final int SEEK_BAR_MAX = 10000;
-	
+	private WakeLock mWakeLock; // 禁止休眠
 	private TextView tvPlayedTime;
 	private TextView tvTotalTime;
 	private TextView tvFileName;
@@ -294,7 +296,8 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
         super.onResume();  
         receiver=new BatteryBroadcastReciver();  
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);  
-        registerReceiver(receiver, intentFilter);  
+        registerReceiver(receiver, intentFilter);
+        acquireWakeLock(this);
     }  
       
     @Override  
@@ -302,6 +305,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
  
         super.onPause();  
         unregisterReceiver(receiver);  
+        releaseWakeLock();
     }
 	
 	
@@ -496,9 +500,11 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 				}
 				updateUI();
 			}
+			acquireWakeLock(this);
 		}else if(myPlayer.state() == MyPlayer.PLAYING_STATE){
 			myPlayer.pausePlayback();
 			play_st.setBackgroundResource(R.drawable.pause);
+			releaseWakeLock();
 		}
 	}
 
@@ -983,6 +989,23 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			playMode.setBackgroundResource(R.drawable.loop_rand);
 		}
 		setPalyst(true);
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	private void acquireWakeLock(Context context) {
+		if (null == mWakeLock) {
+			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, context.getClass().getName());
+			mWakeLock.acquire();
+		}
+	}
+
+	private void releaseWakeLock() {
+		if (null != mWakeLock && mWakeLock.isHeld()) {
+			mWakeLock.release();
+			mWakeLock = null;
+		}
 	}
 	
 }

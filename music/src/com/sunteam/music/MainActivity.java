@@ -37,7 +37,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 	// 全局保存文件名
 	
 	boolean d = false;
-	private WakeLock mWakeLock; // 禁止休眠
+	
 	// 图片 信息
 	private Bitmap imFile;
 	private Bitmap imFoler;
@@ -138,15 +138,12 @@ public class MainActivity extends MenuActivity implements ShowView {
 	@Override
 	protected void onResume() {
 		// TODO 自动生成的方法存根
-		super.onResume();
-		
-		acquireWakeLock(this);
+		super.onResume();	
 	}
 	@Override
 	protected void onPause() {
 		// TODO 自动生成的方法存根
 		super.onPause();
-		releaseWakeLock();
 	}
 	// 键抬起
 	@Override
@@ -1254,19 +1251,5 @@ public class MainActivity extends MenuActivity implements ShowView {
 	}
 	
 	
-	@SuppressWarnings("deprecation")
-	private void acquireWakeLock(Context context) {
-		if (null == mWakeLock) {
-			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, context.getClass().getName());
-			mWakeLock.acquire();
-		}
-	}
 
-	private void releaseWakeLock() {
-		if (null != mWakeLock && mWakeLock.isHeld()) {
-			mWakeLock.release();
-			mWakeLock = null;
-		}
-	}
 }
