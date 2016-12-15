@@ -309,7 +309,7 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		Global.debug("pasteFile === gCopyPath_desk =" + Global.gCopyPath_desk);
 //		Global.debug("pasteFile === gCopyFlag =" + gCopyFlag);
 //		Global.debug("pasteFile === gCutFlag =" + gCutFlag);
-			
+		
 		String tempFile = Global.gCopyPath_desk + java.io.File.separator + Global.gCopyName;
 		
 		File tFile = new File(Global.gCopyPath_src);
@@ -527,11 +527,13 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		Global.debug("1111111111111111111111111111");
 		try {
 			gPastFlag = true;
+			Global.acquireWakeLock(this);  // 禁止休眠
 			pasteFile();
 			if(gPastFlag == true){
 				gPastFlag = false;
 				onComplete();
 			}
+			Global.releaseWakeLock();
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
