@@ -756,7 +756,10 @@ public class Alarm_MainActivity extends MenuActivity {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Global.debug("[BootCompletedReceiver] " + intent.getAction());
+			Global.debug("\r\n ===== [BootCompletedReceiver] " + intent.getAction());
+			Global.debug("\r\n ===== [BootCompletedReceiver]");
+			Global.debug("\r\n ===== [BootCompletedReceiver] ");
+			Global.debug("\r\n ===== [BootCompletedReceiver] ");
 			if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
 				//Intent startIntent = new Intent(context, MainActivity.class);
 				//startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
