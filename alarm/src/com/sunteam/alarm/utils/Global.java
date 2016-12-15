@@ -1,5 +1,8 @@
 package com.sunteam.alarm.utils;
 
+import android.content.Context;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 public class Global {
@@ -44,6 +47,24 @@ public class Global {
 	
 	public static void debug(String s) {
 		Log.d(TAG, s);
+	}
+	
+	public static WakeLock mWakeLock; // 禁止休眠
+	
+	@SuppressWarnings("deprecation")
+	public static void acquireWakeLock(Context context) {
+		if (null == mWakeLock) {
+			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, context.getClass().getName());
+			mWakeLock.acquire();
+		}
+	}
+
+	public static void releaseWakeLock() {
+		if (null != mWakeLock && mWakeLock.isHeld()) {
+			mWakeLock.release();
+			mWakeLock = null;
+		}
 	}
 	
 }
