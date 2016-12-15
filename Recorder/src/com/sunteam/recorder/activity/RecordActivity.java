@@ -228,12 +228,16 @@ public class RecordActivity extends BaseActivity {
 		IntentFilter intentFilter = new IntentFilter(
 				Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(batteryReceiver, intentFilter);
+		
+		Global.acquireWakeLock(this);   // ½ûÖ¹ÐÝÃß
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(batteryReceiver);
+		
+		Global.releaseWakeLock();  // ´ò¿ªÐÝÃß
 	}
 
 	@Override

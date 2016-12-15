@@ -9,6 +9,8 @@ import com.sunteam.recorder.dialog.CustomPromptDialog;
 import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 public class Global {
@@ -21,8 +23,27 @@ public class Global {
 	public static int LONG_PRESS_DOWN = 0;
 	public static int LONG_PRESS_UP = 1;
 	public static String storagePath;
+	
+	public static WakeLock mWakeLock; // ½ûÖ¹ÐÝÃß
+	
+	@SuppressWarnings("deprecation")
+	public static void acquireWakeLock(Context context) {
+		if (null == mWakeLock) {
+			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, context.getClass().getName());
+			mWakeLock.acquire();
+		}
+	}
 
+	public static void releaseWakeLock() {
+		if (null != mWakeLock && mWakeLock.isHeld()) {
+			mWakeLock.release();
+			mWakeLock = null;
+		}
+	}
+	
 	public static final String TAG = "zbc";
+	
 	
 	public static void debug(String s) {
 		Log.d(TAG, s);

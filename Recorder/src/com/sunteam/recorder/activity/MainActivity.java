@@ -24,7 +24,7 @@ import com.sunteam.recorder.R;
 @SuppressLint({ "DefaultLocale", "HandlerLeak" })
 public class MainActivity extends MenuActivity {
 	
-	private WakeLock mWakeLock; // 禁止休眠
+	
 	
 	private BatteryBroadcastReciver reciver;
 
@@ -66,7 +66,7 @@ public class MainActivity extends MenuActivity {
 		// 创建一个过滤器
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(reciver, intentFilter);
-		acquireWakeLock(this);
+		
 		super.onResume();
 	}
 
@@ -74,7 +74,7 @@ public class MainActivity extends MenuActivity {
 	protected void onPause() {
 		unregisterReceiver(reciver);
 		super.onPause();
-		releaseWakeLock();
+		
 	}
 
 	private boolean isExistPlayList() {
@@ -146,19 +146,5 @@ public class MainActivity extends MenuActivity {
 		startActivity(intent);
 	}
 	
-	@SuppressWarnings("deprecation")
-	private void acquireWakeLock(Context context) {
-		if (null == mWakeLock) {
-			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, context.getClass().getName());
-			mWakeLock.acquire();
-		}
-	}
-
-	private void releaseWakeLock() {
-		if (null != mWakeLock && mWakeLock.isHeld()) {
-			mWakeLock.release();
-			mWakeLock = null;
-		}
-	}
+	
 }

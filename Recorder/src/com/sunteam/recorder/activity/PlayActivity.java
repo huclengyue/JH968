@@ -181,13 +181,17 @@ Runnable finishActivityDelayed = new Runnable() {
         //创建一个过滤器  
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);  
         registerReceiver(receiver, intentFilter);  
+        
+        Global.acquireWakeLock(this);   // 禁止休眠
     }  
       
     @Override  
     protected void onPause() {  
         // TODO Auto-generated method stub  
         super.onPause();  
-        unregisterReceiver(receiver);  
+        unregisterReceiver(receiver); 
+        
+        Global.releaseWakeLock();  // 打开休眠
     }
 	
 	
