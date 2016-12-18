@@ -80,6 +80,11 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		//int flag = getAlarmType();
 		Alarminfo alarminfo = new Alarminfo();  // 
 		alarminfo = getAlarmData();
+		if(alarminfo == null){
+			Alarmpublic.UpateAlarm(this);
+			finish();
+			return ;
+		}
 		
 		myPlayer = MyPlayer.getInstance(this,mHandler);
 		myPlayer.setOnStateChangedListener(this);
@@ -228,7 +233,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				if((gHour == tempinfo.hour) && (gmin == tempinfo.minute)){
+				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute <= 1) || (tempinfo.minute - gmin <= 1))){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					return Alarmpublic.ALARM_TYPE_ALARM;
 				}
@@ -242,7 +247,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			tempinfo = mAlarmAll.get(i);
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				if((gHour == tempinfo.hour) && (gmin == tempinfo.minute) &&
+				if((gHour == tempinfo.hour) && (/*gmin == tempinfo.minute*/ (gmin - tempinfo.minute <= 1) || (tempinfo.minute - gmin <= 1)) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					return Alarmpublic.ALARM_TYPE_ANN;
@@ -256,7 +261,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			tempinfo = mAlarmAll.get(i);
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				if((gHour == tempinfo.hour) && (gmin == tempinfo.minute) &&
+				if((gHour == tempinfo.hour) && (/*gmin == tempinfo.minute*/ (gmin - tempinfo.minute <= 1) || (tempinfo.minute - gmin <= 1)) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)&&(gyear == tempinfo.year)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					return Alarmpublic.ALARM_TYPE_REMIND;
@@ -290,7 +295,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		for(int i= 0; i < mAlarmAll.size(); i++)
 		{
 			tempinfo = mAlarmAll.get(i);
-			//Global.debug("\r\nGetNearAlarm === tempinfo_later.hour = "+ tempinfo_later.hour + " tempinfo_later.minute = "+ tempinfo_later.minute);
+			Alarmpublic.debug("\r\nGetNearAlarm === tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
 			
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
@@ -307,7 +312,9 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		{
 			tempinfo = mAlarmAll.get(i);
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
-			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
+			//	Global.debug("\r\nGetNearAlarm === i = "+ i);
+				Alarmpublic.debug("\r\nGetNearAlarm === tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
+				Alarmpublic.debug("\r\nGetNearAlarm === tempinfo.day = "+ tempinfo.day + " tempinfo.month = "+ tempinfo.month);
 				if((gHour == tempinfo.hour) && (gmin == tempinfo.minute) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
@@ -321,7 +328,9 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		{
 			tempinfo = mAlarmAll.get(i);
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
-			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
+			//	Global.debug("\r\nGetNearAlarm === i = "+ i);
+				Alarmpublic.debug("\r\nGetNearAlarm =1== tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
+				Alarmpublic.debug("\r\nGetNearAlarm =2== tempinfo.day = "+ tempinfo.day + " tempinfo.month = "+ tempinfo.month);
 				if((gHour == tempinfo.hour) && (gmin == tempinfo.minute) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)&&(gyear == tempinfo.year)){
 					dbAlarmInfo.closeDb();  // 关闭数据库

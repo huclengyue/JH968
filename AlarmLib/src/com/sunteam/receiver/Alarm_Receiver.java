@@ -3,7 +3,6 @@ package com.sunteam.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 /**
  * 
@@ -21,8 +20,7 @@ public class Alarm_Receiver extends BroadcastReceiver {
 		Alarmpublic.debug("[###]Alarm_Receiver  ==2222222222222222222= \r\n");
 		Intent mIntent = new Intent(context , Alarm_receiver_Activity.class);
 		mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(mIntent);
-		
+		context.startActivity(mIntent);		
     }
 
 }

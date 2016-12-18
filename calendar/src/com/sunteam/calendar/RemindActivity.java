@@ -257,7 +257,7 @@ public class RemindActivity extends MenuActivity{
 		//String packageName = "com.sunteam.calendar";
 		String packageName = "com.sunteam.recorder";
 		String className = "com.sunteam.recorder.activity.RecordActivity";
-		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tixing";
+		String path = Global.TIXING_PATH; //Environment.getExternalStorageDirectory().getAbsolutePath() + "/tixing";
 		gPath = path;
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");

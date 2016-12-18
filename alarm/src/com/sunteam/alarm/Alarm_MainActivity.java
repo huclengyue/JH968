@@ -745,29 +745,5 @@ public class Alarm_MainActivity extends MenuActivity {
 	
 		Alarmpublic.UpateAlarm(Alarm_MainActivity.this);
 	}
-	
-	
-	/**
-	 * @author Jerry
-	 * 
-	 * @Note 接收到通知"android.intent.action.BOOT_COMPLETED"后启动主菜单
-	 */
-	public class BootCompletedReceiver extends BroadcastReceiver {
 
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Global.debug("\r\n ===== [BootCompletedReceiver] " + intent.getAction());
-			Global.debug("\r\n ===== [BootCompletedReceiver]");
-			Global.debug("\r\n ===== [BootCompletedReceiver] ");
-			Global.debug("\r\n ===== [BootCompletedReceiver] ");
-			if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-				//Intent startIntent = new Intent(context, MainActivity.class);
-				//startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//				context.startActivity(startIntent);
-				Alarmpublic.UpateAlarm(context);
-			}
-		}
-
-		
-	}
 }

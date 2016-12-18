@@ -1,6 +1,7 @@
 package com.sunteam.calendar.constant;
 
 
+import android.os.Environment;
 import android.util.Log;
 
 public class Global {
@@ -30,7 +31,8 @@ public class Global {
 	public static final int ALARM_ON = 0;  // 开
 	public static final int DEF_ONOFF = ALARM_ON;  // 默 关
 	
-	public static  String ALARM_FILE_NAME = null;//getResources().getsting(R.string.remind_noFile);
+	public static String ALARM_FILE_NAME = null;//getResources().getsting(R.string.remind_noFile);
+	public static String TIXING_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/提醒";
 	
 	public static void debug(String s) {
 		Log.d(TAG, s);

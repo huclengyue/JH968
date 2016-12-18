@@ -347,7 +347,7 @@ public class SettingActivity extends BaseActivity {
 		case KeyEvent.KEYCODE_8:
 		case KeyEvent.KEYCODE_9:
 			TtsUtils.getInstance().stop();
-//			setNumberKey(keyCode);   -- 暂时去除数字输入
+			setNumberKey(keyCode);//   -- 暂时去除数字输入
 			
 			break;
 		
