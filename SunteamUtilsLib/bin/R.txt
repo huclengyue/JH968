@@ -110,6 +110,7 @@ int id common_menu_item 0x7f090010
 int id common_menu_view_line 0x7f090012
 int id common_menu_view_menu_list 0x7f090013
 int id common_menu_view_title 0x7f090011
+int id common_toast_layout_tv 0x7f090014
 int layout common_dialog_confirm 0x7f030000
 int layout common_dialog_confirm_editor 0x7f030001
 int layout common_dialog_prompt 0x7f030002
@@ -117,6 +118,7 @@ int layout common_dialog_threeoptions 0x7f030003
 int layout common_menu_activity 0x7f030004
 int layout common_menu_item 0x7f030005
 int layout common_menu_view 0x7f030006
+int layout common_toast_layout 0x7f030007
 int string common_delete 0x7f070004
 int string common_dialog_confirm_cancel 0x7f070006
 int string common_dialog_confirm_ok 0x7f070005
