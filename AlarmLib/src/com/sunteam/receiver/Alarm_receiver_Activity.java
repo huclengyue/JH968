@@ -5,28 +5,32 @@ import java.util.Calendar;
 
 import com.sunteam.alarmlib.R;
 import com.sunteam.common.menu.BaseActivity;
-import com.sunteam.common.tts.TtsUtils;
+//import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
 import com.sunteam.player.MyPlayer;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
 public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.OnStateChangedListener{
 
 	private MyPlayer myPlayer = null;
-	
+	private WakeLock mWakeLock; // 禁止休眠
 	private TextView mTvTitle = null; // 标题栏
 	private View mLine = null; // 分割线
 	
@@ -80,9 +84,15 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		//int flag = getAlarmType();
 		Alarminfo alarminfo = new Alarminfo();  // 
 		alarminfo = getAlarmData();
+		Alarmpublic.debug("\r\n[] alarminfo   ===== " + alarminfo);
 		if(alarminfo == null){
+			
+			Alarmpublic.debug("  没有找到闹钟=================\r\n");
+			
 			Alarmpublic.UpateAlarm(this);
+			Alarmpublic.debug("  没有找到闹钟========呜呜呜=========\r\n");
 			finish();
+			
 			return ;
 		}
 		
@@ -93,6 +103,8 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		
 		
 		int alarm_flag = getAlarmType();
+		
+		Alarmpublic.debug("\r\n alarm_flag ==== "+ alarm_flag);
 		if(Alarmpublic.ALARM_TYPE_ALARM == alarm_flag){
 			mTv_Date1.setText("");
 			mTv_Date2.setText("");
@@ -111,7 +123,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 				mTv_Time3.setText("" + alarminfo.minute);
 			}
 			mTvTitle.setText(getResources().getString(R.string.alarm_title));
-			TtsUtils.getInstance().speak(getResources().getString(R.string.alarm_title));
+			//TtsUtils.getInstance().speak(getResources().getString(R.string.alarm_title));
 		}
 		else{
 			if(alarminfo.month < 10){
@@ -142,18 +154,33 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			}
 			if(Alarmpublic.ALARM_TYPE_ANN == alarm_flag){
 				mTvTitle.setText(getResources().getString(R.string.annive_title));
-				TtsUtils.getInstance().speak(getResources().getString(R.string.annive_title));
+				//TtsUtils.getInstance().speak(getResources().getString(R.string.annive_title));
 			}
 			else{
 				mTvTitle.setText(getResources().getString(R.string.remid_title));
-				TtsUtils.getInstance().speak(getResources().getString(R.string.remid_title));
+				//TtsUtils.getInstance().speak(getResources().getString(R.string.remid_title));
 			}
 		}
 		mFilename.setText(alarminfo.filename);
-		
+		Alarmpublic.debug("\r\n alarm_flag ====999999" );
 		Alarmpublic.UpateAlarm(this);
 //		total = myPlayer.fileDuration();
 
+	}
+	
+	@Override
+	protected void onResume() {
+		// TODO 自动生成的方法存根
+		super.onResume();
+		
+		acquireWakeLock(this);
+	}
+	
+	@Override
+	public void onPanelClosed(int featureId, Menu menu) {
+		// TODO 自动生成的方法存根
+		super.onPanelClosed(featureId, menu);
+		releaseWakeLock();
 	}
 	
 	@SuppressLint("HandlerLeak")
@@ -233,7 +260,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute <= 1) || (tempinfo.minute - gmin <= 1))){
+				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					return Alarmpublic.ALARM_TYPE_ALARM;
 				}
@@ -247,7 +274,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			tempinfo = mAlarmAll.get(i);
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				if((gHour == tempinfo.hour) && (/*gmin == tempinfo.minute*/ (gmin - tempinfo.minute <= 1) || (tempinfo.minute - gmin <= 1)) &&
+				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1)) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					return Alarmpublic.ALARM_TYPE_ANN;
@@ -261,7 +288,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			tempinfo = mAlarmAll.get(i);
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				if((gHour == tempinfo.hour) && (/*gmin == tempinfo.minute*/ (gmin - tempinfo.minute <= 1) || (tempinfo.minute - gmin <= 1)) &&
+				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1)) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)&&(gyear == tempinfo.year)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					return Alarmpublic.ALARM_TYPE_REMIND;
@@ -299,8 +326,9 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				if((gHour == tempinfo.hour) && (gmin == tempinfo.minute)){
+				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
 					dbAlarmInfo.closeDb();  // 关闭数据库
+					Alarmpublic.debug("找到数据   === 闹钟======\r\n");
 					return tempinfo;
 				}
 			}
@@ -315,7 +343,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);
 				Alarmpublic.debug("\r\nGetNearAlarm === tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
 				Alarmpublic.debug("\r\nGetNearAlarm === tempinfo.day = "+ tempinfo.day + " tempinfo.month = "+ tempinfo.month);
-				if((gHour == tempinfo.hour) && (gmin == tempinfo.minute) &&
+				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1)) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					return tempinfo;
@@ -331,7 +359,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);
 				Alarmpublic.debug("\r\nGetNearAlarm =1== tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
 				Alarmpublic.debug("\r\nGetNearAlarm =2== tempinfo.day = "+ tempinfo.day + " tempinfo.month = "+ tempinfo.month);
-				if((gHour == tempinfo.hour) && (gmin == tempinfo.minute) &&
+				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1)) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)&&(gyear == tempinfo.year)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					return tempinfo;
@@ -372,5 +400,22 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		finish();
 		return true;
 	//	return super.onKeyUp(keyCode, event);	
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	private void acquireWakeLock(Context context) {
+		if (null == mWakeLock) {
+			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, context.getClass().getName());
+			mWakeLock.acquire();
+		}
+	}
+
+	private void releaseWakeLock() {
+		if (null != mWakeLock && mWakeLock.isHeld()) {
+			mWakeLock.release();
+			mWakeLock = null;
+		}
 	}
 }

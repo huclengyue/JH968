@@ -77,7 +77,7 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 			mPlayer.prepare();
 			mPlayer.seekTo((int) (percentage * mPlayer.getDuration()));
 			//Global.getTts().stop();
-			TtsUtils.getInstance().stop();
+			//TtsUtils.getInstance().stop();
 			mPlayer.start();
 		} catch (IllegalArgumentException e) {
 			setError(INTERNAL_ERROR);
