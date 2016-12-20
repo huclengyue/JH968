@@ -33,7 +33,7 @@ public class calendarMenuActivity extends MenuActivity{
 	private int gSelectId = 0;	// 
 	
 	private int REMIND_ID = 0;  // 查看提醒
-	private int DEL_REMIND_ID = 1;  // 查看提醒
+	private int DEL_REMIND_ID = 1;  // 删除提醒
 	
 	private int gInterfaceflag = 0;  // 界面标志
 	private int INTERFACE_MENU = 0;  // 菜单界面
@@ -157,7 +157,7 @@ public class calendarMenuActivity extends MenuActivity{
 							setListData(mMenuList);
 							setTitle(mTitle);;
 							gInterfaceflag = INTERFACE_MENU;	
-							onResume();
+							//onResume();
 						}
 					});
 				}
@@ -211,13 +211,24 @@ public class calendarMenuActivity extends MenuActivity{
 					delDbdata(gSelectId);
 					mMenuList = getDbdata();
 					setListData(mMenuList);
-					onResume();
+					int selectid = 0;
+					Global.debug("\r\n mMenuList.size() =============="+mMenuList.size());
+					Global.debug("\r\n gSelectId =============="+gSelectId);
+					if(gSelectId > (mMenuList.size() - 1)){
+						selectid = mMenuList.size() - 1;
+					}
+					else{
+						selectid = gSelectId;
+					}
+					Global.debug("\r\n selectid =============="+selectid);
+					mMenuView.setSelectItem(selectid);
+					//onResume();
 				}
 				
 				@Override
 				public void doCancel() {
 					// TODO 自动生成的方法存根
-					onResume();
+					//onResume();
 				}
 			});
 			
@@ -317,7 +328,7 @@ public class calendarMenuActivity extends MenuActivity{
 			}
 		}
 		else{
-			TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
+			//TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
 			PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_remind));
 			mPromptDialog.show();
 		}	
