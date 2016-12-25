@@ -39,7 +39,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="no_file">无文件</string>
     <string name="past_error">操作无效,没有可粘贴的文件</string>
-    <string name="cut_error">操作无效,请检查剪切路径</string>
+    <string name="cut_error">操作无效,请检查粘贴路径</string>
     <string name="file_error">文件不存在</string>
     
     <string name="past_exit">文件正在复制是否退出</string>

@@ -45,6 +45,7 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		if(KeyEvent.KEYCODE_ENTER == keyCode ||   // 按键 Enter
 				KeyEvent.KEYCODE_DPAD_CENTER == keyCode)
 		{	
+			Global.debug("\r\n[keydown] gPastFlag  ===111====gPastFlag =="+gPastFlag);
 			if(true == gPastFlag){
 				return true;
 			}
@@ -87,9 +88,13 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		if(KeyEvent.KEYCODE_ENTER == keyCode ||   // 按键 Enter
 				KeyEvent.KEYCODE_DPAD_CENTER == keyCode)
 		{	
+			
+			Global.debug("\r\n[keyup] gPastFlag  ===111==== " + gPastFlag);
 			if(true == gPastFlag){
 				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.pasteing));
 				mPromptDialog.show();
+				
+				return true;
 			}
 			gSelectID = getSelectItem();
 			
@@ -209,6 +214,9 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 					public void doConfirm() {  // 确认退出
 						// TODO 自动生成的方法存根
 						gPastFlag = false;
+						
+						//Global.gPastName();
+						DeleteFile(Global.gPastName);
 						Intent intent = new Intent();
 						Bundle bundle = new Bundle();	//新建 bundl
 						bundle.putInt("selectItem", getSelectItem());
@@ -312,7 +320,7 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		
 		String tempFile = Global.gCopyPath_desk + java.io.File.separator + Global.gCopyName;
 		
-		File tFile = new File(Global.gCopyPath_src);
+		File tFile = new File(Global.gCopyPath_src);  // 原始文件
 		//File tFile = new File(tempFile);
 		Global.debug("\r\n[$$$$$$]tempFile ======"+ tempFile);
 		if (tFile.isDirectory()) {  // 是文件夹  文件夹复制
@@ -337,88 +345,90 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 			
 			return;
 		}
-
-		if (!Global.gCopyPath_src.equals(tempFile) && ((Global.gCopyFlag == true) || (Global.gCutFlag == true))) {
-			
-			if (tFile.exists()) //  文件存在
-			{
-				int num = 1;
-				File tFile1 = null;
-				String tempFile1 = null;
-				tempFile1 = Global.gCopyPath_desk + java.io.File.separator +getFileNameNoEx(Global.gCopyName)+ "-" + num + "." +getExtensionName(Global.gCopyName);
-				Global.debug("[*******] tempFile1 ===== " + tempFile1);
-				tFile1 = new File(tempFile1);
-				while (tFile1.exists()) {
-					num++;
+		else{
+			File tFile_temp = new File(tempFile);  // 原始文件
+			if (!Global.gCopyPath_src.equals(tempFile) && ((Global.gCopyFlag == true) || (Global.gCutFlag == true))) {
+				
+				if (tFile_temp.exists()) // 不同目录下 文件存在
+				{
+					int num = 1;
+					File tFile1 = null;
+					String tempFile1 = null;
 					tempFile1 = Global.gCopyPath_desk + java.io.File.separator +getFileNameNoEx(Global.gCopyName)+ "-" + num + "." +getExtensionName(Global.gCopyName);
+					Global.debug("[*******] tempFile1 ===== " + tempFile1);
 					tFile1 = new File(tempFile1);
-				}
-				Global.debug("[*******] tempFile1 ====1111  = " + tempFile1);
-				Global.gPastName = tempFile1;
-				copyFile(Global.gCopyPath_src, tempFile1);
-			}
-			else{
-				if( tempFile.contains(Global.gCopyPath_src)){  // 相同文件
-					Global.debug("\r\n pasteFile =55= Global.gCopyPath_src =="+ Global.gCopyPath_src);
-					Global.debug("\r\n pasteFile =66= tempFile =="+ tempFile);
-					SpeakContentend(getResources().getString(R.string.paste_check));
-					return ;
+					while (tFile1.exists()) {
+						num++;
+						tempFile1 = Global.gCopyPath_desk + java.io.File.separator +getFileNameNoEx(Global.gCopyName)+ "-" + num + "." +getExtensionName(Global.gCopyName);
+						tFile1 = new File(tempFile1);
+					}
+					Global.debug("[*******] tempFile1 ====1111  = " + tempFile1);
+					Global.gPastName = tempFile1;
+					copyFile(Global.gCopyPath_src, tempFile1);
 				}
 				else{
-					Global.gPastName = tempFile;
-					copyFile(Global.gCopyPath_src, tempFile);
+					if( tempFile.contains(Global.gCopyPath_src)){  // 相同文件
+						Global.debug("\r\n pasteFile =55= Global.gCopyPath_src =="+ Global.gCopyPath_src);
+						Global.debug("\r\n pasteFile =66= tempFile =="+ tempFile);
+						SpeakContentend(getResources().getString(R.string.paste_check));
+						return ;
+					}
+					else{
+						Global.gPastName = tempFile;
+						copyFile(Global.gCopyPath_src, tempFile);
+					}
 				}
-			}
-			
-			
-			Global.debug("pasteFile ==[]1111= gCutFlag =" + Global.gCutFlag);
-
-			if (Global.gCopyFlag == true) {
-				if(true == gPastFlag){
-					SpeakContentend(getResources().getString(R.string.paste_finsh));
-				}
-			} 
-			else if (Global.gCutFlag == true) {
-
-				//SpeakContentend(getResources().getString(R.string.paste_finsh));
-				final File tFile1 = new File(Global.gCopyPath_src);
-
-				if (tFile1.isFile()) {
-					// 删除文件
-					tFile1.delete();
-				} else {
-					// 删除文件夹
-					deleteFolder(tFile1);
-				}
-				Global.gCutFlag = false;
-				if(true == gPastFlag){
-					SpeakContentend(getResources().getString(R.string.paste_finsh));
-				}
-			}				
-		//showList(gCopyPath_desk, gFileName.get(gPathNum - 2).toString());
-		} 
-		else {
-			Global.debug("pasteFile ==[]2222= gCutFlag =" + Global.gCutFlag);
-			if (tFile.exists()) // 同一目录下复制
-			{
-				int num = 1;
-				File tFile1 = null;
-				String tempFile1 = null;
-				tempFile1 = Global.gCopyPath_desk + java.io.File.separator +getFileNameNoEx(Global.gCopyName)+ "-" + num + "." +getExtensionName(Global.gCopyName);
 				
-				tFile1 = new File(tempFile1);
-				while (tFile1.exists()) {
-					num++;
+				
+				Global.debug("pasteFile ==[]1111= gCutFlag =" + Global.gCutFlag);
+	
+				if (Global.gCopyFlag == true) {
+					if(true == gPastFlag){
+						SpeakContentend(getResources().getString(R.string.paste_finsh));
+					}
+				} 
+				else if (Global.gCutFlag == true) {
+	
+					//SpeakContentend(getResources().getString(R.string.paste_finsh));
+					final File tFile1 = new File(Global.gCopyPath_src);
+	
+					if (tFile1.isFile()) {
+						// 删除文件
+						tFile1.delete();
+					} else {
+						// 删除文件夹
+						deleteFolder(tFile1);
+					}
+					Global.gCutFlag = false;
+					if(true == gPastFlag){
+						SpeakContentend(getResources().getString(R.string.paste_finsh));
+					}
+				}				
+			//showList(gCopyPath_desk, gFileName.get(gPathNum - 2).toString());
+			} 
+			else {
+				Global.debug("pasteFile ==[]2222= gCutFlag =" + Global.gCutFlag);
+				if (tFile_temp.exists()) // 同一目录下复制
+				{
+					int num = 1;
+					File tFile1 = null;
+					String tempFile1 = null;
 					tempFile1 = Global.gCopyPath_desk + java.io.File.separator +getFileNameNoEx(Global.gCopyName)+ "-" + num + "." +getExtensionName(Global.gCopyName);
+					
 					tFile1 = new File(tempFile1);
-				}
-				Global.gPastName = tempFile1;
-				copyFile(Global.gCopyPath_src, tempFile1);
-				if(true == gPastFlag){
-					SpeakContentend(getResources().getString(R.string.paste_finsh));
+					while (tFile1.exists()) {
+						num++;
+						tempFile1 = Global.gCopyPath_desk + java.io.File.separator +getFileNameNoEx(Global.gCopyName)+ "-" + num + "." +getExtensionName(Global.gCopyName);
+						tFile1 = new File(tempFile1);
+					}
+					Global.gPastName = tempFile1;
+					copyFile(Global.gCopyPath_src, tempFile1);
+					if(true == gPastFlag){
+						SpeakContentend(getResources().getString(R.string.paste_finsh));
+					}
 				}
 			}
-		}			
+		}
 	}
 
 /* 
