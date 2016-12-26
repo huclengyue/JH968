@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.iflytek.thridparty.m;
 import com.sunteam.calendar.constant.Global;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.utils.ArrayUtils;
@@ -52,7 +53,7 @@ public class RemindActivity extends MenuActivity{
 		Intent intent=getIntent();	// 获取Intent
 		Bundle bundle=intent.getExtras();	// 获取Bundle
 		
-		gCall_Flag = bundle.getInt("CALLID");  // 获取用户ID
+		gCall_Flag = bundle.getInt("CALLID");  // 获取界面进入标志
 		
 		
 		// 传入参数
@@ -71,9 +72,13 @@ public class RemindActivity extends MenuActivity{
 			gPath = bundle.getString("PATH");
 	
 		}
+		else if(gCall_Flag == Global.REMIND_CALL_ADD_MENU){
+			mTitle = getResources().getString(R.string.add_Remind);
+		}
+		else if(gCall_Flag == Global.REMIND_CALL_MAIN){
 		Global.debug("\r\n RemindActivity gyear = "+ gyear + " gmonth =" + gmonth +  " gday ="+ gday);
-		mTitle = getResources().getString(R.string.title_remind);
-		
+			mTitle = getResources().getString(R.string.title_remind);
+		}
 		String[] mlist = getResources().getStringArray(R.array.remind_list);
 		//FileName = getResources().getString(R.string.remind_noFile);
 		mlist[0] = mlist[0] + gFileName;
@@ -140,9 +145,23 @@ public class RemindActivity extends MenuActivity{
 							}
 							else{*/
 							Global.debug("\r\n ******* Global.REMIND_FLAG_ID ===" + Global.REMIND_FLAG_ID);
-								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
+							setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
 							//}
 						}
+						else if(gCall_Flag == Global.REMIND_CALL_ADD_MENU){
+							Intent intent = new Intent();	//新建 INtent
+							Bundle bundle = new Bundle();	//新建 bundle
+							
+							intent.putExtras(bundle); // 参数传递
+							/*if(gCall_Flag == Global.REMIND_CALL_MENU){
+								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
+								
+							}
+							else{*/
+							Global.debug("\r\n ******* Global.REMIND_ADD_FLAG_ID ===" + Global.REMIND_ADD_FLAG_ID);
+							setResult(Global.REMIND_ADD_FLAG_ID,intent);	//返回界面
+						}
+						
 						finish();
 					}
 				});
@@ -198,7 +217,29 @@ public class RemindActivity extends MenuActivity{
 			
 			startActivityForResult(intent , Global.FLAG_RECORD_ID);  // 设置标志
 */
-			startRecord();
+			if(gFileName.equals(Global.ALARM_FILE_NAME)){  // 没有文件
+				startRecord();
+			}
+			else{
+				ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.ask_record),		
+																	   getResources().getString(R.string.ok), 
+																	   getResources().getString(R.string.canel));
+				mConfirmDialog.show();
+				mConfirmDialog.setConfirmListener(new ConfirmListener() {
+					
+					@Override
+					public void doConfirm() {
+						// TODO 自动生成的方法存根
+						startRecord();
+					}
+					
+					@Override
+					public void doCancel() {
+						// TODO 自动生成的方法存根
+						
+					}
+				});
+			}
 
 		}
 		else if(selectItem == TIME_ID) // 时间设置

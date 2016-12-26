@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import com.sunteam.calendar.constant.Global;
 import com.sunteam.common.menu.BaseActivity;
+import com.sunteam.common.menu.menulistadapter.ShowView;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.PromptDialog;
@@ -363,6 +364,7 @@ public class TimeSetActivity extends BaseActivity {
 				
 				@Override
 				public void onComplete() {
+					/*   -- 12-26 修改为不退出
 					Intent intent = new Intent();			
 					Bundle bundle = new Bundle();//
 
@@ -375,7 +377,9 @@ public class TimeSetActivity extends BaseActivity {
 					setResult(Global.FLAG_TIME_ID,intent);	//返回界面
 					
 					// Ok键 
-					finish();			
+					finish();	
+					*/	
+					showTextView(ghour, gminute);
 				}
 			});
 			

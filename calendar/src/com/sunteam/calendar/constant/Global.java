@@ -8,10 +8,11 @@ public class Global {
 	public static final String TAG = "zbc";
 	
 	public static int REMIND_CALL_MAIN = 1;  //主界面 进入
-	
 	public static int REMIND_CALL_MENU = 2;  //主界面  查看界面
+	public static int REMIND_CALL_ADD_MENU = 3;  //主界面  增加提醒
 	
 	public static int REMIND_FLAG_ID = 0x300;  //菜单
+	public static int REMIND_ADD_FLAG_ID = 0x301;  //菜单
 	
 	public static int MENU_FLAG_ID = 0x200;  //菜单
 	public static int FLAG_RECORD_ID = 0x100;  // 录音界面

@@ -32,8 +32,10 @@ public class calendarMenuActivity extends MenuActivity{
 	
 	private int gSelectId = 0;	// 
 	
-	private int REMIND_ID = 0;  // 查看提醒
-	private int DEL_REMIND_ID = 1;  // 删除提醒
+	private int ADD_REMIND_ID = 0;  // 增加提醒
+	private int REMIND_ID = 1;  // 查看提醒
+	private int DEL_REMIND_ID = 2;  // 删除提醒
+	private int DELALL_REMIND_ID = 3;  // 删除提醒
 	
 	private int gInterfaceflag = 0;  // 界面标志
 	private int INTERFACE_MENU = 0;  // 菜单界面
@@ -71,10 +73,10 @@ public class calendarMenuActivity extends MenuActivity{
 				setListData(mMenuList);
 				setTitle(mTitle);;
 				if(gInterfaceflag == INTERFACE_RENID_LIST){
-					mMenuView.setSelectItem(0);
+					mMenuView.setSelectItem(1);
 				}
 				else{
-					mMenuView.setSelectItem(1);
+					mMenuView.setSelectItem(2);
 				}
 				gInterfaceflag = INTERFACE_MENU;
 				
@@ -99,9 +101,21 @@ public class calendarMenuActivity extends MenuActivity{
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		Global.debug("setResultCode =============gInterfaceflag =" + gInterfaceflag);
 		gSelectId = selectItem;
-		if(gInterfaceflag == INTERFACE_MENU)
+		if(gInterfaceflag == INTERFACE_MENU)  // 菜单界面
 		{
-			if(selectItem == REMIND_ID)  // 查看提醒
+			if(selectItem == ADD_REMIND_ID){   // 增加提醒
+				Intent intent = new Intent();			
+				Bundle bundle = new Bundle();//  
+					
+				bundle.putInt("CALLID", Global.REMIND_CALL_ADD_MENU);
+				
+				//intent.setClass(MainActivity.this, MenuActivity.class);
+				intent.putExtras(bundle); // 传入参数
+				intent.setClass(this, RemindActivity.class);
+				
+				startActivityForResult(intent , Global.REMIND_ADD_FLAG_ID);  // 设置标志
+			}
+			else if(selectItem == REMIND_ID)  // 查看提醒
 			{
 				mMenuList = getDbdata();
 				if(mMenuList != null){
@@ -161,6 +175,40 @@ public class calendarMenuActivity extends MenuActivity{
 						}
 					});
 				}
+			}
+			else if(selectItem == DELALL_REMIND_ID){ // 删除所有提醒
+				
+				ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.ask_delall_Remind),
+																		getResources().getString(R.string.ok),
+																		getResources().getString(R.string.canel));
+				mConfirmDialog.show();
+				mConfirmDialog.setConfirmListener(new ConfirmListener() {
+					
+					@Override
+					public void doConfirm() {
+						// TODO 自动生成的方法存根
+						delAllDbdata();
+						
+						PromptDialog mPromptDialog=new PromptDialog(calendarMenuActivity.this, 
+																	getResources().getString(R.string.delall_Remind));
+						mPromptDialog.show();
+						mPromptDialog.setPromptListener(new PromptListener() {
+							
+							@Override
+							public void onComplete() {
+								// TODO 自动生成的方法存根
+								onResume();
+							}
+						});
+					}
+					
+					@Override
+					public void doCancel() {
+						// TODO 自动生成的方法存根
+						
+					}
+				});
+				
 			}
 		}
 		else if(gInterfaceflag == INTERFACE_RENID_LIST) // 查看提醒 界面
@@ -333,6 +381,15 @@ public class calendarMenuActivity extends MenuActivity{
 			mPromptDialog.show();
 		}	
 	}
+	
+	// 所处所有数据
+	private void delAllDbdata()
+	{
+		GetDbInfo dbInfo = new GetDbInfo(this);  // 打开数据库
+		
+		dbInfo.detele(Alarmpublic.REMIND_TABLE); //getAllData(Alarmpublic.REMIND_TABLE);
+		dbInfo.closeDb();
+	}
 	//  
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
@@ -367,6 +424,18 @@ public class calendarMenuActivity extends MenuActivity{
 					}
 				});
 			}
+		} 
+		// 增加提醒
+		else if(requestCode == Global.REMIND_ADD_FLAG_ID && resultCode == Global.REMIND_ADD_FLAG_ID){
+			mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
+			
+			mTitle = getResources().getString(R.string.title_menu);
+			gInterfaceflag = INTERFACE_MENU;
+			
+			setListData(mMenuList);
+			setTitle(mTitle);
+			mMenuView.setSelectItem(0);
+			onResume();
 		}
 			
 	}
