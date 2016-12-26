@@ -2,7 +2,6 @@ package com.sunteam.alarm;
 
 import java.util.ArrayList;
 
-import com.iflytek.thridparty.r;
 import com.sunteam.alarm.utils.Global;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.utils.ArrayUtils;
@@ -10,8 +9,6 @@ import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
 import com.sunteam.receiver.Alarmpublic;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -315,7 +312,7 @@ public class Alarm_MainActivity extends MenuActivity {
 		setTitle(getResources().getString(R.string.alarm));
 		mMenuView.setSelectItem(0);
 		
-		super.onResume();
+		//onResume();
 	}
 
 	// 显示 纪念日详情
@@ -400,7 +397,7 @@ public class Alarm_MainActivity extends MenuActivity {
 		setListData(mMenuList);
 		setTitle(getResources().getString(R.string.annive));
 		mMenuView.setSelectItem(0);
-		super.onResume();
+	//	super.onResume();
 	}
 	
 	// 获取定时闹钟的数据
@@ -633,22 +630,25 @@ public class Alarm_MainActivity extends MenuActivity {
 			Global.debug("[*********]onActivityResult temp_id =" + selectId);
 		}
 		else if (requestCode == Global.FLAG_CODE_SET_LIST && resultCode == Global.FLAG_CODE_SET_LIST) {
-			Global.debug("\r\n onActivityResult ====== Global.FLAG_CODE_SET_LIST = " + Global.FLAG_CODE_SET_LIST);
+//			Global.debug("\r\n onActivityResult ====== Global.FLAG_CODE_SET_LIST = " + Global.FLAG_CODE_SET_LIST);
 			Bundle bundle = data.getExtras();
 			
 			int selectId = bundle.getInt("SELECTID");
 			int intface = bundle.getInt("FLAG");   // 获取是那个界面
 			
 			Alarminfo alarminfo = new Alarminfo();
-			GetDbInfo dbAlarmInfo = new GetDbInfo( this ); // 打开数据库
 			
-			alarminfo = dbAlarmInfo.find(gSQLData_ID, Alarmpublic.ALARM_TABLE);
-			dbAlarmInfo.closeDb();
 			
 			Global.debug("\r\n selectId ===[2]=== " + selectId);
 			Global.debug("\r\n intface ====[2]== " + intface);
-			
+			onResume();
 			if(intface == Global.ALARM_INFO_INTERFACE){  // 闹钟详情界面
+				
+				GetDbInfo dbAlarmInfo = new GetDbInfo( Alarm_MainActivity.this ); // 打开数据库
+				
+				alarminfo = dbAlarmInfo.find(gSQLData_ID, Alarmpublic.ALARM_TABLE);
+				dbAlarmInfo.closeDb();
+				
 				if(selectId == Global.ALARM_SET_MUSIC) // 时间设置
 				{
 					gFileName = bundle.getString("FILENAME");
@@ -674,7 +674,7 @@ public class Alarm_MainActivity extends MenuActivity {
 				}
 				else if(selectId == Global.ALARM_SET_ONOFF){
 					int id = bundle.getInt("ID"); // 反显项
-					Global.debug("id ====[3] ==== "+ id);
+					Global.debug("\r\n id ====[3] ==== "+ id);
 					if(Alarmpublic.ALARM_OFF == id){  // 关
 						alarminfo.onoff = Alarmpublic.ALARM_OFF;
 						alarminfo.setOnoff(Alarmpublic.ALARM_OFF);
@@ -688,12 +688,14 @@ public class Alarm_MainActivity extends MenuActivity {
 				UpdateAlarmData(alarminfo);
 				ShowAlarmInfo(gSQLData_ID - 1);	
 				mMenuView.setSelectItem(selectId);
-				super.onResume();
+				//onResume();
 			}
 			else if(intface == Global.ANNIVERSARY_INFO_INTERFACE){ // 纪念日详情界面
+				
+				GetDbInfo dbAlarmInfo = new GetDbInfo( Alarm_MainActivity.this ); // 打开数据库
 				alarminfo = dbAlarmInfo.find(gSQLData_ID, Alarmpublic.ANNIVERSARY_TABLE);
 				dbAlarmInfo.closeDb();
-						    			
+				onResume();
 				if(selectId == Global.ANNIVERSARY_SET_MUSIC) // 音乐
 				{
 					gFileName = bundle.getString("FILENAME");
@@ -716,7 +718,7 @@ public class Alarm_MainActivity extends MenuActivity {
 				UpdateAnniversaryData(alarminfo);
 				ShowAnniveInfo(gSQLData_ID - 1);
 				mMenuView.setSelectItem(selectId);
-				super.onResume();
+			//	onResume();
 			}
 
 			Global.debug("[*********]onActivityResult temp_id =" + selectId);
@@ -734,7 +736,8 @@ public class Alarm_MainActivity extends MenuActivity {
 // 更新 纪念日的数据
 	private void UpdateAlarmData( Alarminfo alarminfo) {
 		
-		GetDbInfo dbAlarmInfo = new GetDbInfo( this ); // 打开数据库
+		//GetDbInfo dbAlarmInfo = new GetDbInfo( this ); // 打开数据库
+		GetDbInfo dbAlarmInfo = new GetDbInfo( Alarm_MainActivity.this ); // 打开数据库
 		Global.debug("UpdateAlarmData alarminfo.type ="+ alarminfo.type);
 		Global.debug("UpdateAlarmData alarminfo.onoff ="+ alarminfo.onoff);
 		Global.debug("UpdateAlarmData alarminfo.filename ="+ alarminfo.filename);
