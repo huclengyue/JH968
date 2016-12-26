@@ -41,7 +41,7 @@
     <string-array name="remind_list">
         <item>录音：</item>
         <item>时间：</item>
-        <item>提醒：</item>
+        <item>开关：</item>
     </string-array>
 
     <string name="remind_on">开启</string>
@@ -61,7 +61,7 @@
     <string name="del_ok">删除成功</string>
     <string name="title_activity_onoff_set">OnoffSetActivity</string>
     
-    <string name="canel_set">退出前是否保存数据</string>
+    <string name="canel_set">退出保存</string>
     <string name="canel">否</string>
     <string name="ok">是</string>
     
@@ -69,8 +69,9 @@
     <string name="save_exit">保存退出</string>
     
     <string name="save_update">该时间已有提醒，保存并覆盖</string>
-    <string name="ask_del">是否删除数据</string>
+    <string name="ask_del">确认删除</string>
     <string name="ask_record">覆盖已有录音，开始新录音</string>
+    <string name="onoff_title">开关</string>
     
     
 

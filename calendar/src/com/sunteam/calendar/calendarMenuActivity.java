@@ -40,7 +40,7 @@ public class calendarMenuActivity extends MenuActivity{
 	private int gInterfaceflag = 0;  // 界面标志
 	private int INTERFACE_MENU = 0;  // 菜单界面
 	private int INTERFACE_RENID_LIST = 1;  // 查看 提醒界面
-	private int INTERFACE_DEL_REMIND = 2;  // 菜单 界面
+	private int INTERFACE_DEL_REMIND = 2;  // 删除提醒界面
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//setContentView(R.layout.activity_menu);
@@ -94,6 +94,15 @@ public class calendarMenuActivity extends MenuActivity{
 		{
 //			return true; // zhd@20161025 为何忽略返回键？不然如何跳出功能菜单界面？
 		}
+		else if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER||
+				keyCode == KeyEvent.KEYCODE_DPAD_UP||keyCode == KeyEvent.KEYCODE_DPAD_DOWN||
+				keyCode == KeyEvent.KEYCODE_DPAD_LEFT||keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
+			if(mMenuList.size() <= 0){
+				PromptDialog mpDialog = new PromptDialog(this, getResources().getString(R.string.no_remind));
+				mpDialog.show();
+				return true;
+			}
+		}
 		return super.onKeyDown(keyCode, event);
 	}
 	// 重新实现 方法  ok键处理
@@ -109,6 +118,9 @@ public class calendarMenuActivity extends MenuActivity{
 					
 				bundle.putInt("CALLID", Global.REMIND_CALL_ADD_MENU);
 				
+				bundle.putInt("YEAR", gYear);
+				bundle.putInt("MONTH", gMonth);
+				bundle.putInt("DAY", gDay);
 				//intent.setClass(MainActivity.this, MenuActivity.class);
 				intent.putExtras(bundle); // 传入参数
 				intent.setClass(this, RemindActivity.class);
@@ -156,7 +168,8 @@ public class calendarMenuActivity extends MenuActivity{
 					mMenuView.setSelectItem(0);
 					gInterfaceflag = INTERFACE_DEL_REMIND;
 					onResume();
-				}else {
+				}
+				else {
 					TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
 					PromptDialog mPrompt = new PromptDialog(this, getResources().getString(R.string.no_remind));
 					mPrompt.show();
@@ -217,8 +230,10 @@ public class calendarMenuActivity extends MenuActivity{
 			GetDbInfo dbInfo = new GetDbInfo(this);  // 打开数据库
 			ArrayList<Alarminfo> alarminfos = new ArrayList<Alarminfo>();
 			
+			Global.debug("INTERFACE_RENID_LIST=========1111==\r\n");
 			alarminfos = dbInfo.getAllData(Alarmpublic.REMIND_TABLE);
 			dbInfo.closeDb();
+			Global.debug("INTERFACE_RENID_LIST=========22222==\r\n");
 			tempinfo = alarminfos.get(gSelectId);
 			
 			Intent intent = new Intent();			
@@ -242,9 +257,9 @@ public class calendarMenuActivity extends MenuActivity{
 			//intent.setClass(MainActivity.this, MenuActivity.class);
 			intent.putExtras(bundle); // 传入参数
 			intent.setClass(this, RemindActivity.class);
-			
+			Global.debug("INTERFACE_RENID_LIST=========33333==\r\n");
 			startActivityForResult(intent , Global.REMIND_FLAG_ID);  // 设置标志
-			
+			Global.debug("INTERFACE_RENID_LIST=========4444==\r\n");
 		}
 		else if(gInterfaceflag == INTERFACE_DEL_REMIND){   // 删除列表
 			ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.ask_del),
@@ -256,13 +271,14 @@ public class calendarMenuActivity extends MenuActivity{
 				@Override
 				public void doConfirm() {
 					// TODO 自动生成的方法存根
+					Global.debug("\r\n del id ===== " + gSelectId);
 					delDbdata(gSelectId);
 					mMenuList = getDbdata();
 					setListData(mMenuList);
 					int selectid = 0;
 					Global.debug("\r\n mMenuList.size() =============="+mMenuList.size());
 					Global.debug("\r\n gSelectId =============="+gSelectId);
-					if(gSelectId > (mMenuList.size() - 1)){
+					if(gSelectId > (mMenuList.size() - 1) && (mMenuList.size() > 0)){
 						selectid = mMenuList.size() - 1;
 					}
 					else{
@@ -343,7 +359,8 @@ public class calendarMenuActivity extends MenuActivity{
 			return list;
 		}
 		else{
-			return null;
+			list.clear();
+			return list;
 		}
 	}
 	
@@ -390,10 +407,11 @@ public class calendarMenuActivity extends MenuActivity{
 		dbInfo.detele(Alarmpublic.REMIND_TABLE); //getAllData(Alarmpublic.REMIND_TABLE);
 		dbInfo.closeDb();
 	}
-	//  
+	//  on entern 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
 		Global.debug("\r\n onActivityResult requestCode == " + requestCode + " resultCode =="+resultCode);
+		
 		if(requestCode == Global.REMIND_FLAG_ID && resultCode == Global.REMIND_FLAG_ID){
 			
 			mMenuList = getDbdata();

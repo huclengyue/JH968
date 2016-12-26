@@ -70,13 +70,14 @@ public class RemindActivity extends MenuActivity{
 			gID = bundle.getInt("ID");
 			gFileName = bundle.getString("FILENAME");
 			gPath = bundle.getString("PATH");
-	
+			
+			mTitle = getResources().getString(R.string.title_remind);
 		}
 		else if(gCall_Flag == Global.REMIND_CALL_ADD_MENU){
 			mTitle = getResources().getString(R.string.add_Remind);
 		}
 		else if(gCall_Flag == Global.REMIND_CALL_MAIN){
-		Global.debug("\r\n RemindActivity gyear = "+ gyear + " gmonth =" + gmonth +  " gday ="+ gday);
+			Global.debug("\r\n RemindActivity gyear = "+ gyear + " gmonth =" + gmonth +  " gday ="+ gday);
 			mTitle = getResources().getString(R.string.title_remind);
 		}
 		String[] mlist = getResources().getStringArray(R.array.remind_list);

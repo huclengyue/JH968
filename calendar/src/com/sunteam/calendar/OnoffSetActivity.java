@@ -42,7 +42,7 @@ public class OnoffSetActivity extends MenuActivity {
 		FileName = bundle.getString("FILENAME");
 		Path = bundle.getString("PATH");
 		
-		mTitle = getResources().getString(R.string.remind_on) + getResources().getString(R.string.remind_off);
+		mTitle = getResources().getString(R.string.onoff_title);// + getResources().getString(R.string.remind_off);
 		ArrayList<String> mTemp = new ArrayList<String>(); // 显示
 		
 		mTemp.add(getResources().getString(R.string.remind_on));

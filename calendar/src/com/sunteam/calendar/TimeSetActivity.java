@@ -69,7 +69,8 @@ public class TimeSetActivity extends BaseActivity {
 		FileName = bundle.getString("FILENAME");
 		Path = bundle.getString("PATH");
 	
-
+		TextView tv1 = (TextView)findViewById(R.id.test);
+		tv1.setText(":");
 		
 		mTvTitle = (TextView) findViewById(R.id.title);
 		mLine = findViewById(R.id.line);
@@ -90,8 +91,9 @@ public class TimeSetActivity extends BaseActivity {
 		mTvTitle.setTextColor(mTools.getFontColor()); // 设置title的文字颜色
 				
 		int fontSize = mTools.getFontSize();
-		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize); // 设置title字号
-		mTvTitle.setHeight(fontSize);
+		
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(fontSize));
 		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
 		
 		mTvHour.setTextColor(mTools.getFontColor());
