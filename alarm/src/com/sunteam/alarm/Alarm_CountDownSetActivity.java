@@ -4,8 +4,11 @@ import com.sunteam.alarm.utils.Global;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ConfirmDialog;
+import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.ConfirmListener;
+import com.sunteam.common.utils.dialog.PromptListener;
+
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -102,32 +105,36 @@ public class Alarm_CountDownSetActivity extends BaseActivity {
 		if(keyCode == KeyEvent.KEYCODE_ENTER ||
 				keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
 		{			
-/*			PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.set_ok));
-			mPromptDialog.show();
-			mPromptDialog.setPromptListener(new PromptListener() {
-				
-				@Override
-				public void onComplete() {
-*/	
 			gCountdaownTime = (gHour*60 + gMinute)*60;
-			Intent intent = new Intent();
-			Bundle bundle = new Bundle();
-			
-			bundle.putInt("TIMELEN", gCountdaownTime); // 修改项
-			
-			
-			// intent.setClass(MainActivity.this, MenuActivity.class);
-			intent.putExtras(bundle); // 传入参数
-			intent.setClass(Alarm_CountDownSetActivity.this, Alarm_countdownActivity.class);
+			if(gCountdaownTime > 0){ 
 
-			startActivity(intent);
-			
-			
-			finish();
-/*					
-				}
-			});
-			*/		
+				Intent intent = new Intent();
+				Bundle bundle = new Bundle();
+				
+				bundle.putInt("TIMELEN", gCountdaownTime); // 修改项
+				
+				// intent.setClass(MainActivity.this, MenuActivity.class);
+				intent.putExtras(bundle); // 传入参数
+				intent.setClass(Alarm_CountDownSetActivity.this, Alarm_countdownActivity.class);
+	
+				startActivity(intent);
+				
+				
+				finish();
+			}
+			else{
+				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.count_down_set_error));
+				mPromptDialog.show();
+				mPromptDialog.setPromptListener(new PromptListener() {
+					
+					@Override
+					public void onComplete() {
+						// TODO 自动生成的方法存根
+						
+					}
+				});
+			}
+	
 			return true;
 		}
 		else if(keyCode == KeyEvent.KEYCODE_DPAD_UP){

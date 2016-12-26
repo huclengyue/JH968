@@ -3,7 +3,6 @@ package com.sunteam.alarm;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.iflytek.thridparty.r;
 import com.sunteam.alarm.utils.Global;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.tts.TtsUtils;
@@ -141,7 +140,9 @@ public class Alarm_countdownActivity extends BaseActivity {
                 @Override  
                 public void run() { 
                 	if(gCountDown_falg == START_COUNTDOWN){
-	                	gtime_len--; 
+                		if(gtime_len > 0){
+                			gtime_len--; 
+                		}
 	                	int hour = gtime_len/60/60;
 	                	int min = gtime_len/60%60;
 	                	int sec = gtime_len%60;
@@ -199,7 +200,9 @@ public class Alarm_countdownActivity extends BaseActivity {
 					@Override
 					public void onComplete() {
 						// TODO 自动生成的方法存根
-						TtsUtils.getInstance().speak(gtime_len/60/60 + getResources().getString(R.string.hour_time) + (gtime_len/60)%60 + getResources().getString(R.string.min_time));
+						TtsUtils.getInstance().speak(gtime_len/60/60 + getResources().getString(R.string.hour_time) + 
+								(gtime_len/60)%60 + getResources().getString(R.string.min_time) +
+								(gtime_len%60 + getResources().getString(R.string.sec_time)));
 					}
 				});
 			}
@@ -213,15 +216,20 @@ public class Alarm_countdownActivity extends BaseActivity {
 					public void onComplete() {
 						// TODO 自动生成的方法存根
 						gCountDown_falg = START_COUNTDOWN;
-						TtsUtils.getInstance().speak(gtime_len/60/60 + getResources().getString(R.string.hour_time) + (gtime_len/60)%60 + getResources().getString(R.string.min_time));
+						TtsUtils.getInstance().speak(gtime_len/60/60 + getResources().getString(R.string.hour_time) +
+								(gtime_len/60)%60 + getResources().getString(R.string.min_time) +
+								(gtime_len%60 + getResources().getString(R.string.sec_time)));
 					}
 				});
 			}
 		}
 		else if(keyCode == KeyEvent.KEYCODE_BACK){ // 返回
-			ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.countdown_starting,
-																	getResources().getString(R.string.ok),
-																	getResources().getString(R.string.canel)));
+			String str_ok = getResources().getString(R.string.ok);
+			String str_canel = getResources().getString(R.string.canel);
+			String str_title = getResources().getString(R.string.countdown_starting);
+			
+			//ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.countdown_starting,
+			ConfirmDialog mConfirmDialog = new ConfirmDialog(this, str_title, str_ok, str_canel);
 			mConfirmDialog.show();
 			mConfirmDialog.setConfirmListener(new ConfirmListener() {
 				

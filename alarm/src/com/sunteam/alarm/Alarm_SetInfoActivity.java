@@ -24,6 +24,8 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 	private int gType = 0;  // for 反显
 	private int gOnoff = 0;  // for 反显
 	
+	private boolean gonFileFlag = false;  // for 反显
+	
 	private ArrayList<String> mTemp = new ArrayList<String>(); // 显示
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +48,15 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 				gfileName = bundle.getString("FILENAME");
 				
 				mTitle = getResources().getString(R.string.music_title);
+				gonFileFlag = false;
 				mTemp = getPathAudioList();
 				if(mTemp.size() <= 0){
+					gonFileFlag = true;
+					/*
+					super.onCreate(savedInstanceState);
 					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_file));
 					mPromptDialog.show();
+					
 					mPromptDialog.setPromptListener(new PromptListener() {
 						
 						@Override
@@ -58,13 +65,18 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 							finish();
 						}
 					});
+					
+					return;
+					*/
 				}
-				gSetID = mTemp.indexOf(gfileName);
-				if(gSetID < 0){
-					gSetID = 0;
+				else{  // 有文件
+					gSetID = mTemp.indexOf(gfileName);
+					if(gSetID < 0){
+						gSetID = 0;
+					}
 				}
 			}
-			else if(gSelectID == Global.ALARM_SET_TYPE){
+			else if(gSelectID == Global.ALARM_SET_TYPE){  // 闹钟类型
 				mTitle = getResources().getString(R.string.type_title);
 				gType = bundle.getInt("ALARMTYPE");
 				mTemp.add(getResources().getString(R.string.type1));
@@ -72,7 +84,7 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 				mTemp.add(getResources().getString(R.string.type3));
 				gSetID = gType;
 			}
-			else if(gSelectID == Global.ALARM_SET_ONOFF){
+			else if(gSelectID == Global.ALARM_SET_ONOFF){ // 闹钟开关
 				mTitle = getResources().getString(R.string.onoff_title);
 				gOnoff = bundle.getInt("ONOFF");
 				mTemp.add(getResources().getString(R.string.off));
@@ -85,8 +97,11 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 				gfileName = bundle.getString("FILENAME");
 				
 				mTitle = getResources().getString(R.string.music_title);
+				gonFileFlag = false;
 				mTemp = getPathAudioList();
 				if(mTemp.size() <= 0){
+					gonFileFlag = true;
+					/*
 					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_file));
 					mPromptDialog.show();
 					mPromptDialog.setPromptListener(new PromptListener() {
@@ -97,10 +112,15 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 							finish();
 						}
 					});
+					
+					return;
+					*/
 				}
-				gSetID = mTemp.indexOf(gfileName);
-				if(gSetID < 0){
-					gSetID = 0;
+				else{
+					gSetID = mTemp.indexOf(gfileName);
+					if(gSetID < 0){
+						gSetID = 0;
+					}
 				}
 			}
 			else if(gSelectID == Global.ANNIVERSARY_SET_ONOFF){
@@ -115,6 +135,25 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 		selectItem = gSetID;
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_alarm__set_info);
+	}
+	
+	@Override
+	protected void onResume() {
+		// TODO 自动生成的方法存根
+		super.onResume();
+		
+		if(true == gonFileFlag){
+			PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_file));
+			mPromptDialog.show();
+			mPromptDialog.setPromptListener(new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					// TODO 自动生成的方法存根
+					//finish();
+				}
+			});
+		}
 	}
 	
 	@Override

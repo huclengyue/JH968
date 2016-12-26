@@ -7,13 +7,11 @@ import com.sunteam.common.utils.SunteamDateUtils;
 import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
 
-import android.R.id;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
-import android.provider.Settings.Global;
 import android.util.Log;
 
 public class Alarmpublic {
@@ -177,6 +175,22 @@ public class Alarmpublic {
 					}
 					else if(tempinfo_later.type == Alarmpublic.ALARM_TYPE1){  // 近闹一次
 						data_sec += DAY_MAX_SEC;  // 秒
+					}
+				}
+				else{
+					
+					Alarmpublic.debug("\r\n tempinfo_later.type ==== " + tempinfo_later.type + "\r\n week === "+week);
+					if(tempinfo_later.type == Alarmpublic.ALARM_TYPE2)  // 工作日 需要判断是不是 周5，6
+					{
+						if(week == 5){ // 周5
+							data_sec += DAY_MAX_SEC*3;  // 秒
+						}
+						else if(week == 6){  // 周六
+							data_sec += DAY_MAX_SEC*2;  // 秒
+						}
+						else if(week == 0){ // 周日
+							data_sec += DAY_MAX_SEC;  // 秒
+						}
 					}
 				}
 				
