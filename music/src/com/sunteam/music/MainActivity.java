@@ -354,7 +354,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 				}		
 			}
 			else if(getSelectItem()  == Global.MAIN_PLAY_ID){  // 选中第三项   最近播放界面 显示列表
-				
+				SharedPrefUtils.setSharedPrefInt(this,Global.MUSIC_CONFIG_FILE, Context.MODE_WORLD_READABLE, Global.MUSIC_SELECT, getSelectItem() );
 				if(true ==  showDbList(Global.PLAY_LIST_ID)){
 					intface_flag = RECENTPLAY_INTFACE;  
 				}

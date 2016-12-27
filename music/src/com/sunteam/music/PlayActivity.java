@@ -641,14 +641,13 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			if(myPlayer.state() == MyPlayer.PLAYING_STATE){
 				myPlayer.stopPlayback();
 				isClose = false;
-				
+				mHandler.postDelayed(finishActivity, 0);
 				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.file_end));
 				mPromptDialog.show();
 				mPromptDialog.setPromptListener(new PromptListener() {
 					
 					@Override
 					public void onComplete() {
-						mHandler.postDelayed(finishActivity, 1000);
 						next();  // 下一首
 					}
 				});
