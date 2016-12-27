@@ -54,6 +54,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 	private String mTimerFormatHMS;
 	private ImageButton play_st;  // 
 	private ImageButton playMode;   // 播放模式
+	private ImageButton playABMode;   // 播放模式
 	//private List<String> fileList;
 	private int currentIndex;
 	private int total;  // 总时间
@@ -177,6 +178,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		play_st = (ImageButton)findViewById(R.id.ib_paly);
 		
 		playMode = (ImageButton)findViewById(R.id.play_mode);
+		playABMode = (ImageButton)findViewById(R.id.play_abmode);
 		
 		gPlayListName = new ArrayList<String>();   // 播放列表文件名
 		gPlayListPaths = new ArrayList<String>();		//播放 列表文件路径
@@ -217,6 +219,9 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		else if(gPlay_Mode == Global.MENU_PLAY_MODE_RAND){
 			playMode.setBackgroundResource(R.drawable.loop_rand);
 		}
+		//playABMode.setEnabled(false);
+		playABMode.setVisibility(View.INVISIBLE);
+		//View.setVisible(View.VISIBLE); 
 		//String FilePath = gPlayListPaths.get(currentIndex)+"/"+ gPlayListName.get(currentIndex);
 		String FilePath = gPlayListPaths.get(currentIndex);
 		Global.debug("onCreate =====33344444=== FilePath ="+FilePath);
@@ -318,23 +323,23 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 	
 	private void updateTimerView(){
 		if(myPlayer.state()==MyPlayer.PLAYING_STATE){
-		int current = myPlayer.progress();
-		if(gAB_flag == true)
-		{
-			Global.debug("\r\n gAB_A ==="+ gAB_A + " gAB_B ====" + gAB_B );
-			Global.debug("\r\n current ====" + current );
-		}
-		if((gAB_flag == true) && (current >= gAB_B)){
-			myPlayer.SeekToTime(gAB_A);
-		}
-		else{
-			if(total>=3600){
-				tvPlayedTime.setText(String.format(mTimerFormatHMS,current/3600, (current%3600)/60, current%60));
-			}else{
-				tvPlayedTime.setText(String.format(mTimerFormatMS, current/60, current%60));
-			}	
-		}
-		mHandler.postDelayed(mUpdateTimer, 500);
+			int current = myPlayer.progress();
+			if(gAB_flag == true)
+			{
+				Global.debug("\r\n gAB_A ==="+ gAB_A + " gAB_B ====" + gAB_B );
+				Global.debug("\r\n current ====" + current );
+			}
+			if((gAB_flag == true) && (current >= gAB_B)){
+				myPlayer.SeekToTime(gAB_A);
+			}
+			else{
+				if(total>=3600){
+					tvPlayedTime.setText(String.format(mTimerFormatHMS,current/3600, (current%3600)/60, current%60));
+				}else{
+					tvPlayedTime.setText(String.format(mTimerFormatMS, current/60, current%60));
+				}	
+			}
+			mHandler.postDelayed(mUpdateTimer, 500);
 		}
 	}
 	// 更新 seekbar显示
@@ -359,6 +364,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 				gAB_A = 0;
 				gAB_B = 0;
 				setPalyst(false);
+				playABMode.setVisibility(View.INVISIBLE);  // 不显示
 				PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.mode_off));
 				mDialog.show();
 				
@@ -381,6 +387,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			return true;
 		}else if(keyCode == KeyEvent.KEYCODE_DPAD_UP){  // 上一首
 			gAB_flag = false;
+			playABMode.setVisibility(View.INVISIBLE);
 			gAB_A = 0;
 			gAB_B = 0;
 			if(gPlay_Mode == Global.MENU_PLAY_MODE_SINGLE){   // 单曲循环可以切歌曲
@@ -396,6 +403,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			//switchAudio();
 		}else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){  // 下一首
 			gAB_flag = false;
+			playABMode.setVisibility(View.INVISIBLE);
 			gAB_A = 0;
 			gAB_B = 0;
 			if(gPlay_Mode == Global.MENU_PLAY_MODE_SINGLE){  // 单曲循环可以切歌曲
@@ -432,7 +440,8 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 				public void onComplete() {
 					// TODO 自动生成的方法存根
 					gAB_A = myPlayer.progress();
-					
+					playABMode.setVisibility(View.VISIBLE);
+					playABMode.setBackgroundResource(R.drawable.loop_a);
 					setPalyst(true);
 				}
 			});
@@ -451,6 +460,8 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 					gAB_flag = true;
 					gAB_B = myPlayer.progress();
 					myPlayer.SeekToTime(gAB_A);
+					playABMode.setVisibility(View.VISIBLE);
+					playABMode.setBackgroundResource(R.drawable.loop_ab);
 					setPalyst(true);
 				}
 			});		
@@ -461,6 +472,8 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 				keyCode == KeyEvent.KEYCODE_9 || keyCode == KeyEvent.KEYCODE_0 ){
 			if(gAB_flag == true){
 				gAB_flag = false;
+				playABMode.setVisibility(View.INVISIBLE);
+				
 				gAB_A = 0;
 				gAB_B = 0;
 				setPalyst(false);
@@ -628,13 +641,14 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			if(myPlayer.state() == MyPlayer.PLAYING_STATE){
 				myPlayer.stopPlayback();
 				isClose = false;
-				mHandler.postDelayed(finishActivity, 0);
+				
 				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.file_end));
 				mPromptDialog.show();
 				mPromptDialog.setPromptListener(new PromptListener() {
 					
 					@Override
 					public void onComplete() {
+						mHandler.postDelayed(finishActivity, 1000);
 						next();  // 下一首
 					}
 				});

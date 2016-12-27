@@ -297,7 +297,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	// 按键 entern 的处理
 	private void keyupEnter() {
 		if(MAIN_INTFACE ==  intface_flag){  // 主界面
 			if(getSelectItem()  == Global.MAIN_DIR_ID){  // 选中第一项 
@@ -315,7 +315,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 				gFilePaths.add(Global.USER_PATH);  // 存储卡
 				gFilePaths.add(Global.USB_PATH);   // 优盘
 				
-				gFileName = ArrayUtils.strArray2List (getResources().getStringArray(R.array.main1_list));
+				gFileName = ArrayUtils.strArray2List(getResources().getStringArray(R.array.main1_list));
 				mMenuList = gFileName;
 				setListData(mMenuList);
 				
@@ -1165,7 +1165,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 			//Toast.makeText(MainActivity.this, getResources().getString(R.string.limits), Toast.LENGTH_SHORT).show();
 			//Global.getTts().speak(getResources().getString(R.string.limits));
 		}
-		super.onResume();
+		//super.onResume();
 	}
 	// 获取外部TF卡是否存在路径
 	public boolean getExtSDUSBPathHave(String Path) {

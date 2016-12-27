@@ -61,11 +61,29 @@
             />
 	    
 	    <ImageButton
+	        android:id="@+id/play_abmode"
+	        android:layout_width="24px"
+	        android:layout_height="24px"
+	        android:layout_centerInParent="true"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:background="@drawable/loop_ab" />
+	    
+	     <TextView
+            android:id="@+id/test1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+           	android:layout_weight="3" 
+            />
+	    
+	    <ImageButton
 	        android:id="@+id/play_mode"
 	        android:layout_width="24px"
 	        android:layout_height="24px"
 	        android:layout_centerInParent="true"
-	        android:layout_gravity="right"
+	        android:layout_gravity="right|center_vertical"
+	        android:layout_weight="1" 
 	        
 	        android:background="@drawable/loop_all" />
 	    

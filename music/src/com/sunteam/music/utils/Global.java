@@ -92,7 +92,7 @@ public class Global {
 
 		musicInfos = dbMusicInfo.GetAllData(Global.PLAY_LIST);
 		dbMusicInfo.closeDb();
-		Global.debug("\r\n GetPalyFristSeekTime  musicInfos.get(0).playtime ==="  + musicInfos.get(0).playtime);
+		//Global.debug("\r\n GetPalyFristSeekTime  musicInfos.get(0).playtime ==="  + musicInfos.get(0).playtime);
 		int playtime = 0;
 		
 		for(int i = 0; i < musicInfos.size(); i++)
