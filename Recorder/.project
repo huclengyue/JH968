@@ -3,6 +3,7 @@
 	<name>Recorder</name>
 	<comment></comment>
 	<projects>
+		<project>SunteamUtilsLib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

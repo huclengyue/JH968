@@ -18,6 +18,7 @@ import android.os.Message;
 import android.os.StatFs;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +27,9 @@ import android.widget.TextView;
 import com.sunteam.common.tts.TtsCompletedListener;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.CommonUtils;
+import com.sunteam.common.utils.ConfirmDialog;
+import com.sunteam.common.utils.Tools;
+import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.recorder.Global;
 import com.sunteam.recorder.R;
 import com.sunteam.recorder.dialog.CustomDialog;
@@ -46,9 +50,12 @@ public class RecordActivity extends BaseActivity {
 	private TextView tvReady;
 	private TextView tvFilename;
 	private TextView tvTimeRecored;
-	private TextView tvTitle;
+	//private TextView tvTitle;
 	private TextView tvparameter;
 	private TextView tvtimeLeft;
+	TextView mTvTitle = null;
+	View mLine = null;
+	
 	/**
 	 * -1:没再录制
 	 */
@@ -136,8 +143,11 @@ public class RecordActivity extends BaseActivity {
 		rs = getResources();
 		setContentView(R.layout.record_ready);
 
+		mTvTitle = (TextView) this.findViewById(R.id.title); // 获取控件
+		mLine = this.findViewById(R.id.line); // 获取
+		
 		tvTime = (TextView) findViewById(R.id.tv_time);
-		tvTitle = (TextView) findViewById(R.id.tv_recorde);
+		//tvTitle = (TextView) findViewById(R.id.tv_recorde);
 		tvparameter = (TextView) findViewById(R.id.tv_parameter);
 		tvFilename = (TextView) findViewById(R.id.tv_filename);
 		// tvrecording = (TextView) findViewById(R.id.tv_recording);
@@ -145,14 +155,18 @@ public class RecordActivity extends BaseActivity {
 		tvReady = (TextView) findViewById(R.id.tv_ready);
 		tvtimeLeft = (TextView) findViewById(R.id.tv_timeLeft);
 		// rl_recording = (RelativeLayout)findViewById(R.id.rl_recording);
-
+		Tools mTools = new Tools(this);
+		int fontSize = mTools.getFontSize();
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(fontSize));
+		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
+		mTvTitle.setTextColor(mTools.getFontColor()); //  设置字体颜色
 		// setTextSize默认单位：sp
-		tvTitle.setTextSize(rs.getDimensionPixelSize(R.dimen.ts_title));
+		//tvTitle.setTextSize(rs.getDimensionPixelSize(R.dimen.ts_title));
 		tvparameter.setTextSize(rs.getDimensionPixelSize(R.dimen.textsize));
 		tvFilename.setTextSize(rs.getDimensionPixelSize(R.dimen.textsize));
 		// tvrecording.setTextSize(rs.getDimensionPixelSize(R.dimen.ts_recording));
-		tvTimeRecored.setTextSize(rs
-				.getDimensionPixelSize(R.dimen.ts_recordleft));
+		tvTimeRecored.setTextSize(rs.getDimensionPixelSize(R.dimen.ts_recordleft));
 		tvReady.setTextSize(rs.getDimensionPixelSize(R.dimen.ts_recording));
 		tvtimeLeft.setTextSize(rs.getDimensionPixelSize(R.dimen.textsize));
 		tvTime.setTextSize(rs.getDimensionPixelSize(R.dimen.textsize));
@@ -340,6 +354,26 @@ public class RecordActivity extends BaseActivity {
 		String title = rs.getString(R.string.whether_save);
 		String yes = rs.getString(R.string.yes);
 		TtsUtils.getInstance().speak(title + "," + yes);
+		ConfirmDialog confirmDialog = new ConfirmDialog(RecordActivity.this, title, yes, rs.getString(R.string.no));
+		confirmDialog.show();
+		confirmDialog.setConfirmListener(new ConfirmListener() {
+			
+			@Override
+			public void doConfirm() {
+				// TODO 自动生成的方法存根
+				goback();
+				speakTimeLeft();
+			}
+			
+			@Override
+			public void doCancel() {
+				// TODO 自动生成的方法存根
+				deleteFile();
+				goback();
+				speakTimeLeft();
+			}
+		});
+		/*
 		final CustomDialog customDialog = new CustomDialog(RecordActivity.this,
 				title, yes, rs.getString(R.string.no), RecordHandler);
 		customDialog.show();
@@ -361,7 +395,7 @@ public class RecordActivity extends BaseActivity {
 						speakTimeLeft();
 						Log.e("no", "no");
 					}
-				});
+				});*/
 	}
 
 	private void speakNotRecord() {

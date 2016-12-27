@@ -3,6 +3,7 @@ package com.sunteam.recorder.activity;
 import java.util.List;
 
 import com.sunteam.common.utils.PromptDialog;
+import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.recorder.Global;
 import com.sunteam.recorder.R;
@@ -19,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,8 +35,12 @@ public class PlayActivity extends RecordBaseActivity implements MyPlayer.OnState
 	private TextView tvPlayedTime;
 	private TextView tvTotalTime;
 	private TextView tvFileName;
-	private TextView tvTitle;
+	//private TextView tvTitle;
 	private SeekBar mPlaySeekBar;
+	
+	TextView mTvTitle = null;
+	View mLine = null;
+	
 
 	private String mSampleFile;
 	private String mTimerFormatMS;
@@ -112,16 +118,24 @@ Runnable finishActivityDelayed = new Runnable() {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.play);
 
+		mTvTitle = (TextView) this.findViewById(R.id.title); // 获取控件
+		mLine = this.findViewById(R.id.line); // 获取
+		
 		tvPlayedTime = (TextView) findViewById(R.id.starttime);
 		tvTotalTime = (TextView) findViewById(R.id.totaltime);
 		tvFileName = (TextView) findViewById(R.id.filename);
-		tvTitle = (TextView) findViewById(R.id.tv_recorder);
+		//tvTitle = (TextView) findViewById(R.id.tv_recorder);
 		
 		tvPlayedTime.setTextSize(getResources().getDimensionPixelSize(R.dimen.textsize));
 		tvTotalTime.setTextSize(getResources().getDimensionPixelSize(R.dimen.textsize));
 		tvFileName.setTextSize(getResources().getDimensionPixelSize(R.dimen.textsize));
-		tvTitle.setTextSize(getResources().getDimensionPixelSize(R.dimen.ts_title));
-		
+		//tvTitle.setTextSize(getResources().getDimensionPixelSize(R.dimen.ts_title));
+	
+		Tools mTools = new Tools(this);
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(mTools.getFontSize()));
+		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
+		mTvTitle.setTextColor(mTools.getFontColor()); //  设置字体颜色
 		
 		imageButton = (ImageButton)findViewById(R.id.ib_paly);
 		
