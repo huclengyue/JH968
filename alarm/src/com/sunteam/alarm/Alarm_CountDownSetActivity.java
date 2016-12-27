@@ -71,8 +71,9 @@ public class Alarm_CountDownSetActivity extends BaseActivity {
 		
 		
 		int fontSize = mTools.getFontSize();
-		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize); // 设置title字号
-		mTvTitle.setHeight(fontSize);
+		
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(fontSize));
 		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
 		
 		mTvTitle.setTextColor(mTools.getFontColor()); //  设置字体颜色
