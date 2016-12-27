@@ -240,11 +240,14 @@ public class MainActivity extends MenuActivity implements ShowView{
 			showList(Global.gPath.get(Global.gPathNum - 1), Global.gName.get(Global.gPathNum - 1));
 			Global.debug("Global.gPastName ====== " + Global.gPastName);
 			Global.debug("Global.gFilePaths.indexOf(Global.gPastName) ====== " + Global.gFilePaths.indexOf(Global.gPastName));
-			int selseid = Global.gFilePaths.indexOf(Global.gPastName);
-			if(selseid <= 0){
-				selseid = 0;
+			if(null != Global.gPastName){
+				Global.gtempID = Global.gFilePaths.indexOf(Global.gPastName);
+				if(Global.gtempID <= 0){
+					Global.gtempID = 0;
+				}
 			}
-			mMenuView.setSelectItem(selseid);
+			
+			mMenuView.setSelectItem(Global.gtempID);
 			//onResume();
 		}
 		
