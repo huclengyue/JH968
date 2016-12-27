@@ -45,7 +45,7 @@
     <string name="clear_data_Ok">数据已清空</string>
     
     <string name="ask_save">是否保存数据？</string>
-    <string name="set_ok">设置成功！</string>
+    <string name="set_ok">设定成功！</string>
     
     
      <string-array name="main_list">

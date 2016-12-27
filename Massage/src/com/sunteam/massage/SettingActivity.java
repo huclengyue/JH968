@@ -910,6 +910,14 @@ public class SettingActivity extends BaseActivity {
 		else if(gId == FORWORK_SET || gId == OVERWORK_SET)  // 排钟 点钟
 		{	
 			if(gPointFlag == true){
+				double i_Max = 0;	
+				if(gId == FORWORK_SET){
+					i_Max = (double) (Global.MAX_HOUR - gOverTime);
+				}
+				else{
+					i_Max = (double) (Global.MAX_HOUR -gForTime);
+				}
+				cNum = Double.toString(i_Max);
 				showview();
 				return;
 			}
