@@ -588,38 +588,36 @@ public final class FmProxy {
      * @return
      */
 
-    @SuppressWarnings("unused")
+    
 	public static boolean getProxy(Context ctx, IFmProxyCallback cb) {
-        boolean status = false;
+       // boolean status = false;
         FmProxy p = null;
-
+        Global.debug("\r\n [getProxy]    =====111==");
         try {
             p = new FmProxy(ctx, cb);
         } catch (Throwable t) {
             Log.e(TAG, "Unable to get FM Proxy", t);
             return false;
         }
-
-
         return true;
 
     }
 
     public FmProxy(Context ctx, IFmProxyCallback cb) {
          Log.d(TAG, "FmProxy object created obj ="+this);
+         Global.debug("\r\n  [FmProxy]==============111===");
          mContext = ctx;
          mProxyCback = cb;
 
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if(adapter == null) {
-            Log.w(TAG, "BluetoothAdapter is null.");
+        	Global.debug("\r\n[FmProxy]   BluetoothAdapter is null.");
             return ;
         }
 
-             if (!mContext.bindService(new Intent(IFmReceiverService.class.getName()),
-                              mConnection, Context.BIND_AUTO_CREATE)) {
-             Log.e(TAG, "Could not bind to IFmReceiverService Service");
-         }
+        if (!mContext.bindService(new Intent(IFmReceiverService.class.getName()), mConnection, Context.BIND_AUTO_CREATE)) {
+        	 Global.debug("\r\n [FmProxy]Could not bind to IFmReceiverService Service");
+        }
 
     }
 

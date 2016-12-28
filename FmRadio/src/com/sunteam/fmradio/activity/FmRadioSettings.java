@@ -44,7 +44,6 @@
 
 package com.sunteam.fmradio.activity;
 
-import android.R.bool;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -53,7 +52,9 @@ import java.util.ArrayList;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.utils.ArrayUtils;
+import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.PromptDialog;
+import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.fmradio.R;
 import com.sunteam.fmradio.dao.FmInfo;
@@ -63,7 +64,7 @@ import com.sunteam.fmradio.utils.Global;
 public class FmRadioSettings extends MenuActivity {
     /** Called with the activity is first created. */
 	
-	int gfreq = 0;
+	int gfreq = 0;	
 	@Override
 	public void onCreate(Bundle b) {
 		
@@ -82,7 +83,7 @@ public class FmRadioSettings extends MenuActivity {
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		// TODO 自动生成的方法存根
 		if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER){
-			if(2 == getSelectItem()){ // 保存电台
+			if(Global.SAVE_CHANEL_ID == getSelectItem()){ // 保存电台
 				String temp = null;
 				if(true == addChanel(gfreq)){
 					temp = getResources().getString(R.string.save_ok);
@@ -107,20 +108,44 @@ public class FmRadioSettings extends MenuActivity {
 				});
 				return true;
 			}
-			else if(3 == getSelectItem()){  // 删除电台
-				String temp = null;
-				if(true == delChanelData(gfreq)){
-					temp = getResources().getString(R.string.del_ok);
-				}
-				else{
-					temp = getResources().getString(R.string.del_error);
-				}
-				PromptDialog mPromptDialog = new PromptDialog(this, temp);
-				mPromptDialog.show();
-				mPromptDialog.setPromptListener(new PromptListener() {
+			else if(Global.DEL_CHANEL_ID == getSelectItem()){  // 删除电台
+				ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.ask_del),
+																		getResources().getString(R.string.ok),
+																		getResources().getString(R.string.canel));
+				mConfirmDialog.show();
+				mConfirmDialog.setConfirmListener(new ConfirmListener() {
 					
 					@Override
-					public void onComplete() {
+					public void doConfirm() {
+						// TODO 自动生成的方法存根
+						String temp = null;
+						if(true == delChanelData(gfreq)){
+							temp = getResources().getString(R.string.del_ok);
+						}
+						else{
+							temp = getResources().getString(R.string.del_error);
+						}
+						PromptDialog mPromptDialog = new PromptDialog(FmRadioSettings.this, temp);
+					
+						mPromptDialog.show();
+						mPromptDialog.setPromptListener(new PromptListener() {
+							
+							@Override
+							public void onComplete() {
+								// TODO 自动生成的方法存根
+								Intent intent = new Intent();
+								Bundle bundle = new Bundle();	//新建 bundl
+								bundle.putInt("selectItem", getSelectItem());
+								intent.putExtras(bundle); // 参数传递
+								setResult(Global.MENU_FLAG, intent);
+								finish();
+							}
+						});
+						
+					}
+					
+					@Override
+					public void doCancel() {
 						// TODO 自动生成的方法存根
 						Intent intent = new Intent();
 						Bundle bundle = new Bundle();	//新建 bundl
@@ -130,6 +155,51 @@ public class FmRadioSettings extends MenuActivity {
 						finish();
 					}
 				});
+				
+			}
+			else if(Global.DELALL_CHANEL_ID == getSelectItem()){
+				
+				ConfirmDialog mcConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.ask_delall),
+																		getResources().getString(R.string.ok),
+																		getResources().getString(R.string.canel));
+				mcConfirmDialog.show();
+				mcConfirmDialog.setConfirmListener(new ConfirmListener() {
+					
+					@Override
+					public void doConfirm() {
+						// TODO 自动生成的方法存根
+						delChanelAllData();  // 清空数据
+						
+						PromptDialog mPromptDialog = new PromptDialog(FmRadioSettings.this, getResources().getString(R.string.delall_ok));
+						mPromptDialog.show();
+						mPromptDialog.setPromptListener(new PromptListener() {
+							
+							@Override
+							public void onComplete() {
+								// TODO 自动生成的方法存根
+								Intent intent = new Intent();
+								Bundle bundle = new Bundle();	//新建 bundl
+								bundle.putInt("selectItem", getSelectItem());
+								intent.putExtras(bundle); // 参数传递
+								setResult(Global.MENU_FLAG, intent);
+								finish();
+							}
+						});
+
+					}
+					
+					@Override
+					public void doCancel() {
+						// TODO 自动生成的方法存根
+						Intent intent = new Intent();
+						Bundle bundle = new Bundle();	//新建 bundl
+						bundle.putInt("selectItem", getSelectItem());
+						intent.putExtras(bundle); // 参数传递
+						setResult(Global.MENU_FLAG, intent);
+						finish();
+					}
+				});
+				
 			}
 			else{
 				Intent intent = new Intent();
@@ -170,7 +240,7 @@ public class FmRadioSettings extends MenuActivity {
 	}
 	
 	
-	// 获取全部数据
+	// 删除一条数据
 	private boolean delChanelData(int freq) {
 	// TODO 自动生成的方法存根
 		GetDbInfo dbFmInfo = new GetDbInfo( this ); // 打开数据库
@@ -198,5 +268,13 @@ public class FmRadioSettings extends MenuActivity {
 			
 		}
 	}
-
+	// 删除所有数据
+	private void delChanelAllData() {
+	// TODO 自动生成的方法存根
+		GetDbInfo dbFmInfo = new GetDbInfo( this ); // 打开数据库
+		//FmInfo musicinfo = new FmInfo();   //创建 结构体
+		dbFmInfo.detele(Global.FM_LIST);
+				
+		dbFmInfo.closeDb();
+	}
 }
