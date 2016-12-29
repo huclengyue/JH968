@@ -100,6 +100,7 @@
 <string name="music_is_playing">"音乐正在播放， 收音机无法播放！！"</string>
 
 <string name="mhz">"MHz"</string>
+<string name="fm">"FM"</string>
 
 
 <string name="fm_setting">"功能菜单"</string>
@@ -113,6 +114,9 @@
 <string name="ask_delall">"确认清空"</string>
 <string name="delall_ok">"数据已清空"</string>
 <string name="hearphone_notin">"必须插入耳机，才能正常使用"</string>
+
+<string name="play_pause">"暂停播放"</string>
+<string name="play_start">"开始播放"</string>
 
 <string-array name="fm_setting_list">
 	<item>自动搜台</item>

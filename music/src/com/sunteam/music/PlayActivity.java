@@ -795,6 +795,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		MusicAddPlayList(); // 先保存 
 		Global.FristString =  Global.GetPalyFristData(this);   // 获取最后一次伯村的路径
 		myPlayer.stopPlayback();
+		isClose = true;
 		Intent intent = new Intent();
 		intent.putExtra("filename", gPlayListName.get(currentIndex));
 		setResult(Global.PLAY_FLAG, intent);

@@ -38,7 +38,9 @@ public class Global {
     public final int freqStep = 10; // 步进频率为 100KHz
     public final static float fmScale = (float) 100.0; // 把10kHz单位转换成MHz单位
 
-	
+    public static final String FM_CONFIG_FILE = "fm_cfg.xml";   // 保存播放的频道 文件
+    public static final String FM_SELECT = "fm_select";   //   保存播放的频道
+    
 	public static final String DB_PATH = Environment.getExternalStorageDirectory() + "//fm.db"; // 数据库路径
 	public static final String FM_LIST = "fm";   // 最近播放 
 	public static Context mContext;
@@ -52,7 +54,7 @@ public class Global {
 	public static int DELALL_CHANEL_ID	=	4 ;  // 删除所有电台
 	public static int RECORD_CHANEL_ID	=	5 ;  // 内录电台
 	
-	public static final String MHZ = "Mhz";   // 最近播放
+	//public static final String MHZ = "Mhz";   // 最近播放
 
 	public static Context getContext() {
 		return mContext;

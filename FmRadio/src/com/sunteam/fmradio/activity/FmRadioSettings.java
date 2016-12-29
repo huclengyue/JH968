@@ -119,11 +119,14 @@ public class FmRadioSettings extends MenuActivity {
 					public void doConfirm() {
 						// TODO 自动生成的方法存根
 						String temp = null;
+						
+						String s = getResources().getString(R.string.fm)+String.format("%.1f", gfreq / Global.fmScale);
+					        
 						if(true == delChanelData(gfreq)){
-							temp = getResources().getString(R.string.del_ok);
+							temp = s + getResources().getString(R.string.del_ok);
 						}
 						else{
-							temp = getResources().getString(R.string.del_error);
+							temp = s + getResources().getString(R.string.del_error);
 						}
 						PromptDialog mPromptDialog = new PromptDialog(FmRadioSettings.this, temp);
 					
