@@ -61,7 +61,7 @@
     <string name="del_ok">删除成功</string>
     <string name="title_activity_onoff_set">OnoffSetActivity</string>
     
-    <string name="canel_set">退出保存</string>
+    <string name="canel_set">退出前保存</string>
     <string name="canel">否</string>
     <string name="ok">是</string>
     
