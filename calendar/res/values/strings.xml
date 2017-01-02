@@ -26,11 +26,11 @@
     <string name="title_menu">功能菜单</string>
     <string name="add_Remind">增加提醒</string>
     
-    <string name="ask_delall_Remind">清空所有数据，是否确认</string>
+    <string name="ask_delall_Remind">清空确认</string>
     <string name="delall_Remind">数据已清空</string>
 
     <string-array name="menu_list">
-        <item>增加提醒</item>
+        <item>添加提醒</item>
         <item>查看提醒</item>
         <item>删除提醒</item>
         <item>清空提醒</item>

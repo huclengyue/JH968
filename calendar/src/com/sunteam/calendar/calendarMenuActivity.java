@@ -14,6 +14,7 @@ import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
 import com.sunteam.receiver.Alarmpublic;
 
+import android.accounts.NetworkErrorException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -130,7 +131,7 @@ public class calendarMenuActivity extends MenuActivity{
 			else if(selectItem == REMIND_ID)  // 查看提醒
 			{
 				mMenuList = getDbdata();
-				if(mMenuList != null){
+				if(mMenuList.size() > 0){
 					setListData(mMenuList);
 					mTitle = getResources().getString(R.string.list_remind);
 					setTitle(mTitle);
@@ -161,7 +162,7 @@ public class calendarMenuActivity extends MenuActivity{
 			else if(selectItem == DEL_REMIND_ID) // 删除提醒
 			{
 				mMenuList = getDbdata();
-				if(mMenuList != null){
+				if(mMenuList.size() > 0){
 					setListData(mMenuList);
 					mTitle = getResources().getString(R.string.del_remind);
 					setTitle(mTitle);
@@ -184,7 +185,7 @@ public class calendarMenuActivity extends MenuActivity{
 							setListData(mMenuList);
 							setTitle(mTitle);;
 							gInterfaceflag = INTERFACE_MENU;	
-							//onResume();
+							onResume();
 						}
 					});
 				}
@@ -279,7 +280,7 @@ public class calendarMenuActivity extends MenuActivity{
 					Global.debug("\r\n mMenuList.size() =============="+mMenuList.size());
 					Global.debug("\r\n gSelectId =============="+gSelectId);
 					if(gSelectId > (mMenuList.size() - 1) && (mMenuList.size() > 0)){
-						selectid = mMenuList.size() - 1;
+						selectid = 0;//mMenuList.size() - 1;
 					}
 					else{
 						selectid = gSelectId;
@@ -388,6 +389,14 @@ public class calendarMenuActivity extends MenuActivity{
 				//	TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
 					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.del_ok));
 					mPromptDialog.show();
+					mPromptDialog.setPromptListener(new PromptListener() {
+						
+						@Override
+						public void onComplete() {
+							// TODO 自动生成的方法存根
+							onResume();
+						}
+					});
 					break;
 				}
 			}

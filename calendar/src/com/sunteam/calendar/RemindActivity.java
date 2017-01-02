@@ -1,5 +1,6 @@
 package com.sunteam.calendar;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +17,8 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
 import com.sunteam.receiver.Alarmpublic;
+
+import android.R.bool;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,7 +43,7 @@ public class RemindActivity extends MenuActivity{
 	private int ghour = Alarmpublic.DEF_HOUR;   // 开始
 	private int gmin = Alarmpublic.DEF_MIN;   // 开始
 	
-	
+	private String gFileName_bk = null; 
 	private String gFileName = Global.ALARM_FILE_NAME; //Alarmpublic.ALARM_FILE_NAME;  // 录音文件名    getResources().getString(R.string.remind_noFile);
 	private String gPath = Alarmpublic.ALARM_FILE_PATH;   // 录音文件路径
 	private int gonoff = Alarmpublic.ALARM_ON;   // 开关标志
@@ -169,30 +172,35 @@ public class RemindActivity extends MenuActivity{
 			
 			}
 			else{
+				
+				Global.debug("\r\n 可以保存 ------------------- \r\n");
+				boolean rtn = false;
 				if(gCall_Flag == Global.REMIND_CALL_MENU){
-					saveDataRemindForMenu();
+					rtn = saveDataRemindForMenu();
 				}
 				else{
-					saveDataRemind();
+					rtn = saveDataRemind();
 				}
-				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.save_exit));
-				mPromptDialog.show();
-				mPromptDialog.setPromptListener(new PromptListener() {
-					
-					@Override
-					public void onComplete() {
-						// TODO 自动生成的方法存根
-						if(gCall_Flag == Global.REMIND_CALL_MENU){
-							Intent intent = new Intent();	//新建 INtent
-							Bundle bundle = new Bundle();	//新建 bundle
-							
-							intent.putExtras(bundle); // 参数传递
-							
-							setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
+				if(false == rtn){
+					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.save_exit));
+					mPromptDialog.show();
+					mPromptDialog.setPromptListener(new PromptListener() {
+						
+						@Override
+						public void onComplete() {
+							// TODO 自动生成的方法存根
+							if(gCall_Flag == Global.REMIND_CALL_MENU){
+								Intent intent = new Intent();	//新建 INtent
+								Bundle bundle = new Bundle();	//新建 bundle
+								
+								intent.putExtras(bundle); // 参数传递
+								
+								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
+							}
+							finish();
 						}
-						finish();
-					}
-				});
+					});
+				}
 			}
 			
 			return true;
@@ -237,7 +245,7 @@ public class RemindActivity extends MenuActivity{
 					@Override
 					public void doCancel() {
 						// TODO 自动生成的方法存根
-						
+						onResume();
 					}
 				});
 			}
@@ -304,6 +312,7 @@ public class RemindActivity extends MenuActivity{
 		Date dt = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		String fileName = "NT" + sdf.format(dt) + ".wav";
+		gFileName_bk = gFileName;
 		gFileName = fileName;
 		intent.putExtra("callerId", 2); // 0: 默认由录音机调用; 1: 热键进入录音; 2: 万年历中提醒录音;
 										// 3: 语音备忘录音; 后两者在退出时返回到调用者!
@@ -332,7 +341,10 @@ public class RemindActivity extends MenuActivity{
 			Path = bundle.getString("PATH");
 */
 			//saveDataRemind();
-			
+			File mFile = new File(gPath+ "/" +gFileName);
+			if(!mFile.exists()){ // 不存在  还用原来的文件
+				gFileName = gFileName_bk;
+			}
 			showList();
 			//saveDataRemind();
 		}
@@ -398,12 +410,13 @@ public class RemindActivity extends MenuActivity{
 		
 		mMenuView.setSelectItem(gSelectID);
 		onResume();
+		
 	}
 	// 保存提醒数据
-	private void saveDataRemind() {
+	private Boolean saveDataRemind() {
 		// TODO 自动生成的方法存根
 		final Alarminfo tempinfo = new Alarminfo();  // 
-		
+		boolean flag = false;
 		
 		tempinfo.year = gyear;
 		tempinfo.month = gmonth;
@@ -413,19 +426,57 @@ public class RemindActivity extends MenuActivity{
 		tempinfo.minute = gmin;
 		
 		tempinfo.filename = gFileName;
-		tempinfo.path = gPath;
+		tempinfo.path = gPath + "/" + gFileName;
 		tempinfo.onoff = gonoff;
 		
 		Global.debug("saveDataRemind ===111=== tempinfo.onoff ==" + tempinfo.onoff);
-		
+			
+		Calendar calendar = Calendar.getInstance();  // 获取日历
+
 		Calendar tempcalendar = Calendar.getInstance();  // 获取日历
 		
 		tempcalendar.set(Calendar.YEAR, gyear);
 		tempcalendar.set(Calendar.MONTH, gmonth -1);
 		tempcalendar.set(Calendar.DAY_OF_MONTH, gday);
-		tempcalendar.set(Calendar.HOUR, ghour);
+		tempcalendar.set(Calendar.HOUR_OF_DAY, ghour);
 		tempcalendar.set(Calendar.MINUTE, gmin);
-	
+		
+		
+		if(calendar.after(tempcalendar))  // 时间已过
+		{
+			flag = true;
+			ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.time_after),
+					getResources().getString(R.string.ok), 
+					getResources().getString(R.string.canel));
+			mConfirmDialog.show();
+			mConfirmDialog.setConfirmListener(new ConfirmListener() {
+			
+			@Override
+				public void doConfirm() {
+				// TODO 自动生成的方法存根
+					mMenuView.setSelectItem(1);
+					onResume();
+				}
+				
+				@Override
+				public void doCancel() {
+				// TODO 自动生成的方法存根
+				// TODO 自动生成的方法存根
+					if(gCall_Flag == Global.REMIND_CALL_MENU){
+						Intent intent = new Intent();	//新建 INtent
+						Bundle bundle = new Bundle();	//新建 bundle
+					
+						intent.putExtras(bundle); // 参数传递
+					
+						setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
+					}
+					finish();
+				}
+			});
+			return flag;
+		}
+		
+		
 		final GetDbInfo dbInfo = new GetDbInfo(RemindActivity.this);  // 打开数据库
 		int max_num = dbInfo.getCount(Alarmpublic.REMIND_TABLE); // 记录条数
 		int max_Id = dbInfo.getMaxId(Alarmpublic.REMIND_TABLE); // 记录条数
@@ -437,7 +488,7 @@ public class RemindActivity extends MenuActivity{
 		}
 		else{  // 已经有数据 
 			Alarminfo tempinfo_1 = new Alarminfo();  // 临时变量
-			boolean flag = false;
+			
 			ArrayList<Alarminfo> allData = new ArrayList<Alarminfo>();
 			allData = dbInfo.getAllData(Alarmpublic.REMIND_TABLE);
 			for(int i = 0; i < max_num; i++) // 查找相同的 替换
@@ -461,12 +512,32 @@ public class RemindActivity extends MenuActivity{
 							// TODO 自动生成的方法存根
 							//tempinfo._id = tempinfo_1._id;
 							dbInfo.update(tempinfo, Alarmpublic.REMIND_TABLE);
+							
+							// TODO 自动生成的方法存根
+							if(gCall_Flag == Global.REMIND_CALL_MENU){
+								Intent intent = new Intent();	//新建 INtent
+								Bundle bundle = new Bundle();	//新建 bundle
+								
+								intent.putExtras(bundle); // 参数传递
+								
+								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
+							}
+							finish();
 						}
 						
 						@Override
 						public void doCancel() {
 							// TODO 自动生成的方法存根
-							
+							// TODO 自动生成的方法存根
+							if(gCall_Flag == Global.REMIND_CALL_MENU){
+								Intent intent = new Intent();	//新建 INtent
+								Bundle bundle = new Bundle();	//新建 bundle
+								
+								intent.putExtras(bundle); // 参数传递
+								
+								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
+							}
+							finish();
 						}
 					});
 					
@@ -481,14 +552,17 @@ public class RemindActivity extends MenuActivity{
 			}
 			dbInfo.closeDb();
 		}
+		Global.debug("\r\n saveDataRemind  ========9999===========");
 		Alarmpublic.UpateAlarm(this);
+		
+		return flag;
 	}
 	
 	// 保存提醒数据
-	private void saveDataRemindForMenu() {
+	private Boolean saveDataRemindForMenu() {
 		// TODO 自动生成的方法存根
 		final Alarminfo tempinfo = new Alarminfo();  // 
-		
+		Boolean flag = false;
 		
 		tempinfo.year = gyear;
 		tempinfo.month = gmonth;
@@ -498,16 +572,64 @@ public class RemindActivity extends MenuActivity{
 		tempinfo.minute = gmin;
 		
 		tempinfo.filename = gFileName;
-		tempinfo.path = gPath;
+		tempinfo.path = gPath + "/" + gFileName;
 		tempinfo.onoff = gonoff;
 		
 		Global.debug("saveDataRemind ===111=== tempinfo.onoff ==" + tempinfo.onoff);
+	/*	
+		Calendar calendar = Calendar.getInstance();  // 获取日历
+
+		Calendar tempcalendar = Calendar.getInstance();  // 获取日历
 		
+		tempcalendar.set(Calendar.YEAR, gyear);
+		tempcalendar.set(Calendar.MONTH, gmonth -1);
+		tempcalendar.set(Calendar.DAY_OF_MONTH, gday);
+		tempcalendar.set(Calendar.HOUR_OF_DAY, ghour);
+		tempcalendar.set(Calendar.MINUTE, gmin);
+		
+		
+		if(calendar.after(tempcalendar))  // 时间已过
+		{
+			flag = true;
+			ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.time_after),
+					getResources().getString(R.string.ok), 
+					getResources().getString(R.string.canel));
+			mConfirmDialog.show();
+			mConfirmDialog.setConfirmListener(new ConfirmListener() {
+			
+			@Override
+				public void doConfirm() {
+				// TODO 自动生成的方法存根
+					mMenuView.setSelectItem(1);
+					onResume();
+				}
+				
+				@Override
+				public void doCancel() {
+				// TODO 自动生成的方法存根
+				// TODO 自动生成的方法存根
+					if(gCall_Flag == Global.REMIND_CALL_MENU){
+						Intent intent = new Intent();	//新建 INtent
+						Bundle bundle = new Bundle();	//新建 bundle
+					
+						intent.putExtras(bundle); // 参数传递
+					
+						setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
+					}
+					finish();
+				}
+			});
+		}
+		*/
+	
 		final GetDbInfo dbInfo = new GetDbInfo(RemindActivity.this);  // 打开数据库
 
 		tempinfo._id = gID;
 		dbInfo.update(tempinfo, Alarmpublic.REMIND_TABLE);
 		dbInfo.closeDb();
+		Global.debug("\r\n saveDataRemindForMenu ------------------- \r\n");
 		Alarmpublic.UpateAlarm(this);
+		
+		return flag;
 	}
 }

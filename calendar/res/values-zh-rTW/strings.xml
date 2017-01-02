@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">萬年曆</string>
+    <string name="calendar_name">萬年曆</string>
     <string name="hello_world">Hello world!</string>
     <string name="week0">日</string>
     <string name="week1">一</string>

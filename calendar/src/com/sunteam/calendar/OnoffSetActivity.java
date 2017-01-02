@@ -48,6 +48,14 @@ public class OnoffSetActivity extends MenuActivity {
 		mTemp.add(getResources().getString(R.string.remind_on));
 		mTemp.add(getResources().getString(R.string.remind_off));
 		mMenuList = mTemp;
+		
+		if(gonoff == Global.ALARM_OFF){  // 此处需要注意， 逻辑翻转
+			selectItem = Alarmpublic.ALARM_OFF; 
+		}
+		else {
+			selectItem = Alarmpublic.ALARM_ON;
+		}
+		
 		super.onCreate(savedInstanceState);
 //		setContentView(R.layout.calendar_onoff_set);
 	}

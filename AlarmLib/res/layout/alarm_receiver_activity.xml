@@ -44,6 +44,24 @@
             android:gravity="center_vertical"
 
              />
+         <TextView
+            android:id="@+id/Year_tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="2017"
+            android:background="@android:color/transparent"           
+            android:textSize="@dimen/text_big_size_px"
+             />
+         <TextView
+            android:id="@+id/Year_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="-"
+            android:background="@android:color/transparent"           
+            android:textSize="@dimen/text_big_size_px"
+             />
          
         <TextView
             android:id="@+id/date_tv1"

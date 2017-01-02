@@ -34,6 +34,9 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	private TextView mTvTitle = null; // 标题栏
 	private View mLine = null; // 分割线
 	
+	private TextView mTv_Year1 = null; // 标题栏
+	private TextView mTv_Year2 = null; // 标题栏
+	
 	private TextView mTv_Date1 = null; // 标题栏
 	private TextView mTv_Date2 = null; // 标题栏
 	private TextView mTv_Date3 = null; // 标题栏
@@ -41,6 +44,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	private TextView mTv_Time2 = null; // 标题栏
 	private TextView mTv_Time3 = null; // 标题栏
 	private TextView mFilename = null; // 标题栏
+	
 	private static boolean isClose = false;
 	private String gFilename = null; // 标题栏
 	@Override
@@ -51,9 +55,11 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		Tools mTools = new Tools(this);
 		
 		mTvTitle = (TextView) this.findViewById(R.id.title); // 标题栏
-		mTv_Date1 = (TextView) this.findViewById(R.id.date_tv1); // 标题栏
-		mTv_Date2 = (TextView) this.findViewById(R.id.date_tv2); // 标题栏
-		mTv_Date3 = (TextView) this.findViewById(R.id.date_tv3); // 标题栏
+		mTv_Year1 = (TextView) this.findViewById(R.id.Year_tv1); // 年
+		mTv_Year2 = (TextView) this.findViewById(R.id.Year_tv2); // -
+		mTv_Date1 = (TextView) this.findViewById(R.id.date_tv1); // 月
+		mTv_Date2 = (TextView) this.findViewById(R.id.date_tv2); // -
+		mTv_Date3 = (TextView) this.findViewById(R.id.date_tv3); // 日
 		
 		mTv_Time1 = (TextView) this.findViewById(R.id.time_tv1); // 标题栏
 		mTv_Time2 = (TextView) this.findViewById(R.id.time_tv2); // 标题栏
@@ -99,6 +105,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		myPlayer = MyPlayer.getInstance(this,mHandler);
 		myPlayer.setOnStateChangedListener(this);
 		gFilename = alarminfo.path;
+		Alarmpublic.debug("\r\n[11111111111] gFilename ======="+ gFilename);
 		myPlayer.startPlayback(myPlayer.playProgress(), gFilename, true);	
 		
 		
@@ -125,7 +132,45 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			mTvTitle.setText(getResources().getString(R.string.alarm_title));
 			//TtsUtils.getInstance().speak(getResources().getString(R.string.alarm_title));
 		}
-		else{
+		else if (Alarmpublic.ALARM_TYPE_ANN == alarm_flag){
+			if(alarminfo.month < 10){
+				mTv_Date1.setText("0"+alarminfo.month);
+			}
+			else{
+				mTv_Date1.setText(""+alarminfo.month);
+			}
+			mTv_Date2.setText("-");
+			if(alarminfo.day < 10){
+				mTv_Date3.setText("0"+alarminfo.day);
+			}
+			else{
+				mTv_Date3.setText(""+alarminfo.day);
+			}
+			if(alarminfo.hour < 10){
+				mTv_Time1.setText("0" + alarminfo.hour);
+			}
+			else{
+				mTv_Time1.setText("" + alarminfo.hour);
+			}
+			mTv_Time2.setText(":");
+			if(alarminfo.minute < 10){
+				mTv_Time3.setText("0" + alarminfo.minute);
+			}
+			else{
+				mTv_Time3.setText("" + alarminfo.minute);
+			}
+			if(Alarmpublic.ALARM_TYPE_ANN == alarm_flag){
+				mTvTitle.setText(getResources().getString(R.string.annive_title));
+				//TtsUtils.getInstance().speak(getResources().getString(R.string.annive_title));
+			}
+			else{
+				mTvTitle.setText(getResources().getString(R.string.remid_title));
+				//TtsUtils.getInstance().speak(getResources().getString(R.string.remid_title));
+			}
+		}
+		else if( Alarmpublic.ALARM_TYPE_REMIND == alarm_flag){
+			mTv_Year1.setText("" + alarminfo.year);
+			mTv_Year2.setText("-");
 			if(alarminfo.month < 10){
 				mTv_Date1.setText("0"+alarminfo.month);
 			}
@@ -187,6 +232,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
+			Alarmpublic.debug(" \r\n mHandler  ={}====1110000000000000");
 			if(msg.what == 1){   // 音乐播放结束消息
 				Intent intent = new Intent();
 				myPlayer.stopPlayback();
