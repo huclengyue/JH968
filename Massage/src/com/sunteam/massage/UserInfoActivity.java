@@ -84,7 +84,7 @@ public class UserInfoActivity extends MenuActivity {
 
 		if (gUserID >= Global.MAX_USER_NUM) // 全部用户
 		{
-			for (int i = 0; i < Global.MAX_USER_NUM; i++) // 计算圈闭用户
+			for (int i = 0; i < Global.MAX_USER_NUM; i++) // 计算全部用户
 			{
 
 				int maxid = dbInfo.getMaxId(i); // 获取用户最大数据个数
@@ -237,10 +237,11 @@ public class UserInfoActivity extends MenuActivity {
 	// 从写setResultCode 函数
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		Global.debug("setResultCode == gUserID = " + gUserID + " selectItem == " + selectItem);
-		if ((gUserID >= Global.MAX_USER_NUM) && (selectItem != Global.DATE_SET)) {
+		Global.debug("\r\n[setResultCode] setResultCode == gUserID = " + gUserID + " selectItem == " + selectItem);
+		if (((gUserID >= Global.MAX_USER_NUM) && (selectItem != Global.DATE_SET)) || ((gUserID < Global.MAX_USER_NUM) && (selectItem > Global.MONEY_SET))) {
 			return;
 		}
+		
 
 		Intent intent = new Intent();
 		Bundle bundle = new Bundle();//

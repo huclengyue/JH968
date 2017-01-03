@@ -99,7 +99,7 @@ public class SettingActivity extends BaseActivity {
 		if(gId == DATE_SET)  // 日期
 		{
 			setContentView(R.layout.massage_setting);	
-			TTS_speak(0, getResources().getString(R.string.cur_date));
+			TTS_speak(false, getResources().getString(R.string.cur_date));
 		}
 		else if(gId == FORWORK_SET || gId == OVERWORK_SET) // 排钟 点钟
 		{	
@@ -129,10 +129,10 @@ public class SettingActivity extends BaseActivity {
 			
 			if(gId == FORWORK_SET)
 			{
-				TTS_speak(0, getResources().getString(R.string.cur_forTime));
+				TTS_speak(false, getResources().getString(R.string.cur_forTime));
 			}
 			else{
-				TTS_speak(0, getResources().getString(R.string.cur_overTime));
+				TTS_speak(false, getResources().getString(R.string.cur_overTime));
 			}	
 		}
 		else if(gId == MONEY_SET)  //金额
@@ -143,7 +143,7 @@ public class SettingActivity extends BaseActivity {
 			cNum = Integer.toString(dtmp);
 			
 			setContentView(R.layout.massage_setting);
-			TTS_speak(0, getResources().getString(R.string.cur_money));
+			TTS_speak(false, getResources().getString(R.string.cur_money));
 		}
 	//	cNum = "0";
 			
@@ -182,7 +182,7 @@ public class SettingActivity extends BaseActivity {
 		tv2.setTextColor(mTools.getFontColor());
 		
 		Global.debug("==[set]=== onResume ==== ");
-		showview();
+		showview(true);
 		super.onResume();
 	}
 // 界面开始
@@ -307,14 +307,14 @@ public class SettingActivity extends BaseActivity {
 			return true;
 			
 		case KeyEvent.KEYCODE_DPAD_UP:  // 上键处理
-			TtsUtils.getInstance().stop();
+			//TtsUtils.getInstance().stop();
 			gNumberFlag = true;  // 数字输入标志
 			gNumBitflag = 0;
 			setUpKey(); // 上键处理
 			return true;
 			
 		case KeyEvent.KEYCODE_DPAD_DOWN: //下键处理
-			TtsUtils.getInstance().stop();
+			//TtsUtils.getInstance().stop();
 			gNumberFlag = true;  //  数字输入标志
 			gNumBitflag = 0;
 			setDownKey();
@@ -322,12 +322,12 @@ public class SettingActivity extends BaseActivity {
 			
 		case KeyEvent.KEYCODE_STAR: // *键
 		case KeyEvent.KEYCODE_DPAD_LEFT: // 左键
-			TtsUtils.getInstance().stop();
+			//TtsUtils.getInstance().stop();
 			setLeftKey();
 			return true;
 			
 		case KeyEvent.KEYCODE_DPAD_RIGHT: // 右键
-			TtsUtils.getInstance().stop();
+//			TtsUtils.getInstance().stop();
 			setRightKey();
 			return true;
 			
@@ -346,7 +346,7 @@ public class SettingActivity extends BaseActivity {
 		case KeyEvent.KEYCODE_7:
 		case KeyEvent.KEYCODE_8:
 		case KeyEvent.KEYCODE_9:
-			TtsUtils.getInstance().stop();
+//			TtsUtils.getInstance().stop();
 			setNumberKey(keyCode);//   -- 暂时去除数字输入
 			
 			break;
@@ -413,7 +413,6 @@ public class SettingActivity extends BaseActivity {
 		return super.onKeyUp(keyCode, event);
 	}
 	// 数字键
-	@SuppressWarnings("unused")
 	private void setNumberKey(int num) {
 		
 		if(gNumberFlag == false){
@@ -498,7 +497,7 @@ public class SettingActivity extends BaseActivity {
 					if(gyear >= Global.MIN_YEAR && gyear <= Global.MAX_YEAR ){
 						String speak_str= null;
 						speak_str = Integer.toString(gyear) + getResources().getString(R.string.year);
-						TTS_speak(1, speak_str);
+						TTS_speak(false, speak_str);
 					}
 				}
 				else if(gNumBitflag >= 2)
@@ -568,7 +567,7 @@ public class SettingActivity extends BaseActivity {
 						String speak_str= null;
 						String[] mon = getResources().getStringArray(R.array.month);
 						speak_str = mon[gmonth];
-						TTS_speak(1, speak_str);
+						TTS_speak(false, speak_str);
 					}
 					
 				}
@@ -657,7 +656,7 @@ public class SettingActivity extends BaseActivity {
 					if(gday >= 1 && gday <= max_day ){
 						String speak_str= null;
 						speak_str = Integer.toString(gday);
-						TTS_speak(1, speak_str);
+						TTS_speak(false, speak_str);
 					}
 					
 				}
@@ -752,7 +751,7 @@ public class SettingActivity extends BaseActivity {
 			}
 			cNum = Integer.toString(d_temp);
 		}
-		showview();
+		showview(false);
 	}
 	// 更新数据
 	private void SettingUpDataDB() {
@@ -918,7 +917,7 @@ public class SettingActivity extends BaseActivity {
 					i_Max = (double) (Global.MAX_HOUR -gForTime);
 				}
 				cNum = Double.toString(i_Max);
-				showview();
+				showview(false);
 				return;
 			}
 			
@@ -958,9 +957,19 @@ public class SettingActivity extends BaseActivity {
 				}
 				d_temp = d_temp*10; // 扩大十倍
 				if(d_temp > i_Max){
-					d_temp = i_Max;
+					if(gPointFlag == false)  // 没有小数
+					{
+						gPointFlag = true;
+						cNum = Double.toString(d_temp/10);
+					}
+					else{  // 不会执行
+						d_temp = i_Max;
+						cNum = Integer.toString(d_temp);
+					}
 				}
-				cNum = Integer.toString(d_temp);
+				else{
+					cNum = Integer.toString(d_temp);
+				}
 			}			
 		}
 		else if(gId == MONEY_SET)
@@ -977,7 +986,7 @@ public class SettingActivity extends BaseActivity {
 				cNum = Integer.toString(d_temp);
 			}			
 		}
-		showview();		
+		showview(false);		
 	}
 	
 	// 左键处理   增加一位
@@ -1014,7 +1023,7 @@ public class SettingActivity extends BaseActivity {
 			cNum = Integer.toString(d_temp/10);
 			
 		}
-		showview();	
+		showview(false);	
 	}
 
 	// 下键处理
@@ -1211,7 +1220,7 @@ public class SettingActivity extends BaseActivity {
 			}	*/	
 		}
 		//Global.debug("setDownKey cNum ========= " + cNum.toString());
-		showview();
+		showview(false);
 	}
 
 	// 上键处理
@@ -1430,11 +1439,11 @@ public class SettingActivity extends BaseActivity {
 				cNum = Integer.toString(d_temp - 1);
 			}*/
 		}
-		showview();
+		showview(false);
 		
 	}
 	// 显示
-	private void showview() {
+	private void showview(Boolean flag) {
 		Tools mTools = new Tools(SettingActivity.this);
 		String speak_str = null;
 		if(gId == DATE_SET) // 编辑日期
@@ -1529,7 +1538,7 @@ public class SettingActivity extends BaseActivity {
 			gMoney = Integer.valueOf(cNum);
 		}
 		
-		TTS_speak(1, speak_str);
+		TTS_speak(flag, speak_str);
 	}
 
 	// 键抬起
@@ -1575,21 +1584,25 @@ public class SettingActivity extends BaseActivity {
 	
 	
 	/// ＴＴＳ发音
-	public void TTS_speak(int speakWay, String text) {
+	public void TTS_speak(Boolean speakWay, String text) {
 		//HashMap<String, String> map = new HashMap<String, String>();
 		//map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, Constant.TTS_UTTERAANCEID);
-		if (speakWay == 0) {
-			TtsUtils.getInstance().stop();
+//		TtsUtils.getInstance().speak(text, TextToSpeech.QUEUE_FLUSH);
+		
+		if (speakWay == false) {
+			//TtsUtils.getInstance().stop();
 			TtsUtils.getInstance().speak(text, TextToSpeech.QUEUE_FLUSH);
 		} else {
 			TtsUtils.getInstance().speak(text, TextToSpeech.QUEUE_ADD);
+
 		}
+
 		Global.debug("TTS_speak === "+ text);
 	}
 	
 	// TTS读函数 结束
 	public void SpeakContentend(String Text) {
-		TtsUtils.getInstance().stop();
+//		TtsUtils.getInstance().stop();
 		TtsUtils.getInstance().speak(Text, TextToSpeech.QUEUE_FLUSH);
 		
 		delay(4000);
