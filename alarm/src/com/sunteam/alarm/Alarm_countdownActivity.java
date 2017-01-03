@@ -244,9 +244,11 @@ public class Alarm_countdownActivity extends BaseActivity {
 				@Override
 				public void doCancel() {
 					// TODO 自动生成的方法存根
-					
+					Global.debug("\r\n  否========================");
 				}
+				
 			});
+			Global.debug("\r\n  ======88888==99================");
 			return true;
 		}
 		return super.onKeyUp(keyCode, event);

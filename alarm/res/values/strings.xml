@@ -21,7 +21,7 @@
     <string name="annive">纪念日</string>
     <string name="countdown">倒计时</string>
     <string name="time">时间：</string>
-    <string name="music">音乐：</string>
+    <string name="music">铃声：</string>
     <string name="onoff">开关：</string>
     <string name="on">开启</string>
     <string name="off">关闭</string>
@@ -37,8 +37,8 @@
     <string name="music_title">音乐</string>
     <string name="onoff_title">开关</string>
     <string name="type_title">类型</string>
-    <string name="set_ok">设定成功！</string>
-    <string name="canel_set">确认退出</string>
+    <string name="set_ok">设定成功</string>
+    <string name="canel_set">退出前保存</string>
     <string name="canel">否</string>
     <string name="ok">是</string>
     <string name="title_activity_alarm_setting">AlarmSettingActivity</string>
@@ -59,6 +59,7 @@
     <string name="time_self">自定义</string>
     <string name="no_file">无文件</string>
     <string name="count_down_set_error">倒计时时间为0，请重新设置</string>
+     <string name="canel_set_countdown">确认退出</string>
     
 
 </resources>

@@ -131,7 +131,8 @@ public class Alarm_CountDownSetActivity extends BaseActivity {
 					@Override
 					public void onComplete() {
 						// TODO 自动生成的方法存根
-						
+						//onResume();
+						showInfo();
 					}
 				});
 			}
@@ -211,7 +212,7 @@ public class Alarm_CountDownSetActivity extends BaseActivity {
 			showInfo();
 		}
 		else if(keyCode == KeyEvent.KEYCODE_BACK){ // 返回
-			ConfirmDialog gConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.canel_set), getResources().getString(R.string.ok), getResources().getString(R.string.canel));
+			ConfirmDialog gConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.canel_set_countdown), getResources().getString(R.string.ok), getResources().getString(R.string.canel));
 			gConfirmDialog.show();
 			gConfirmDialog.setConfirmListener(new ConfirmListener() {
 				
@@ -230,7 +231,7 @@ public class Alarm_CountDownSetActivity extends BaseActivity {
 				@Override
 				public void doCancel() {   // 直接退出
 					// TODO 自动生成的方法存根
-					finish();
+					//finish();
 				}
 			});
 			

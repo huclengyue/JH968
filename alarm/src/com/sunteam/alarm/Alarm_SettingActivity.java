@@ -153,7 +153,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 		}
 		mTvTitle.setText(title);
 		TtsUtils.getInstance().speak(title);
-		showInfo();
+		showInfo(true);
 		
 	}
 	// 按键处理
@@ -207,7 +207,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 			return true;
 		}
 		else if(keyCode == KeyEvent.KEYCODE_DPAD_UP){
-			TtsUtils.getInstance().stop();
+
 //			Global.debug("KEYCODE_DPAD_UP === 1111");
 			if(gSelectID == 0 && (gInterfaceFlag == Global.ALARM_INFO_INTERFACE)){  // 闹钟
 				if(gFlag == FLAG1){  // 小时
@@ -263,10 +263,10 @@ public class Alarm_SettingActivity extends BaseActivity {
 					}
 				}
 			}
-			showInfo();
+			showInfo(false);
 		}
 		else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
-			TtsUtils.getInstance().stop();
+			
 //			Global.debug("KEYCODE_DPAD_UP === 1111");
 			if(gSelectID == 0 && (gInterfaceFlag == Global.ALARM_INFO_INTERFACE)){
 				if(gFlag == FLAG1){  // 小时
@@ -323,7 +323,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 				
 				}
 			}
-			showInfo();
+			showInfo(false);
 		}
 		else if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
 	//		Global.debug("LEFT RIHKT  gFlag == " + gFlag);
@@ -334,7 +334,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 				gFlag = FLAG1;
 			}
 	//		Global.debug("LEFT RIHKT  gFlag =11== " + gFlag);
-			showInfo();
+			showInfo(false);
 		}
 		else if(keyCode == KeyEvent.KEYCODE_BACK){ // 返回
 			Global.debug("{}        gInterfaceFlag === "+ gInterfaceFlag);
@@ -342,7 +342,9 @@ public class Alarm_SettingActivity extends BaseActivity {
 			{
 				if((gHour != gHour_bk || gMin != gMin_bk) && (Global.ALARM_SET_TIME == gSelectID))  // 有改变
 				{
-					ConfirmDialog gConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.canel_set), getResources().getString(R.string.ok), getResources().getString(R.string.canel));
+					ConfirmDialog gConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.canel_set),
+																			getResources().getString(R.string.ok), 
+																			getResources().getString(R.string.canel));
 					gConfirmDialog.show();
 					gConfirmDialog.setConfirmListener(new ConfirmListener() {
 						
@@ -471,7 +473,13 @@ public class Alarm_SettingActivity extends BaseActivity {
 		}
 	}
 	// 显示界面
-	private void showInfo(){
+	private void showInfo(boolean flag){
+		int ttsFlag = TtsUtils.TTS_QUEUE_FLUSH;
+		
+		if(flag == true){
+			ttsFlag = TtsUtils.TTS_QUEUE_ADD;
+		}
+		
 		if(gInterfaceFlag == Global.ALARM_INFO_INTERFACE)  // 闹钟
 		{
 			if(gSelectID == Global.ALARM_SET_TIME){  // 时间
@@ -494,7 +502,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 			Global.debug("showInfo gFlag == " + gFlag);
 			if(gFlag == FLAG1){
 				tv1.setBackgroundColor(new Tools(this).getHighlightColor()); // 设置颜色反显	
-				TtsUtils.getInstance().speak(gHour + getResources().getString(R.string.hour_time1), 1);
+				TtsUtils.getInstance().speak(gHour + getResources().getString(R.string.hour_time1), ttsFlag);
 			}
 			else{
 				tv1.setBackgroundColor(new Tools(this).getBackgroundColor()); // 设置颜色反显
@@ -502,7 +510,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 			
 			if(gFlag == FLAG2){
 				tv3.setBackgroundColor(new Tools(this).getHighlightColor()); // 设置颜色反显
-				TtsUtils.getInstance().speak(gMin + getResources().getString(R.string.min_time), 1);
+				TtsUtils.getInstance().speak(gMin + getResources().getString(R.string.min_time), ttsFlag);
 			}
 			else{
 				tv3.setBackgroundColor(new Tools(this).getBackgroundColor()); // 设置颜色反显
@@ -525,7 +533,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 				
 				if(gFlag == FLAG1){
 					tv1.setBackgroundColor(new Tools(this).getHighlightColor()); // 设置颜色反显	
-					TtsUtils.getInstance().speak(gMonth +getResources().getString(R.string.month), 1);
+					TtsUtils.getInstance().speak(gMonth +getResources().getString(R.string.month), ttsFlag);
 				}
 				else{
 					tv1.setBackgroundColor(new Tools(this).getBackgroundColor()); // 设置颜色反显
@@ -533,7 +541,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 				
 				if(gFlag == FLAG2){
 					tv3.setBackgroundColor(new Tools(this).getHighlightColor()); // 设置颜色反显
-					TtsUtils.getInstance().speak(gDay +getResources().getString(R.string.day), 1);
+					TtsUtils.getInstance().speak(gDay +getResources().getString(R.string.day), ttsFlag);
 				}
 				else{
 					tv3.setBackgroundColor(new Tools(this).getBackgroundColor()); // 设置颜色反显
@@ -557,7 +565,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 				Global.debug("showInfo gFlag == " + gFlag);
 				if(gFlag == FLAG1){
 					tv1.setBackgroundColor(new Tools(this).getHighlightColor()); // 设置颜色反显	
-					TtsUtils.getInstance().speak(gHour + getResources().getString(R.string.hour_time1), 1);
+					TtsUtils.getInstance().speak(gHour + getResources().getString(R.string.hour_time1), ttsFlag);
 				}
 				else{
 					tv1.setBackgroundColor(new Tools(this).getBackgroundColor()); // 设置颜色反显
@@ -565,7 +573,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 				
 				if(gFlag == FLAG2){
 					tv3.setBackgroundColor(new Tools(this).getHighlightColor()); // 设置颜色反显
-					TtsUtils.getInstance().speak(gMin + getResources().getString(R.string.min_time), 1);
+					TtsUtils.getInstance().speak(gMin + getResources().getString(R.string.min_time), ttsFlag);
 				}
 				else{
 					tv3.setBackgroundColor(new Tools(this).getBackgroundColor()); // 设置颜色反显

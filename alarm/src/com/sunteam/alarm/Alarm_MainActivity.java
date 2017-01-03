@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.sunteam.alarm.utils.Global;
 import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
@@ -48,6 +49,19 @@ public class Alarm_MainActivity extends MenuActivity {
 	}
 	
 	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO 自动生成的方法存根
+		if(keyCode == KeyEvent.KEYCODE_ENTER ||
+				keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
+		{
+		//	TtsUtils.getInstance().stop();
+			return true;
+		}
+		
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		
 		if(keyCode == KeyEvent.KEYCODE_ENTER ||
@@ -61,7 +75,7 @@ public class Alarm_MainActivity extends MenuActivity {
 					mMenuList = getAlarmData();
 					setListData(mMenuList);
 					mMenuView.setSelectItem(0);
-					super.onResume();
+					onResume();
 				}
 				else if(ANNIVERSARY_ID == getSelectItem()){   // 纪念日
 					gInterfaceFlag = Global.ANNIVERSARY_INTERFACE;
@@ -70,7 +84,7 @@ public class Alarm_MainActivity extends MenuActivity {
 					
 					setListData(mMenuList);
 					mMenuView.setSelectItem(0);
-					super.onResume();
+					onResume();
 				}
 				else if(COUNTDOWN_ID == getSelectItem()){   // 倒计时
 					gInterfaceFlag = Global.COUNTDOWN_INTERFACE;
@@ -312,7 +326,7 @@ public class Alarm_MainActivity extends MenuActivity {
 		setTitle(getResources().getString(R.string.alarm));
 		mMenuView.setSelectItem(0);
 		
-		//onResume();
+		onResume();
 	}
 
 	// 显示 纪念日详情
@@ -397,7 +411,7 @@ public class Alarm_MainActivity extends MenuActivity {
 		setListData(mMenuList);
 		setTitle(getResources().getString(R.string.annive));
 		mMenuView.setSelectItem(0);
-	//	super.onResume();
+		onResume();
 	}
 	
 	// 获取定时闹钟的数据
