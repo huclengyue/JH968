@@ -243,7 +243,7 @@ public class RecordActivity extends BaseActivity {
 				Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(batteryReceiver, intentFilter);
 		
-		Global.acquireWakeLock(this);   // 禁止休眠
+		
 	}
 
 	@Override
@@ -284,12 +284,14 @@ public class RecordActivity extends BaseActivity {
 					TtsUtils.getInstance().speak(rs.getString(R.string.startRecord),
 							TextToSpeech.QUEUE_FLUSH);
 					//showDialog();
+					Global.acquireWakeLock(this);   // 禁止休眠
 				}
 
-			} else if (mState == state_recording) {
+			} else if (mState == state_recording) {  // 正在录音
 				stop();
 				Global.showToast(RecordActivity.this, R.string.saveAndexit,
 						RecordHandler, 2);
+				Global.releaseWakeLock();   // 打开休眠
 				// goback(); // houding@20160902 统一在RecordHandler中处理
 			} else if (mState == state_ready) {
 				TtsUtils.getInstance().stop();
@@ -297,6 +299,7 @@ public class RecordActivity extends BaseActivity {
 				// goback(); // houding@20160902 统一在RecordHandler中处理
 				Global.showToast(RecordActivity.this, R.string.invalid_file,
 						RecordHandler, 2);
+				Global.releaseWakeLock();   // 打开休眠
 			}
 		} else if ((code == KeyEvent.KEYCODE_BACK || code == KeyEvent.KEYCODE_ESCAPE)
 				&& action == KeyEvent.ACTION_UP) {

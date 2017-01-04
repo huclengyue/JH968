@@ -254,9 +254,11 @@ Runnable finishActivityDelayed = new Runnable() {
 						tvTotalTime.setText(String.format(mTimerFormatMS, total/ 60,total% 60));
 					}
 					updateUI();
+					Global.acquireWakeLock(this);  //  ²¥·Å×´Ì¬½ûÖ¹ÐÝÃß
 				}else if(myPlayer.state() == MyPlayer.PLAYING_STATE){
 					myPlayer.pausePlayback();
 					imageButton.setBackgroundResource(R.drawable.pause);
+					Global.releaseWakeLock();   // ÔÝÍ£Ê± ¿ÉÒÔÐÝÃß
 				}
 			}else if(keyCode == KeyEvent.KEYCODE_DPAD_UP&&action == KeyEvent.ACTION_UP){
 				previous();
