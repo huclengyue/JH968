@@ -114,6 +114,7 @@
 <string name="ask_delall">"确认清空"</string>
 <string name="delall_ok">"数据已清空"</string>
 <string name="hearphone_notin">"必须插入耳机，才能正常使用"</string>
+<string name="title_nohearphone">"请插入耳机"</string>
 
 <string name="play_pause">"暂停播放"</string>
 <string name="play_start">"开始播放"</string>

@@ -48,15 +48,18 @@
         <activity
             android:name=".SaveMenuActivity"
             android:label="@string/title_activity_save_menu"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".PlayMenuActivity"
-            android:label="@string/title_activity_play_menu" >
+            android:label="@string/title_activity_play_menu"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".MenuPalyMenuActivity"
-            android:label="@string/title_activity_menu_paly_menu" >
+            android:label="@string/title_activity_menu_paly_menu"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
     </application>
 

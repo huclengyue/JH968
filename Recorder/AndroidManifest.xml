@@ -47,13 +47,13 @@
             android:name="com.sunteam.recorder.activity.PlaylistActivity"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name="com.sunteam.recorder.activity.PlayActivity"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
     </application>
 

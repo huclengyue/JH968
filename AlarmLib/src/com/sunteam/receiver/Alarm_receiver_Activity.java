@@ -79,14 +79,18 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		mTv_Time1.setTextColor(mTools.getFontColor());
 		mTv_Time2.setTextColor(mTools.getFontColor());
 		mTv_Time3.setTextColor(mTools.getFontColor());
+		
+		mTv_Year1.setTextColor(mTools.getFontColor());
+		mTv_Year2.setTextColor(mTools.getFontColor());
 
 		mFilename.setTextColor(mTools.getFontColor());
 
 		mTvTitle.setText(getResources().getString(R.string.alarm_title));
 		
+		// 设置显示属性
 		int fontSize = mTools.getFontSize();
-		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize); // 设置title字号
-		mTvTitle.setHeight(fontSize);	
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(fontSize));	
 		//int flag = getAlarmType();
 		Alarminfo alarminfo = new Alarminfo();  // 
 		alarminfo = getAlarmData();
@@ -110,6 +114,9 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		
 		
 		int alarm_flag = getAlarmType();
+		
+		mTv_Year1.setText("");
+		mTv_Year2.setText("");
 		
 		Alarmpublic.debug("\r\n alarm_flag ==== "+ alarm_flag);
 		if(Alarmpublic.ALARM_TYPE_ALARM == alarm_flag){

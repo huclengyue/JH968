@@ -72,12 +72,14 @@
         <activity
             android:name=".OnoffSetActivity"
             android:screenOrientation="landscape"
-            android:label="@string/title_activity_onoff_set" >
+            android:label="@string/title_activity_onoff_set"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <!-- 录音机调用 -->
         <activity
             android:name="com.sunteam.recorder.activity.RecordActivity"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
@@ -86,7 +88,8 @@
          <activity
             android:name="com.sunteam.receiver.Alarm_receiver_Activity"
             android:label="@string/alarm_title"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         
          <!-- 必须要注册才行 -->

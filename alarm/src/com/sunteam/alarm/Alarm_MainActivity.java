@@ -10,9 +10,12 @@ import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
 import com.sunteam.receiver.Alarmpublic;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 public class Alarm_MainActivity extends MenuActivity {
 
@@ -762,5 +765,22 @@ public class Alarm_MainActivity extends MenuActivity {
 	
 		Alarmpublic.UpateAlarm(Alarm_MainActivity.this);
 	}
+	
+	// 切换发音
+		private void setHearToSpeak(Boolean flag) {
+			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+			if(true == flag){  //切换到外放
+				audioManager.setMode(AudioManager.MODE_NORMAL);
+				audioManager.setSpeakerphoneOn(true);
+				Toast.makeText(this, "   切换外放  ", 0).show();
+				
+				
+			}
+			else{  // 切换到 耳机
+				//audioManager.setMode(AudioManager.ROUTE_HEADSET);
+				audioManager.setSpeakerphoneOn(false);
+				Toast.makeText(this, "   切换耳机  ", 0).show();;
+			}
+		}
 
 }

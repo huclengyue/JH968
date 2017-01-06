@@ -484,6 +484,7 @@ public class MainActivity extends BaseActivity {
 			
 			
 		case KeyEvent.KEYCODE_DPAD_DOWN:  // 下键
+/*
 			if(select_id == SELECT_YEAR_ID)   // 焦点 在 年
 			{
 				if(gyear >= Global.MAX_YEAR){
@@ -518,9 +519,11 @@ public class MainActivity extends BaseActivity {
 			Global.debug("====gYear = "+gyear + " Gmonth == "+gmonth + " gday == "+gday);
 
 			SetTextView(gyear, gmonth, gday, true);
+			*/
 			return true;
 			
 		case KeyEvent.KEYCODE_DPAD_UP: // 上键
+/*			
 			if(select_id == SELECT_YEAR_ID)
 			{
 				if(gyear <= Global.MIN_YEAR){
@@ -554,6 +557,7 @@ public class MainActivity extends BaseActivity {
 			}
 			Global.debug("====gYear = "+gyear + " Gmonth == "+gmonth + " gday == "+gday);
 			SetTextView(gyear, gmonth, gday, true);
+			*/
 			return true;
 			
 		case KeyEvent.KEYCODE_DPAD_LEFT: // 左键
@@ -608,11 +612,86 @@ public class MainActivity extends BaseActivity {
 	//  
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		
 		switch (keyCode) {   
 		case KeyEvent.KEYCODE_DPAD_CENTER:
 		case KeyEvent.KEYCODE_ENTER:
 		case KeyEvent.KEYCODE_DPAD_DOWN:  // 下键
+			if(select_id == SELECT_YEAR_ID)   // 焦点 在 年
+			{
+				if(gyear >= Global.MAX_YEAR){
+					gyear = Global.MIN_YEAR;
+				}
+				else{
+					gyear ++;
+				}
+			}
+			else if(select_id == SELECT_MONTH_ID){			// 焦点 在 月
+				if(gmonth >=  Global.MAX_MONTH)
+				{
+					gmonth = Global.MIN_MONTH;
+				}
+				else{
+					gmonth ++;
+				}
+				getCalendar(gyear, gmonth);  // 获取有用的信息
+				if(gday > daysOfMonth ){
+					gday = daysOfMonth;
+				}
+			}
+			else {  // 焦点 在 日
+				if(gday >= daysOfMonth)
+				{
+					gday = 1;
+				}
+				else {
+					gday ++;
+				}
+			}
+			Global.debug("====gYear = "+gyear + " Gmonth == "+gmonth + " gday == "+gday);
+
+			SetTextView(gyear, gmonth, gday, true);
+			return true;
+
 		case KeyEvent.KEYCODE_DPAD_UP: // 上键
+			
+			if(select_id == SELECT_YEAR_ID)
+			{
+				if(gyear <= Global.MIN_YEAR){
+					gyear = Global.MAX_YEAR;
+				}
+				else{
+					gyear --;
+				}
+			}
+			else if(select_id == SELECT_MONTH_ID){			
+				if(gmonth <=  Global.MIN_MONTH)
+				{
+					gmonth = Global.MAX_MONTH;
+				}
+				else{
+					gmonth -- ;
+				}
+				getCalendar(gyear, gmonth);  // 获取有用的信息
+				if(gday > daysOfMonth ){
+					gday = daysOfMonth;
+				}
+			}
+			else {
+				if(gday <= 1)
+				{
+					gday = daysOfMonth;
+				}
+				else{
+					gday --;
+				}
+			}
+			Global.debug("====gYear = "+gyear + " Gmonth == "+gmonth + " gday == "+gday);
+			SetTextView(gyear, gmonth, gday, true);
+			
+			return true;
+
 		case KeyEvent.KEYCODE_DPAD_LEFT: // 左键
 		case KeyEvent.KEYCODE_DPAD_RIGHT: // 右键	
 		case KeyEvent.KEYCODE_MENU:   // menu界面启动

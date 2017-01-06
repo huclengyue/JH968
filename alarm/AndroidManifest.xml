@@ -46,12 +46,14 @@
         <activity
             android:name=".Alarm_countdownActivity"
             android:label="@string/title_activity_alarm_countdown"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".Alarm_SetInfoActivity"
             android:label="@string/alarm_title"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <!-- 必须要注册才行 -->
         <receiver
@@ -62,11 +64,13 @@
         <activity
             android:name="com.sunteam.receiver.Alarm_receiver_Activity"
             android:label="@string/alarm_title"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".Alarm_CountDownSetActivity"
-            android:label="@string/title_activity_alarm__count_down_set" >
+            android:label="@string/title_activity_alarm__count_down_set"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <!-- 开机 消息 -->
         <receiver android:name="com.sunteam.alarm.BootCompletedReceiver" >
