@@ -232,6 +232,8 @@ public class Alarm_CountDownSetActivity extends BaseActivity {
 				public void doCancel() {   // 直接退出
 					// TODO 自动生成的方法存根
 					//finish();
+					//onResume();
+					showInfo();
 				}
 			});
 			

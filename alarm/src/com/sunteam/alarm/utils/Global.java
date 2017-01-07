@@ -8,6 +8,7 @@ import android.util.Log;
 public class Global {
 	public static final String TAG = "zbc";
 	
+	
 	public static final int ALARM_INTERFACE = 1;	// 定时闹钟界面
 	public static final int ANNIVERSARY_INTERFACE = 2;	// 纪念日界面
 	public static final int COUNTDOWN_INTERFACE = 3;	// 倒计时界面

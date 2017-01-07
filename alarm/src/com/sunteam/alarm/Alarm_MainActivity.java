@@ -1,19 +1,23 @@
 package com.sunteam.alarm;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.sunteam.alarm.utils.Global;
 import com.sunteam.common.menu.MenuActivity;
-import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
+import com.sunteam.receiver.Alarm_receiver_Activity;
 import com.sunteam.receiver.Alarmpublic;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -66,7 +70,7 @@ public class Alarm_MainActivity extends MenuActivity {
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		
+		Global.debug("\r\n onKeyUp ===========");
 		if(keyCode == KeyEvent.KEYCODE_ENTER ||
 				keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
 		{
@@ -242,7 +246,12 @@ public class Alarm_MainActivity extends MenuActivity {
 				super.onResume();
 			}
 			
+			
 			return true;
+		}
+		else if(keyCode == KeyEvent.KEYCODE_0){
+		
+			testrawplay();
 		}
 		return super.onKeyUp(keyCode, event);
 		
@@ -614,14 +623,13 @@ public class Alarm_MainActivity extends MenuActivity {
 					Global.debug("\r\n gHour ====== " + gHour);
 					Global.debug("\r\n gMin ====== " + gMin);
 	    			alarminfo.hour = gHour;
-	    			alarminfo.minute = gMin;
-	    			
+	    			alarminfo.minute = gMin;	
 				}
 				UpdateAlarmData(alarminfo);
     			
     			ShowAlarmInfo(gSQLData_ID - 1);	
 				mMenuView.setSelectItem(selectId);
-				super.onResume();
+				//onResume();
 			}
 			else if(intface == Global.ANNIVERSARY_INFO_INTERFACE){ // 纪念日详情界面
 				
@@ -642,7 +650,7 @@ public class Alarm_MainActivity extends MenuActivity {
     			
 				ShowAnniveInfo(gSQLData_ID - 1);
 				mMenuView.setSelectItem(selectId);
-				super.onResume();
+				//super.onResume();
 			}
 			Global.debug("[*********]onActivityResult temp_id =" + selectId);
 		}
@@ -773,8 +781,7 @@ public class Alarm_MainActivity extends MenuActivity {
 				audioManager.setMode(AudioManager.MODE_NORMAL);
 				audioManager.setSpeakerphoneOn(true);
 				Toast.makeText(this, "   切换外放  ", 0).show();
-				
-				
+					
 			}
 			else{  // 切换到 耳机
 				//audioManager.setMode(AudioManager.ROUTE_HEADSET);
@@ -782,5 +789,55 @@ public class Alarm_MainActivity extends MenuActivity {
 				Toast.makeText(this, "   切换耳机  ", 0).show();;
 			}
 		}
+		
+		private void testrawplay() {
+			// TODO 自动生成的方法存根
+			boolean D = false;
+			Handler mHandler = null;
+			if(false){
+				MediaPlayer mediaPlayer= MediaPlayer.create(this, R.raw.alarm);
+	            mediaPlayer.start();
+			}
+			
+			if(true){
+				Intent mIntent = new Intent(this , Alarm_receiver_Activity.class);
+				//Bundle bundle = new Bundle();//
+				
+				//bundle.putInt("FLAG", Alarmpublic.BOOT_FLAG); // 修改项
+				mIntent.putExtra("FLAG", Alarmpublic.BOOT_FLAG); // 传入参数 
+				mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(mIntent);
+			}
+			
+            if(D){
+			MediaPlayer myPlayer = new MediaPlayer();//MyPlayer.getInstance(this,mHandler);
+			//((MyPlayer) myPlayer).setOnStateChangedListener((OnStateChangedListener) this);
+			
+			Global.debug("\r\nKeyEvent.KEYCODE_0  ============ ");
+			
+			
+			AssetFileDescriptor fd = getResources().openRawResourceFd(R.raw.alarm);
+			
+			Global.debug("\r\n[4444] gFilename =====fileDescriptor.getFileDescriptor()==" + fd.getFileDescriptor());
+
+			try {
+				myPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+				myPlayer.setDataSource(fd.getFileDescriptor());
+				myPlayer.prepare();
+				myPlayer.start();
+			} catch (IllegalArgumentException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}
+			Global.debug("\r\n startPlay2   ==========666==");
+            }
+			//((MyPlayer) myPlayer).startPlayback2(((MyPlayer) myPlayer).playProgress(), fd.getFileDescriptor(), true);
+		}	
 
 }

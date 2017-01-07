@@ -24,7 +24,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 		Global.debug("\r\n ===== [BootCompletedReceiver]");
 		Global.debug("\r\n ===== [BootCompletedReceiver] ");
 		Global.debug("\r\n ===== [BootCompletedReceiver] ");
-		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) { // 开机消息
 			Global.debug("\r\n ==1111=== [BootCompletedReceiver] ");
 			/*
 			Intent startIntent = new Intent(context, com.sunteam.receiver.Alarm_receiver_Activity.class);
@@ -33,10 +33,17 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 			*/
 			Alarmpublic.debug("[###]Alarm_Receiver  ==2222222222222222222= \r\n");
 			Intent mIntent = new Intent(context , Alarm_receiver_Activity.class);
+			//Bundle bundle = new Bundle();//
+			
+			//bundle.putInt("FLAG", Alarmpublic.BOOT_FLAG); // 修改项
+			mIntent.putExtra("FLAG", Alarmpublic.BOOT_FLAG); // 传入参数 
 			mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(mIntent);	
 			
 //			Alarmpublic.UpateAlarm(context);
+		}
+		else{
+			Alarmpublic.UpateAlarm(context);
 		}
 		
     }
