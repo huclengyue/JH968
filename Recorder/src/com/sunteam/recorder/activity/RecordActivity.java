@@ -32,7 +32,6 @@ import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.recorder.Global;
 import com.sunteam.recorder.R;
-import com.sunteam.recorder.dialog.CustomDialog;
 //import com.sunteam.recorder.log.MyLog;
 import com.sunteam.recorder.recorder.AudioFileFunc;
 import com.sunteam.recorder.recorder.AudioRecorder;
@@ -128,6 +127,7 @@ public class RecordActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Global.debug("RecordActivity  [onCreate] ======================== \r\n ");
 		// 通过Intent传递调用者id、录音文件保存路径、录音文件名
 		Intent intent = getIntent();
 		callerId = intent.getIntExtra("callerId", callerId);
@@ -137,9 +137,10 @@ public class RecordActivity extends BaseActivity {
 					+ "/" + getResources().getString(R.string.storage);
 		}
 		Global.setSavePath(path);
+		Global.debug("RecordActivity  [onCreate] ========222================path == " + path);
 		AudioFileFunc.fileBasePath = new File(path);
 		fileName = intent.getStringExtra("fileName");
-
+		Global.debug("RecordActivity  [onCreate] ========333================fileName == " + fileName);
 		rs = getResources();
 		setContentView(R.layout.record_ready);
 
@@ -698,8 +699,7 @@ public class RecordActivity extends BaseActivity {
 						goback();
 					}
 				} else if (level < 20 && !isCharging) {
-					Global.showToast(RecordActivity.this, R.string.low_battery,
-							null, -1);
+				//	Global.showToast(RecordActivity.this, R.string.low_battery,	null, -1);
 				}
 			}
 		}

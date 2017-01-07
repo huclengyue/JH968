@@ -84,7 +84,7 @@ public class PlaylistActivity extends MenuActivity {
 				if (level < 10) {
 
 				} else if (level < 20 && !isCharging) {
-					Global.showToast(PlaylistActivity.this, R.string.low_battery, null, -1);
+				//	Global.showToast(PlaylistActivity.this, R.string.low_battery, null, -1);
 				}
 			}
 		}

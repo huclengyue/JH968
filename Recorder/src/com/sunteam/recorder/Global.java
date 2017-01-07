@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 import com.sunteam.common.tts.TtsCompletedListener;
 import com.sunteam.common.tts.TtsUtils;
-import com.sunteam.recorder.dialog.CustomPromptDialog;
+import com.sunteam.common.utils.PromptDialog;
+import com.sunteam.common.utils.dialog.PromptListener;
 
 import android.content.Context;
 import android.os.Environment;
@@ -57,15 +58,12 @@ public class Global {
 		setSavePath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + app.getResources().getString(R.string.storage));
 		gApp = app;
 	}
-
 	public static void setSavePath(String path) {
 		storagePath = path;
 	}
-
 	public static int getBackgroundColor() {
 		return backgroundColor;
 	}
-
 	public static void setBackgroundColor(int color) {
 		backgroundColor = color;
 	}
@@ -117,24 +115,20 @@ public class Global {
 
 	public static void showToast(Context context, int StringID, final Handler handler, final int what) {
 		String hint = context.getResources().getString(StringID);
-		final CustomPromptDialog hintDialog = new CustomPromptDialog(context, hint);
-
-		TtsUtils.getInstance().setCompletedListener(new TtsCompletedListener() {
-
+		final PromptDialog hintDialog = new PromptDialog(context, hint);
+		hintDialog.show();
+		hintDialog.setPromptListener(new PromptListener() {
+			
 			@Override
-			public void onCompleted(String arg0) {
-				hintDialog.dismiss();
+			public void onComplete() {
+				// TODO 自动生成的方法存根
 				if (handler != null) {
 					handler.sendEmptyMessage(what);
 					TtsUtils.getInstance().setCompletedListener(null);
 				}
 			}
 		});
-		TtsUtils.getInstance().speak(hint);
-		try {
-			hintDialog.show();
-		} catch (Exception e) {
-		}
+		
 	}
 
 }

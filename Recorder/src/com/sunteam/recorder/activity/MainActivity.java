@@ -111,7 +111,7 @@ public class MainActivity extends MenuActivity {
 				if (level < 10) {
 
 				} else if (level < 20 && !isCharging) {
-					Global.showToast(MainActivity.this, R.string.low_battery, null, -1);
+			//		Global.showToast(MainActivity.this, R.string.low_battery, null, -1);
 				}
 			}
 		}
@@ -120,10 +120,10 @@ public class MainActivity extends MenuActivity {
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		switch (selectItem) {
-		case 0:
+		case 0:  // 录音
 			startActivityFromMenu(RecordActivity.class, menuItem);
 			break;
-		case 1:
+		case 1:  // 录音回放
 			if (!isExistPlayList()) {
 				Global.showToast(MainActivity.this, R.string.no_file,mHandler,2);
 			} else {
@@ -134,7 +134,7 @@ public class MainActivity extends MenuActivity {
 			break;
 		}
 	}
-
+ // 
 	private void startActivityFromMenu(Class<?> cls, String title) {
 		Intent intent = new Intent();
 		intent.putExtra("title", title); // 标题名称

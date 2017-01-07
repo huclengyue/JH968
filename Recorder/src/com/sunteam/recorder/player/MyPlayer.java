@@ -3,13 +3,16 @@ package com.sunteam.recorder.player;
 import java.io.IOException;
 
 import android.content.Context;
+import android.gesture.GestureStore;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.os.Handler;
 
+import com.iflytek.thridparty.r;
 import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.recorder.Global;
 import com.sunteam.recorder.R;
 
@@ -139,7 +142,9 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 		pos += 10000;
 		if(pos>=mPlayer.getDuration()+9000){
 			stopPlayback();
-			Global.showToast(mcontext, R.string.speed2end, mHandler,2);
+			//Global.showToast(mcontext, R.string.speed2end, mHandler,2);
+			PromptDialog mPromptDialog = new PromptDialog(mcontext, mcontext.getResources().getString(R.string.speed2end));
+			mPromptDialog.show();
 		}else if(pos>=mPlayer.getDuration()){
 			mPlayer.seekTo(mPlayer.getDuration()-500);
 			mPlayer.setOnCompletionListener(this);
@@ -155,7 +160,9 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 		int pos = mPlayer.getCurrentPosition();
 		pos -= 10000;//每按一次键倒退10s
 		if(pos<=-8000){
-			Global.showToast(mcontext, R.string.rewind2start, mHandler,0);
+			//Global.showToast(mcontext, R.string.rewind2start, mHandler,0);
+			PromptDialog mPromptDialog = new PromptDialog(mcontext, mcontext.getResources().getString(R.string.rewind2start));
+			mPromptDialog.show();
 			//stopPlayback();
 			mPlayer.seekTo(1000);   // 快退不停止 一直播
 		}else{

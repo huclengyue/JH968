@@ -2,6 +2,7 @@ package com.sunteam.recorder.activity;
 
 import java.util.List;
 
+import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
@@ -439,8 +440,8 @@ Runnable finishActivityDelayed = new Runnable() {
 	            			Global.showToast(PlayActivity.this, R.string.cannot_play,mHandler,0);
 	            			myPlayer.pausePlayback();
 	            		}
-	            }else if(level<20&&!isCharging){
-	            	Global.showToast(PlayActivity.this, R.string.low_battery,null,-1);
+	            }else if(level < 20 &&!isCharging){
+	            //	Global.showToast(PlayActivity.this, R.string.low_battery,null,-1);
 	            } 
 	    }
 		}
