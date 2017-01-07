@@ -427,8 +427,8 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				return tempinfo;
-				/*if((gFlag == Alarmpublic.BOOT_FLAG) && (gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
+				
+				if((gFlag == Alarmpublic.BOOT_FLAG) && (gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					Alarmpublic.debug("找到数据   === 闹钟======\r\n");
 					return tempinfo;
@@ -437,7 +437,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					Alarmpublic.debug("找到数据   === 闹钟======\r\n");
 					return tempinfo;
-				}*/
+				}
 			}
 		}
 		  
