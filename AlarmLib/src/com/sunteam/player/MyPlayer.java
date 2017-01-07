@@ -2,7 +2,8 @@ package com.sunteam.player;
 
 import java.io.IOException;
 
-import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.receiver.Alarmpublic;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -71,7 +72,8 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 		setState(MyPlayer.IDLE_STATE);
 		try {
 			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			mPlayer.setDataSource(path);	
+			mPlayer.setDataSource(path);
+			
 			mPlayer.setOnCompletionListener(this);
 			mPlayer.setOnErrorListener(this);
 			mPlayer.prepare();
@@ -219,4 +221,47 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 	        if (mOnStateChangedListener != null)
 	            mOnStateChangedListener.onStateChanged(state);
 	    }
+
+	public void startPlayback2(Context context, int id, boolean keyType) {
+		// TODO 自动生成的方法存根
+		Alarmpublic.debug("\r\n startPlayback2   ==========1111==");
+		if (state() == PLAYING_PAUSED_STATE) {
+			if(keyType){
+				//mPlayer.seekTo((int) (playProgress * mPlayer.getDuration()));
+				mPlayer.start();
+				setState(PLAYING_STATE);
+			}else{
+				Alarmpublic.debug("\r\n startPlayback2   ==========2222==");
+				startPlay2(context, id);
+			}		
+		} else {
+			startPlay2(context, id);          
+		}
+	}
+
+	private void startPlay2(Context context, int resid) {
+		// TODO 自动生成的方法存根
+		stopPlayback();		
+		Alarmpublic.debug("\r\n startPlay2   ==========2222==");
+		
+		mPlayer = MediaPlayer.create(context, resid);
+		mPlayer.start();
+		Alarmpublic.debug("\r\n startPlay2   ==========3333==");
+		setState(MyPlayer.IDLE_STATE);
+		try {
+			Alarmpublic.debug("\r\n startPlay2   ==========4444==");
+		
+			mPlayer.setOnCompletionListener(this);
+			mPlayer.setOnErrorListener(this);
+		//	mPlayer.prepare();
+			Alarmpublic.debug("\r\n startPlay2   ==========777==");
+		//	mPlayer.start();
+			Alarmpublic.debug("\r\n startPlay2   ==========888==");
+		} catch (IllegalArgumentException e) {
+			setError(INTERNAL_ERROR);
+			mPlayer = null;
+			return;
+		}
+		setState(PLAYING_STATE);	
+	}
 }

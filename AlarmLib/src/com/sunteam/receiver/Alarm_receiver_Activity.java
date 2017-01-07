@@ -1,5 +1,6 @@
 package com.sunteam.receiver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -47,6 +48,12 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	
 	private static boolean isClose = false;
 	private String gFilename = null; // 标题栏
+	private int gyear = 0;
+	private int gmonth = 0;
+	private int gday = 0;
+	
+	private int gFlag = 0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,6 +61,12 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		Alarmpublic.debug("\r\n Alarm_receiver_Activity ====================\r\n");
 		Tools mTools = new Tools(this);
 		
+		Intent intent = getIntent();	//获取Intent
+		//Bundle bundle = intent.getExtras();	//获取 Bundle
+		Alarmpublic.debug("\r\n Alarm_receiver_Activity =========2222===========\r\n");
+		gFlag = intent.getIntExtra("FLAG", gFlag);  // 获取进入标志
+		Alarmpublic.debug("\r\n Alarm_receiver_Activity ===========3333=========gFlag ="+ gFlag);
+				
 		mTvTitle = (TextView) this.findViewById(R.id.title); // 标题栏
 		mTv_Year1 = (TextView) this.findViewById(R.id.Year_tv1); // 年
 		mTv_Year2 = (TextView) this.findViewById(R.id.Year_tv2); // -
@@ -108,21 +121,53 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		
 		myPlayer = MyPlayer.getInstance(this,mHandler);
 		myPlayer.setOnStateChangedListener(this);
-		gFilename = alarminfo.path;
-		Alarmpublic.debug("\r\n[11111111111] gFilename ======="+ gFilename);
-		myPlayer.startPlayback(myPlayer.playProgress(), gFilename, true);	
+		gFilename = alarminfo.path;   // 获取文件名
+		File mFile = new File(gFilename);
+		if(mFile.exists()){   // 文件不存在
+			Alarmpublic.debug("\r\n[11111111111] gFilename ======="+ gFilename);
+			myPlayer.startPlayback(myPlayer.playProgress(), gFilename, true);	
+		}
+		else{
+			Alarmpublic.debug("\r\n[22222222] gFilename =======");
+			
+			Alarmpublic.debug("\r\n[33333] gFilename =======");
+			//AssetFileDescriptor fd = getResources().openRawResourceFd();
 		
+			//Alarmpublic.debug("\r\n[4444] gFilename =====fileDescriptor.getFileDescriptor()==" + fd.getFileDescriptor());
+			myPlayer.startPlayback2(this, R.raw.alarm, true);
+			
+			Alarmpublic.debug("\r\n[33333] gFilename =======");
+		}
 		
 		int alarm_flag = getAlarmType();
 		
-		mTv_Year1.setText("");
-		mTv_Year2.setText("");
+		// 获取时间
+		Calendar calendar = Calendar.getInstance();  // 获取日历
+		
+		gyear = calendar.get(Calendar.YEAR);
+		gmonth = calendar.get(Calendar.MONTH) +1;  // 月份从0开始，需要+1
+		gday = calendar.get(Calendar.DAY_OF_MONTH);
+				
+		
 		
 		Alarmpublic.debug("\r\n alarm_flag ==== "+ alarm_flag);
 		if(Alarmpublic.ALARM_TYPE_ALARM == alarm_flag){
-			mTv_Date1.setText("");
-			mTv_Date2.setText("");
-			mTv_Date3.setText("");
+			mTv_Year1.setText("" + gyear);
+			mTv_Year2.setText("-");
+			if(gmonth < 10){
+				mTv_Date1.setText("0" + gmonth);
+			}
+			else{
+				mTv_Date1.setText(gmonth);
+			}
+			
+			mTv_Date2.setText("-");
+			if(gday < 10){
+				mTv_Date3.setText("0" + gday);	
+			}
+			else{
+				mTv_Date3.setText("" + gday);
+			}
 			if(alarminfo.hour < 10){
 				mTv_Time1.setText("0" + alarminfo.hour);
 			}
@@ -140,6 +185,9 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			//TtsUtils.getInstance().speak(getResources().getString(R.string.alarm_title));
 		}
 		else if (Alarmpublic.ALARM_TYPE_ANN == alarm_flag){
+			mTv_Year1.setText("" + gyear);
+			mTv_Year2.setText("-");
+			
 			if(alarminfo.month < 10){
 				mTv_Date1.setText("0"+alarminfo.month);
 			}
@@ -379,11 +427,17 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
+				return tempinfo;
+				/*if((gFlag == Alarmpublic.BOOT_FLAG) && (gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
 					dbAlarmInfo.closeDb();  // 关闭数据库
 					Alarmpublic.debug("找到数据   === 闹钟======\r\n");
 					return tempinfo;
 				}
+				else if ((gFlag == Alarmpublic.NORMAL_FLAG) && (gHour == tempinfo.hour) && (gmin == tempinfo.minute)){
+					dbAlarmInfo.closeDb();  // 关闭数据库
+					Alarmpublic.debug("找到数据   === 闹钟======\r\n");
+					return tempinfo;
+				}*/
 			}
 		}
 		  

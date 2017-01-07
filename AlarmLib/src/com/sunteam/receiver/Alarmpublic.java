@@ -17,6 +17,10 @@ import android.util.Log;
 public class Alarmpublic {
 	public static final String TAG = "alarmlib";
 	Context context;
+	
+	public static final int BOOT_FLAG = 1;	// 关机开启
+	public static final int NORMAL_FLAG = 0;	// 正常开启
+	
 	public static final String DB_ALARM = Environment.getExternalStorageDirectory() + "/alarm.db";
 	public static final String ALARM_TABLE = "alarm";  // 数据库 定时闹钟 table
 	public static final String ANNIVERSARY_TABLE = "anniversary";  // 数据库纪念日 table
@@ -182,10 +186,10 @@ public class Alarmpublic {
 					Alarmpublic.debug("\r\n tempinfo_later.type ==== " + tempinfo_later.type + "\r\n week === "+week);
 					if(tempinfo_later.type == Alarmpublic.ALARM_TYPE2)  // 工作日 需要判断是不是 周5，6
 					{
-						if(week == 5){ // 周5
-							data_sec += DAY_MAX_SEC*3;  // 秒
-						}
-						else if(week == 6){  // 周六
+					//	if(week == 5){ // 周5
+					//		data_sec += DAY_MAX_SEC*3;  // 秒
+					//	}
+						if(week == 6){  // 周六
 							data_sec += DAY_MAX_SEC*2;  // 秒
 						}
 						else if(week == 0){ // 周日
