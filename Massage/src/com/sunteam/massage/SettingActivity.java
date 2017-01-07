@@ -167,8 +167,8 @@ public class SettingActivity extends BaseActivity {
 		Tools mTools = new Tools(this);
 		
 		int fontSize = mTools.getFontSize();
-		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize); // 设置title字号
-		mTvTitle.setHeight(fontSize);
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(fontSize));
 		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
 		
 		mTvTitle.setTextColor(mTools.getFontColor()); // 设置字体颜色
@@ -217,8 +217,8 @@ public class SettingActivity extends BaseActivity {
 		
 		
 		int fontSize = mTools.getFontSize();
-		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize); // 设置title字号
-		mTvTitle.setHeight(fontSize);
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(fontSize));
 		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
 		
 		mTvTitle.setTextColor(mTools.getFontColor()); //  设置字体颜色
@@ -347,13 +347,17 @@ public class SettingActivity extends BaseActivity {
 		case KeyEvent.KEYCODE_8:
 		case KeyEvent.KEYCODE_9:
 //			TtsUtils.getInstance().stop();
-			setNumberKey(keyCode);//   -- 暂时去除数字输入
+//			setNumberKey(keyCode);//   -- 暂时去除数字输入
 			
 			break;
 		
 		case KeyEvent.KEYCODE_POUND:  // #键
-			
+			Global.debug("\r\n [KEYCODE_POUND] ==================== ");
 			gPointFlag = true;  // 小数点
+			double d_temp = Double.valueOf(cNum);
+		
+			cNum = Double.toString(d_temp);
+			showview(false);
 			break;
 			
 		case KeyEvent.KEYCODE_BACK:  // 返回键
