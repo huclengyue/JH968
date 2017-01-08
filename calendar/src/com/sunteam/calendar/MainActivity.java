@@ -151,7 +151,8 @@ public class MainActivity extends BaseActivity {
 		Global.debug("===== onResume ==2== ");
 		TtsUtils.getInstance().speak(getResources().getString(R.string.calendar_name)+ "。", 0);
 		Global.debug("===== onResume ==3== ");
-		speakInfo();
+		//speakInfo();
+		speakInfo_forstart();
 		Global.debug("===== onResume ==4== ");
 		
 	}
@@ -326,22 +327,24 @@ public class MainActivity extends BaseActivity {
 							gTextViews[i].setText(getLunarDay(gyear, gmonth, j+1));
 						}
 						
-/*						if( ((day-1) == j) && (select_id == SELECT_DAY_ID))  // 日需要一直反显
+						if( ((day-1) == j) && (select_id == SELECT_DAY_ID))  // 日需要一直反显
 						{
 							gTextViews[i].setBackgroundColor(mTools.getHighlightColor());
 //							gTextViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTSIZEHIGHT); // 设置title字号
 //							gTextViews[i].setHeight(FONTSIZEHIGHT);
 						}
 						else if((day-1) == j){
-							gTextViews[i].getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
-							gTextViews[i].getPaint().setFakeBoldText(true);;//下划线
-						}*/
-						if( (day-1) == j)  // 日需要一直反显
+							//gTextViews[i].getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
+							//gTextViews[i].getPaint().setFakeBoldText(true);;//下划线
+							gTextViews[i].setTextColor(mTools.getHighlightColor());
+						}
+						
+/*						if( (day-1) == j)  // 日需要一直反显
 						{
 							gTextViews[i].setBackgroundColor(mTools.getHighlightColor());
 //							gTextViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTSIZEHIGHT); // 设置title字号
 //							gTextViews[i].setHeight(FONTSIZEHIGHT);
-						}
+						}*/
 						
 						i++;	
 					}
@@ -451,6 +454,33 @@ public class MainActivity extends BaseActivity {
 
 	}
 	
+	private void speakInfo_forstart() {
+		// TODO 自动生成的方法存根
+		String str = null; 
+		String str1 = null;
+		
+		str = null;
+		str1 = null;
+		str = gyear+ getResources().getString(R.string.year)+
+				gmonth + getResources().getString(R.string.month)+
+				gday + getResources().getString(R.string.day) +
+				"," +
+				gWeekSpeakId[getWeakOfDay(gyear, gmonth, gday)];
+		
+		str1 = getResources().getString(R.string.lunarlendar);
+		str1 = str1 + ",";
+		str1 = getAnimalsYear(gyear) + getResources().getString(R.string.year)+  // 年
+		"," +
+		getLunarMon(gyear, gmonth, gday)+
+		getLunarDay(gyear, gmonth, gday);
+				
+
+		Global.debug("speak == " + str+";" +str1);
+		TtsUtils.getInstance().speak( str+";" +str1);
+
+		Global.debug("speak =222= " + str+";" +str1);
+	}
+	
 	public void delay(int len) {
 		try {
 			Thread.currentThread();
@@ -484,7 +514,7 @@ public class MainActivity extends BaseActivity {
 			
 			
 		case KeyEvent.KEYCODE_DPAD_DOWN:  // 下键
-/*
+
 			if(select_id == SELECT_YEAR_ID)   // 焦点 在 年
 			{
 				if(gyear >= Global.MAX_YEAR){
@@ -519,11 +549,11 @@ public class MainActivity extends BaseActivity {
 			Global.debug("====gYear = "+gyear + " Gmonth == "+gmonth + " gday == "+gday);
 
 			SetTextView(gyear, gmonth, gday, true);
-			*/
+			
 			return true;
 			
 		case KeyEvent.KEYCODE_DPAD_UP: // 上键
-/*			
+			
 			if(select_id == SELECT_YEAR_ID)
 			{
 				if(gyear <= Global.MIN_YEAR){
@@ -557,7 +587,7 @@ public class MainActivity extends BaseActivity {
 			}
 			Global.debug("====gYear = "+gyear + " Gmonth == "+gmonth + " gday == "+gday);
 			SetTextView(gyear, gmonth, gday, true);
-			*/
+			
 			return true;
 			
 		case KeyEvent.KEYCODE_DPAD_LEFT: // 左键
@@ -618,7 +648,7 @@ public class MainActivity extends BaseActivity {
 		case KeyEvent.KEYCODE_DPAD_CENTER:
 		case KeyEvent.KEYCODE_ENTER:
 		case KeyEvent.KEYCODE_DPAD_DOWN:  // 下键
-			if(select_id == SELECT_YEAR_ID)   // 焦点 在 年
+/*			if(select_id == SELECT_YEAR_ID)   // 焦点 在 年
 			{
 				if(gyear >= Global.MAX_YEAR){
 					gyear = Global.MIN_YEAR;
@@ -651,11 +681,11 @@ public class MainActivity extends BaseActivity {
 			}
 			Global.debug("====gYear = "+gyear + " Gmonth == "+gmonth + " gday == "+gday);
 
-			SetTextView(gyear, gmonth, gday, true);
+			SetTextView(gyear, gmonth, gday, true);*/
 			return true;
 
 		case KeyEvent.KEYCODE_DPAD_UP: // 上键
-			
+/*			
 			if(select_id == SELECT_YEAR_ID)
 			{
 				if(gyear <= Global.MIN_YEAR){
@@ -689,7 +719,7 @@ public class MainActivity extends BaseActivity {
 			}
 			Global.debug("====gYear = "+gyear + " Gmonth == "+gmonth + " gday == "+gday);
 			SetTextView(gyear, gmonth, gday, true);
-			
+			*/
 			return true;
 
 		case KeyEvent.KEYCODE_DPAD_LEFT: // 左键

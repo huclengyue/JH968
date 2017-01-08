@@ -24,9 +24,9 @@
     <string name="day">日</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_menu">功能菜单</string>
-    <string name="add_Remind">增加提醒</string>
+    <string name="add_Remind">语音提醒</string>
     
-    <string name="ask_delall_Remind">清空确认</string>
+    <string name="ask_delall_Remind">确认清空</string>
     <string name="delall_Remind">数据已清空</string>
 
     <string-array name="menu_list">

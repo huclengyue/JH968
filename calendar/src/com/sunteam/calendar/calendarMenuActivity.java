@@ -202,7 +202,7 @@ public class calendarMenuActivity extends MenuActivity{
 					public void doConfirm() {
 						// TODO 自动生成的方法存根
 						delAllDbdata();
-						
+						Alarmpublic.UpateAlarm(calendarMenuActivity.this);
 						PromptDialog mPromptDialog=new PromptDialog(calendarMenuActivity.this, 
 																	getResources().getString(R.string.delall_Remind));
 						mPromptDialog.show();
@@ -211,7 +211,19 @@ public class calendarMenuActivity extends MenuActivity{
 							@Override
 							public void onComplete() {
 								// TODO 自动生成的方法存根
-								onResume();
+								PromptDialog mPromptDialog=new PromptDialog(calendarMenuActivity.this, 
+										getResources().getString(R.string.no_remind));
+								mPromptDialog.show();
+								mPromptDialog.setPromptListener(new PromptListener() {
+								
+								@Override
+								public void onComplete() {
+									// TODO 自动生成的方法存根
+									
+									onResume();
+								}
+								});
+								
 							}
 						});
 					}
@@ -273,21 +285,76 @@ public class calendarMenuActivity extends MenuActivity{
 				public void doConfirm() {
 					// TODO 自动生成的方法存根
 					Global.debug("\r\n del id ===== " + gSelectId);
-					delDbdata(gSelectId);
-					mMenuList = getDbdata();
-					setListData(mMenuList);
-					int selectid = 0;
-					Global.debug("\r\n mMenuList.size() =============="+mMenuList.size());
-					Global.debug("\r\n gSelectId =============="+gSelectId);
-					if(gSelectId > (mMenuList.size() - 1) && (mMenuList.size() > 0)){
-						selectid = 0;//mMenuList.size() - 1;
+					if(true == delDbdata(gSelectId))
+					{
+						PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this, getResources().getString(R.string.del_ok));
+						mPromptDialog.show();
+						mPromptDialog.setPromptListener(new PromptListener() {
+							
+							@Override
+							public void onComplete() {
+								// TODO 自动生成的方法存根
+								Alarmpublic.UpateAlarm(calendarMenuActivity.this);
+								mMenuList = getDbdata();
+								setListData(mMenuList);
+								int selectid = 0;
+								Global.debug("\r\n mMenuList.size() =============="+mMenuList.size());
+								Global.debug("\r\n gSelectId =============="+gSelectId);
+								if(mMenuList.size() <= 0){  // 无提醒
+									PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this, getResources().getString(R.string.no_remind));
+									mPromptDialog.show();
+									mPromptDialog.setPromptListener(new PromptListener() {
+										
+										@Override
+										public void onComplete() {
+											// TODO 自动生成的方法存根
+											mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
+											
+											mTitle = getResources().getString(R.string.title_menu);
+											setListData(mMenuList);
+											setTitle(mTitle);;
+											if(gInterfaceflag == INTERFACE_RENID_LIST){
+												mMenuView.setSelectItem(1);
+											}
+											else{
+												mMenuView.setSelectItem(2);
+											}
+											gInterfaceflag = INTERFACE_MENU;
+											
+											onResume();
+											//finish();
+											
+										}
+									});
+									
+								}
+								else if(gSelectId > (mMenuList.size() - 1) && (mMenuList.size() > 0)){
+									selectid = 0;//mMenuList.size() - 1;
+									Global.debug("\r\n selectid =============="+selectid);
+									mMenuView.setSelectItem(selectid);
+								}
+								else{
+									selectid = gSelectId;
+									Global.debug("\r\n selectid =============="+selectid);
+									mMenuView.setSelectItem(selectid);
+								}
+
+							}
+						});
+					//onResume();
 					}
 					else{
-						selectid = gSelectId;
+						PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this, getResources().getString(R.string.no_remind));
+						mPromptDialog.show();
+						mPromptDialog.setPromptListener(new PromptListener() {
+							
+							@Override
+							public void onComplete() {
+								// TODO 自动生成的方法存根
+								onResume();
+							}
+						}); 
 					}
-					Global.debug("\r\n selectid =============="+selectid);
-					mMenuView.setSelectItem(selectid);
-					//onResume();
 				}
 				
 				@Override
@@ -366,7 +433,7 @@ public class calendarMenuActivity extends MenuActivity{
 	}
 	
 	// 获取list
-	private void delDbdata(int id)
+	private Boolean delDbdata(int id)
 	{
 
 		//String[] guser_List = new String[]; // list信息
@@ -386,8 +453,9 @@ public class calendarMenuActivity extends MenuActivity{
 				Global.debug("i == "+ i + " id =="+ id);
 				if(id == i){
 					dbInfo.deteleForOne(tempinfo._id, Alarmpublic.REMIND_TABLE);
+					return true;
 				//	TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
-					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.del_ok));
+					/*PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.del_ok));
 					mPromptDialog.show();
 					mPromptDialog.setPromptListener(new PromptListener() {
 						
@@ -397,15 +465,17 @@ public class calendarMenuActivity extends MenuActivity{
 							onResume();
 						}
 					});
-					break;
+					break;*/
 				}
 			}
 		}
 		else{
 			//TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
-			PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_remind));
-			mPromptDialog.show();
-		}	
+		//	PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_remind));
+		//	mPromptDialog.show();
+			return false;
+		}
+		return true;
 	}
 	
 	// 所处所有数据
@@ -420,7 +490,7 @@ public class calendarMenuActivity extends MenuActivity{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
 		Global.debug("\r\n onActivityResult requestCode == " + requestCode + " resultCode =="+resultCode);
-		
+		Alarmpublic.UpateAlarm(calendarMenuActivity.this);
 		if(requestCode == Global.REMIND_FLAG_ID && resultCode == Global.REMIND_FLAG_ID){
 			
 			mMenuList = getDbdata();
@@ -456,6 +526,7 @@ public class calendarMenuActivity extends MenuActivity{
 		else if(requestCode == Global.REMIND_ADD_FLAG_ID && resultCode == Global.REMIND_ADD_FLAG_ID){
 			mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
 			
+			Alarmpublic.UpateAlarm(calendarMenuActivity.this);
 			mTitle = getResources().getString(R.string.title_menu);
 			gInterfaceflag = INTERFACE_MENU;
 			
