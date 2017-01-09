@@ -693,6 +693,8 @@ public class MainActivity extends MenuActivity implements ShowView{
 		Global.gFileName.add(getResources().getString(R.string.udisk));
 		Global.gFilePaths.add(Global.USB_PATH);
 		
+		interface_flag = Global.MAIN_INTERFACE;
+		
 		setListData(Global.gFileName);
 		mMenuView.setSelectItem(gSelecyId[Global.gPathNum]);
 		Global.debug("[******]gSelecyId[gPathNum] === " + gSelecyId[Global.gPathNum]);
@@ -720,6 +722,7 @@ public class MainActivity extends MenuActivity implements ShowView{
             String action = intent.getAction();
             
             String mData = intent.getDataString();  // 获取路径
+            mData = mData.substring(7,mData.length());
             Global.debug("\r\n mData ============== " + mData);
             if (Intent.ACTION_MEDIA_MOUNTED.equals(action)) { // 插入
                 
@@ -729,7 +732,7 @@ public class MainActivity extends MenuActivity implements ShowView{
             	
             	String mPath = getCurPath();
             	Global.debug("\r\n mPath ============== " + mPath);
-            	if(mData.contains(mPath)){  // 包含
+            	if(mPath.contains(mData)){  // 包含
 	            	if(mData.contains(Global.MENU_PATH_EXTSD) ){  // 存储卡
 	            		Global.debug("\r\n tf卡 列表更新============== ");
 	            		updateShowList();
@@ -748,7 +751,6 @@ public class MainActivity extends MenuActivity implements ShowView{
             	Global.debug("\r\n tf卡 ACTION_MEDIA_SHARED============== ");
             }
             
-        } 
-           
+        }            
     };
 }
