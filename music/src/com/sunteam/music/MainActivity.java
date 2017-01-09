@@ -2,8 +2,10 @@ package com.sunteam.music;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.menulistadapter.ShowView;
@@ -15,15 +17,18 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.music.dao.GetDbInfo;
 import com.sunteam.music.dao.MusicInfo;
 import com.sunteam.music.utils.Global;
-
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -114,6 +119,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 		gFilePaths.clear();
 		
 		Global.FristString =  Global.GetPalyFristData(this);   // 获取最后一次伯村的路径
+		Global.debug("MainActivity ====1112222= Global.FristString ==" + Global.FristString);
 		//mTitle = getResources().getString(R.string.app_name);
 		mTitle = this.getResources().getString(R.string.title_main);
 		gFileName = ArrayUtils.strArray2List (getResources().getStringArray(R.array.main_list));
@@ -132,7 +138,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 		Global.debug("MainActivity ====2222= \r\n");
 		mMenuView.setShowView(this);
 		Global.debug("MainActivity ====3333= \r\n");
-		
+		registerTFcardPlugReceiver();
 	}
 // 界面刷新
 	@Override
@@ -144,6 +150,12 @@ public class MainActivity extends MenuActivity implements ShowView {
 	protected void onPause() {
 		// TODO 自动生成的方法存根
 		super.onPause();
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO 自动生成的方法存根
+		super.onDestroy();
+		unregisterReceiver(tfCardPlugReceiver);
 	}
 	// 键抬起
 	@Override
@@ -183,6 +195,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 			keyupBack();
 
 			return true;
+		}
+		else if(keyCode == KeyEvent.KEYCODE_0){
+			testrawplay();
 		}
 		
 		return super.onKeyUp(keyCode, event);
@@ -299,6 +314,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 
 	// 按键 entern 的处理
 	private void keyupEnter() {
+		Global.debug("\r\n[keyupEnter]======= intface_flag = " + intface_flag);
 		if(MAIN_INTFACE ==  intface_flag){  // 主界面
 			if(getSelectItem()  == Global.MAIN_DIR_ID){  // 选中第一项 
 				SharedPrefUtils.setSharedPrefInt(this,Global.MUSIC_CONFIG_FILE, Context.MODE_WORLD_READABLE, Global.MUSIC_SELECT, getSelectItem() );
@@ -681,6 +697,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 	
 	// 进入 播放界面
 	private void startPlay(int defaultItem, String title) {
+		unregisterReceiver(tfCardPlugReceiver);
 		Intent intent = new Intent();
 		intent.putExtra("filename", gFileName.get(defaultItem)); // 设置标题
 
@@ -696,6 +713,12 @@ public class MainActivity extends MenuActivity implements ShowView {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Global.debug("\r\n[11] onActivityResult == requestCode ="+requestCode + " resultCode ==" + resultCode );
 		if (requestCode == Global.PLAY_FLAG && resultCode == Global.PLAY_FLAG) {
+			registerTFcardPlugReceiver();
+			int tf_flag = data.getIntExtra("flag", 0);
+			if(tf_flag == 1){
+				updateShowList();
+				return;
+			}
 			String mfilename = data.getStringExtra("filename");
 			if(intface_flag == RECENTPLAY_INTFACE){
 				showDbList(Global.PLAY_LIST_ID);
@@ -718,7 +741,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 				}
 				else{
 					if(gId > (mMenuList.size()-1)){
-						gId = mMenuList.size()-1;
+						gId = 0;
 					}
 					mMenuView.setSelectItem(gId);
 					onResume();
@@ -738,7 +761,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 				}
 				else{
 					if(gId > (mMenuList.size()-1)){
-						gId = mMenuList.size()-1;
+						gId = 0;
 					}
 					mMenuView.setSelectItem(gId);
 					onResume();
@@ -815,8 +838,21 @@ public class MainActivity extends MenuActivity implements ShowView {
 						// Log.i("zbc","mCurrentFile.getPath() ="+mCurrentFile.getPath()
 						// + " mCurrentFile.getName()"+mCurrentFile.getName());
 					}
-					Collections.sort(mFileName);  // 排序
-					Collections.sort(mFilePaths);  // 排序
+					Collections.sort(mFileName, new Comparator<String>() {
+				       
+				        public int compare(String s1, String s2) {
+				            return s1.compareToIgnoreCase(s2);
+				        }
+				        
+				    });
+					Collections.sort(mFilePaths, new Comparator<String>() {
+				       
+				        public int compare(String s1, String s2) {
+				            return s1.compareToIgnoreCase(s2);
+				        }
+				    });
+//					Collections.sort(mFileName);  // 排序
+//					Collections.sort(mFilePaths);  // 排序
 					// 重新赋值
 					for(int i = 0; i < mFileName.size(); i++){
 						gFileName.add(mFileName.get(i));
@@ -879,8 +915,20 @@ public class MainActivity extends MenuActivity implements ShowView {
 						// Log.i("zbc","mCurrentFile.getPath() ="+mCurrentFile.getPath()
 						// + " mCurrentFile.getName()"+mCurrentFile.getName());
 					}
-					Collections.sort(mFileName);
-					Collections.sort(mFilePaths);  // 排序
+					Collections.sort(mFileName, new Comparator<String>() {
+					       
+				        public int compare(String s1, String s2) {
+				            return s1.compareToIgnoreCase(s2);
+				        }
+				    });
+					Collections.sort(mFilePaths, new Comparator<String>() {
+				       
+				        public int compare(String s1, String s2) {
+				            return s1.compareToIgnoreCase(s2);
+				        }
+				    });
+					//Collections.sort(mFileName);
+					//Collections.sort(mFilePaths);  // 排序
 					
 					// 重新赋值
 					for(int i = 0; i < mFileName.size(); i++){
@@ -941,7 +989,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 		gFileName.clear();
 		gFilePaths.clear();
 		
-		Global.debug("showDblist flag =====" + flag);
+		//Global.debug("showDblist flag =====" + flag);
 		
 		int max_id = dbMusicInfo.getMaxId(flag);
 		Global.debug("showDblist flag ====max_id =" + max_id);
@@ -964,7 +1012,8 @@ public class MainActivity extends MenuActivity implements ShowView {
 				gFilePaths.add(musicinfo.path);
 				//Global.debug("[**]gFileName.get(i)  == "+ gFileName.get(i));
 				//Global.debug("[**]gFilePaths.get(i)  == "+ gFilePaths.get(i));
-				if((Global.FristString != null) && (Global.FristString.contains(musicinfo.getPath() + "/" + musicinfo.filename))){
+				//Global.debug(" showDbList ====1112222= Global.FristString ==" + Global.FristString);
+				if((Global.FristString != null) && (Global.FristString.contains(musicinfo.getPath()))){
 				//	selectId = allId;
 					mSelectName = musicinfo.filename;
 				}
@@ -975,6 +1024,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 		
 		setListData(gFileName);
 		int mselectId = gFileName.indexOf(mSelectName);
+		
+		//Global.debug("\r\n[**] mSelectName  == "+ mSelectName  + " mselectId ==" + mselectId);
+		
 		if(mselectId <= 0){
 			mselectId = 0;
 		}
@@ -986,7 +1038,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 		else if(flag == Global.SAVE_LIST_ID){
 			setTitle(getResources().getString(R.string.my_save));
 		}
-		Global.debug("[**]gFilePaths.size()  =ww= "+ gFilePaths.size());
+		//Global.debug("[**]gFilePaths.size()  =ww= "+ gFilePaths.size());
 		super.onResume();
 		return true;
 	}
@@ -1250,6 +1302,126 @@ public class MainActivity extends MenuActivity implements ShowView {
     	}
 	}
 	
-	
+	private void testrawplay() {
+		// TODO 自动生成的方法存根
+		Handler mHandler = null;
+		MediaPlayer myPlayer = new MediaPlayer();//MyPlayer.getInstance(this,mHandler);
+		//((MyPlayer) myPlayer).setOnStateChangedListener((OnStateChangedListener) this);
+		
+		Global.debug("\r\nKeyEvent.KEYCODE_0  ============ ");
+		/*Intent mIntent = new Intent(this , Alarm_receiver_Activity.class);
+		//Bundle bundle = new Bundle();//
+		
+		//bundle.putInt("FLAG", Alarmpublic.BOOT_FLAG); // 修改项
+		mIntent.putExtra("FLAG", Alarmpublic.BOOT_FLAG); // 传入参数 
+		mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(mIntent);	*/
+		
+		AssetFileDescriptor fd = getResources().openRawResourceFd(R.raw.alarm);
+		
+		Global.debug("\r\n[4444] gFilename =====fileDescriptor.getFileDescriptor()==" + fd.getFileDescriptor());
 
+		try {
+			myPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			myPlayer.setDataSource(fd.getFileDescriptor());
+			myPlayer.prepare();
+			myPlayer.start();
+		} catch (IllegalArgumentException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		Global.debug("\r\n startPlay2   ==========666==");
+		
+		//((MyPlayer) myPlayer).startPlayback2(((MyPlayer) myPlayer).playProgress(), fd.getFileDescriptor(), true);
+	}
+	
+	
+	// 获取当前路径
+	private String getCurPath(){
+		return gPath.get(gPathNum -1);
+	}
+	// 更新界面
+	private void updateShowList(){
+		gName.clear();
+		gPath.clear();
+		
+		gFileName.clear();
+		gFilePaths.clear();
+		
+		Global.FristString =  Global.GetPalyFristData(this);   // 获取最后一次伯村的路径
+		Global.debug("MainActivity ====1112222= Global.FristString ==" + Global.FristString);
+		//mTitle = getResources().getString(R.string.app_name);
+		mTitle = this.getResources().getString(R.string.title_main);
+		gFileName = ArrayUtils.strArray2List (getResources().getStringArray(R.array.main_list));
+		mMenuList = gFileName; // ArrayUtils.strArray2List(getResources().getStringArray(R.array.main_list));
+		
+		gFilePaths.add(Global.DIRECTORY_PATH) ;  // 目录浏览 
+		gFilePaths.add(Global.FAVORITE_PATH) ;	// 我的最爱
+		gFilePaths.add(Global.RECENTPLAY_PATH) ;  // 最近播放
+		intface_flag = MAIN_INTFACE;
+		setListData(mMenuList);
+		selectItem = SharedPrefUtils.getSharedPrefInt(this, Global.MUSIC_CONFIG_FILE, Context.MODE_WORLD_READABLE, Global.MUSIC_SELECT, selectItem);
+		Global.debug("\r\n selectItem =====" + selectItem);
+		setTitle(getResources().getString(R.string.app_name));
+		mMenuView.setSelectItem(selectItem);
+		super.onResume();
+	}
+	
+	// tf卡插拔消息 注册
+	private void registerTFcardPlugReceiver() {   
+        IntentFilter intentFilter = new IntentFilter();   
+       
+        intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED); // SD卡插入
+        intentFilter.addAction(Intent.ACTION_MEDIA_EJECT); // SD卡拔出
+        intentFilter.addDataScheme("file");
+        
+        registerReceiver(tfCardPlugReceiver, intentFilter);  
+        Global.debug("\r\n  registerTFcardPlugReceiver ==========================");
+    } 
+	// 插拔消息  接收
+    private BroadcastReceiver tfCardPlugReceiver = new BroadcastReceiver() { 
+   
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+        	 Global.debug("\r\n  tfCardPlugReceiver ========2222==================");   
+            String action = intent.getAction();
+            
+            String mData = intent.getDataString();  // 获取路径
+            mData = mData.substring(7,mData.length());
+            Global.debug("\r\n mData ============== " + mData);
+            if (Intent.ACTION_MEDIA_MOUNTED.equals(action)) { // 插入
+                
+                Global.debug("\r\n tf卡插入============== ");
+            }
+            else if(Intent.ACTION_MEDIA_EJECT.equals(action)){  // Tf 卡拔出
+            	
+            	String mPath = getCurPath();
+            	Global.debug("\r\n mPath ============== " + mPath);
+            	if(mPath.contains(mData)){  // 包含
+	            	if(mData.contains(Global.MENU_PATH_EXTSD) ){  // 存储卡
+	            		Global.debug("\r\n tf卡 列表更新============== ");
+	            		updateShowList();
+	            	}
+	            	else if(mData.contains(Global.MENU_PATH_UDISK) ){  // U盘
+	            		Global.debug("\r\n U盘 列表更新============== ");
+	            		updateShowList();
+	            	}
+            	}
+            	Global.debug("\r\n tf卡 拔出============== ");
+            }
+            else if(Intent.ACTION_MEDIA_REMOVED.equals(action)){
+            	Global.debug("\r\n tf卡 ACTION_MEDIA_REMOVED============== ");
+            }
+            else if(Intent.ACTION_MEDIA_SHARED.equals(action)){
+            	Global.debug("\r\n tf卡 ACTION_MEDIA_SHARED============== ");
+            }
+            
+        }            
+    };
 }

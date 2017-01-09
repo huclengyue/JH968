@@ -1,10 +1,13 @@
 package com.sunteam.music;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import com.sunteam.common.menu.BaseActivity;
+import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.SharedPrefUtils;
 import com.sunteam.common.utils.Tools;
@@ -18,8 +21,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -144,7 +150,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Global.debug("onCreate =====1111===");
+		//Global.debug("onCreate =====1111===");
 		setContentView(R.layout.music_play);
 		
 		Tools mTools = new Tools(this);
@@ -174,7 +180,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		
 		tvTitle.setText(getResources().getString(R.string.title_main));
 		
-		Global.debug("onCreate =====2222===");
+	//	Global.debug("onCreate =====2222===");
 		play_st = (ImageButton)findViewById(R.id.ib_paly);
 		
 		playMode = (ImageButton)findViewById(R.id.play_mode);
@@ -186,18 +192,18 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		gAB_flag = false ;  // 不是AB 复读模式
 		
 		Intent intent = getIntent();
-		Global.debug("onCreate =====2222=33==");
+//		Global.debug("onCreate =====2222=33==");
 		mSampleFile = intent.getStringExtra("filename");
 		tvFileName.setText(mSampleFile);  
 		gPlayListName = intent.getStringArrayListExtra("filenamelist");
 		gPlayListPaths = intent.getStringArrayListExtra("filepathlist");
 		//mSampleFile = gPlayListName.get(0);
-		Global.debug("onCreate =====2222=33==mSampleFile ===" + mSampleFile);
+//		Global.debug("onCreate =====2222=33==mSampleFile ===" + mSampleFile);
 		currentIndex = getCurrentIndex(mSampleFile);
 
 		tvFileName.setText(mSampleFile);
 		
-		Global.debug("onCreate =====3333===");
+		//Global.debug("onCreate =====3333===");
 		
 		mPlaySeekBar = (SeekBar) findViewById(R.id.play_seek_bar);
 	    mPlaySeekBar.setMax(SEEK_BAR_MAX);
@@ -206,7 +212,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		
 		myPlayer = MyPlayer.getInstance(PlayActivity.this,mHandler);
 		myPlayer.setOnStateChangedListener(this);
-		Global.debug("onCreate =====344444===");
+//		Global.debug("onCreate =====344444===");
 		// 获取播放模式
 		gPlay_Mode = SharedPrefUtils.getSharedPrefInt(this, Global.MUSIC_CONFIG_FILE, Context.MODE_WORLD_READABLE, Global.MUSIC_MODE, gPlay_Mode);
 		
@@ -224,28 +230,34 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		//View.setVisible(View.VISIBLE); 
 		//String FilePath = gPlayListPaths.get(currentIndex)+"/"+ gPlayListName.get(currentIndex);
 		String FilePath = gPlayListPaths.get(currentIndex);
-		Global.debug("onCreate =====33344444=== FilePath ="+FilePath);
-		
+//		Global.debug("onCreate =====33344444=== FilePath ="+FilePath);
+	
+		//Global.debug("\r\n[22222222] gFilename =======");
+		//AssetManager assetManager = Context.getAssets();
+		//AssetFileDescriptor fileDescriptor;
+	
 		myPlayer.startPlayback(myPlayer.playProgress(), FilePath ,true);		
 		play_st.setBackgroundResource(R.drawable.play);
-		Global.debug("onCreate =====344444===");
+		//Global.debug("onCreate =====344444===");
 		total = myPlayer.fileDuration();
-		Global.debug("onCreate =====344444===total =="+total);
+		//Global.debug("onCreate =====344444===total =="+total);
 		if(total <= 0){
 			FileError();
 		}
 		else{
-			if(total>=3600){
+			if(total >= 3600){
 				tvTotalTime.setText(String.format(mTimerFormatHMS, total/3600,(total%3600)/ 60,total% 60));
 			}else{
 				tvTotalTime.setText(String.format(mTimerFormatMS, total/ 60,total% 60));
 			}
 			//String path = gPlayListPaths.get(currentIndex)+"/"+ gPlayListName.get(currentIndex);
 			String path = gPlayListPaths.get(currentIndex);
-			Global.debug("\r\n path ==" + path + " Global.FristString =="+Global.FristString );
-			//if((Global.FristString != null) && (Global.FristString.equals(path))){
+			Global.debug("\r\n[oncreat] path ==" + path + " Global.FristString =="+Global.FristString );
+			// 所有播放的文件都要记录
+//			if((Global.FristString != null) && (Global.FristString.equals(path))){
 				myPlayer.SeekToTime(Global.GetPalyFristSeekTime(this, path));
-		//	}
+//			}
+			
 			Global.debug("onCreate =====4444===");
 			
 			updateUI();
@@ -274,9 +286,9 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 					play_st.setBackgroundResource(R.drawable.pause);
 				}
 			}
-
-			
 		});	
+		
+		registerTFcardPlugReceiver();
 	}
 	// 文件错误
 	private void FileError() {
@@ -304,7 +316,13 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
         registerReceiver(receiver, intentFilter);
         acquireWakeLock(this);
     }  
-      
+	
+	protected void onDestroy() {
+		// TODO 自动生成的方法存根
+		super.onDestroy();
+		unregisterReceiver(tfCardPlugReceiver);
+	}
+	
     @Override  
     protected void onPause() {  
  
@@ -801,6 +819,18 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		setResult(Global.PLAY_FLAG, intent);
 		finish();
 	}
+	private void Key_back_forTF() {
+		// TODO 自动生成的方法存根
+		MusicAddPlayList(); // 先保存 
+		Global.FristString =  Global.GetPalyFristData(this);   // 获取最后一次伯村的路径
+		myPlayer.stopPlayback();
+		isClose = true;
+		Intent intent = new Intent();
+		intent.putExtra("filename", gPlayListName.get(currentIndex));
+		intent.putExtra("flag", 1);
+		setResult(Global.PLAY_FLAG, intent);
+		finish();
+	}
 	@Override
 	public void leftSlip() {
 		rightKeyPress();
@@ -1021,5 +1051,66 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			mWakeLock = null;
 		}
 	}
+	
+	
+	
+	// 获取当前路径
+	private String getCurPath(){
+		return gPlayListPaths.get(currentIndex);
+	}
+	
+	
+	// tf卡插拔消息 注册
+	private void registerTFcardPlugReceiver() {   
+        IntentFilter intentFilter = new IntentFilter();   
+       
+        intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED); // SD卡插入
+        intentFilter.addAction(Intent.ACTION_MEDIA_EJECT); // SD卡拔出
+        intentFilter.addDataScheme("file");
+        
+        registerReceiver(tfCardPlugReceiver, intentFilter);  
+        Global.debug("\r\n  registerTFcardPlugReceiver ==========================");
+    } 
+	// 插拔消息  接收
+    private BroadcastReceiver tfCardPlugReceiver = new BroadcastReceiver() { 
+   
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+        	 Global.debug("\r\n  tfCardPlugReceiver ========2222====play==============");   
+            String action = intent.getAction();
+            
+            String mData = intent.getDataString();  // 获取路径
+            Global.debug("\r\n mData ========play======mData.length() +  " + mData.length());
+            mData = mData.substring(7,mData.length());
+            Global.debug("\r\n mData ========play====== " + mData);
+            if (Intent.ACTION_MEDIA_MOUNTED.equals(action)) { // 插入
+                
+                Global.debug("\r\n tf卡插入========play====== ");
+            }
+            else if(Intent.ACTION_MEDIA_EJECT.equals(action)){  // Tf 卡拔出
+            	
+            	String mPath = getCurPath();
+            	Global.debug("\r\n mPath ======play======== " + mPath);
+            	if(mPath.contains(mData)){  // 包含
+	            	if(mData.contains(Global.MENU_PATH_EXTSD) ){  // 存储卡
+	            		Global.debug("\r\n tf卡 列表更新=======play======= ");
+	            		Key_back_forTF();
+	            	}
+	            	else if(mData.contains(Global.MENU_PATH_UDISK) ){  // U盘
+	            		Global.debug("\r\n U盘 列表更新======play======== ");
+	            		Key_back_forTF();
+	            	}
+            	}
+            	Global.debug("\r\n tf卡 拔出=======play======= ");
+            }
+            else if(Intent.ACTION_MEDIA_REMOVED.equals(action)){
+            	Global.debug("\r\n tf卡 ACTION_MEDIA_REMOVED============== ");
+            }
+            else if(Intent.ACTION_MEDIA_SHARED.equals(action)){
+            	Global.debug("\r\n tf卡 ACTION_MEDIA_SHARED============== ");
+            }
+            
+        }            
+    };
 	
 }

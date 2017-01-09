@@ -86,13 +86,36 @@ public class SaveMenuActivity extends MenuActivity implements ConfirmListener, P
 			MusicDelSaveList(gPath, gFileName);
 			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del));
 			mDialog.show();
-			mDialog.setPromptListener(this);
+			if(true == MusicGetHaveSaveList()){  // 
+				mDialog.setPromptListener(this);
+			}
+			else{
+				mDialog.setPromptListener(new PromptListener() {
+					
+					@Override
+					public void onComplete() {
+						// TODO 自动生成的方法存根
+						PromptDialog mDialog1 = new PromptDialog(SaveMenuActivity.this, getResources().getString(R.string.no_file));
+						mDialog1.show();
+						mDialog1.setPromptListener(SaveMenuActivity.this);
+					}
+				});
+			}
 		}
 		else if(gSelectID == Global.MENU_DEL_ALL){
 			MusicDelAllSaveList();
 			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del_all));
 			mDialog.show();
-			mDialog.setPromptListener(this);
+			mDialog.setPromptListener(new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					// TODO 自动生成的方法存根
+					PromptDialog mDialog1 = new PromptDialog(SaveMenuActivity.this, getResources().getString(R.string.no_file));
+					mDialog1.show();
+					mDialog1.setPromptListener(SaveMenuActivity.this);
+				}
+			});
 		}	
 	}
 
@@ -136,7 +159,23 @@ public class SaveMenuActivity extends MenuActivity implements ConfirmListener, P
 
 		return flag;
 	}
+	// 判断是否为空 true 不为空  
+	public boolean MusicGetHaveSaveList()
+	{
+		boolean flag = false;
+
+		GetDbInfo dbMusicInfo = new GetDbInfo( this ); // 打开数据库
 	
+		int max_id = dbMusicInfo.getCount(Global.SAVE_LIST_ID);
+		dbMusicInfo.closeDb();
+		if(max_id > 0){
+			flag = true;
+		}
+		else{
+			flag = false;
+		}
+		return flag;
+	}
 	// 删除我的收藏 列表文件
 	public void MusicDelAllSaveList()
 	{

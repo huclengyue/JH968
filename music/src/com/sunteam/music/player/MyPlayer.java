@@ -1,10 +1,10 @@
 package com.sunteam.music.player;
 
+import java.io.FileDescriptor;
 import java.io.IOException;
 
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.music.utils.Global;
-
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -243,4 +243,48 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 	        if (mOnStateChangedListener != null)
 	            mOnStateChangedListener.onStateChanged(state);
 	    }
+	 
+	 
+	 public void startPlayback2(float playProgress, FileDescriptor fileDescriptor, boolean keyType) {
+			// TODO 自动生成的方法存根
+			if (state() == PLAYING_PAUSED_STATE) {
+				if(keyType){
+					mPlayer.seekTo((int) (playProgress * mPlayer.getDuration()));
+					mPlayer.start();
+					setState(PLAYING_STATE);
+				}else{
+					startPlay2(playProgress,fileDescriptor);
+				}		
+			} else {
+				startPlay2(playProgress,fileDescriptor);          
+			}
+		}
+
+		private void startPlay2(float playProgress, FileDescriptor fileDescriptor) {
+			// TODO 自动生成的方法存根
+			stopPlayback();			
+			mPlayer = new MediaPlayer();
+			setState(MyPlayer.IDLE_STATE);
+			try {
+				mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+				mPlayer.setDataSource(fileDescriptor);
+				
+				mPlayer.setOnCompletionListener(this);
+				mPlayer.setOnErrorListener(this);
+				mPlayer.prepare();
+				//mPlayer.seekTo((int) (playProgress * mPlayer.getDuration()));
+				//Global.getTts().stop();
+				//TtsUtils.getInstance().stop();
+				mPlayer.start();
+			} catch (IllegalArgumentException e) {
+				setError(INTERNAL_ERROR);
+				mPlayer = null;
+				return;
+			} catch (IOException e) {
+				setError(STORAGE_ACCESS_ERROR);
+				mPlayer = null;
+				return;
+			}
+			setState(PLAYING_STATE);	
+		}
 }

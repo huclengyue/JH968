@@ -58,7 +58,7 @@
     <string name="file_end">文件到结尾</string>
     <string name="file_start">文件到开头</string>
     <string name="no_file">无文件</string>
-    <string name="bat_lv0">电池电压低，无法播放</string>
+    <string name="bat_lv0">电池电量低，无法播放</string>
     
     <string name="mode_A">A点选定</string>
     <string name="mode_AB">AB复读</string>

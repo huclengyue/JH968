@@ -104,13 +104,36 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 			
 			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del));
 			mDialog.show();
-			mDialog.setPromptListener(this);
+			if(true == MusicGetHavePalyList()){ // 还有数据
+				mDialog.setPromptListener(this);
+			}
+			else{ // 数据为空
+				mDialog.setPromptListener(new PromptListener() {
+					
+					@Override
+					public void onComplete() {
+						// TODO 自动生成的方法存根
+						PromptDialog mDialog1 = new PromptDialog(PlayMenuActivity.this, getResources().getString(R.string.no_file));
+						mDialog1.show();
+						mDialog1.setPromptListener(PlayMenuActivity.this);
+					}
+				});
+			}
 		}
 		else if(gSelectID == Global.MENU_DEL_ALL){
 			MusicDelAllPlayList();
 			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del_all));
 			mDialog.show();
-			mDialog.setPromptListener(this);
+			mDialog.setPromptListener(new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					// TODO 自动生成的方法存根
+					PromptDialog mDialog1 = new PromptDialog(PlayMenuActivity.this, getResources().getString(R.string.no_file));
+					mDialog1.show();
+					mDialog1.setPromptListener(PlayMenuActivity.this);
+				}
+			});
 		}
 	}
 
@@ -155,7 +178,23 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 
 		return flag;
 	}
+	// 判断是否为空 true 不为空  
+	public boolean MusicGetHavePalyList()
+	{
+		boolean flag = false;
+
+		GetDbInfo dbMusicInfo = new GetDbInfo( this ); // 打开数据库
 	
+		int max_id = dbMusicInfo.getCount(Global.PLAY_LIST_ID);
+		dbMusicInfo.closeDb();
+		if(max_id > 0){
+			flag = true;
+		}
+		else{
+			flag = false;
+		}
+		return flag;
+	}
 	// 删除最近浏览列表文件
 	public void MusicDelAllPlayList()
 	{

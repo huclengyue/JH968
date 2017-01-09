@@ -11,7 +11,10 @@ import android.util.Log;
 
 public class Global {
 	public static final String TAG = "zbc";
-
+	
+	public static final String MENU_PATH_EXTSD = "/mnt/extsd"; // 扩展SD卡
+	public static final String MENU_PATH_UDISK = "/mnt/usbhost1"; // U盘
+	
 	public static final String DIRECTORY_PATH = "/directory"; // 目录浏览
 	public static final String FAVORITE_PATH = "/favorite"; // 我的最爱
 	public static final String RECENTPLAY_PATH = "/Recentplay"; // 最近播放
@@ -92,21 +95,24 @@ public class Global {
 
 		musicInfos = dbMusicInfo.GetAllData(Global.PLAY_LIST);
 		dbMusicInfo.closeDb();
-		//Global.debug("\r\n GetPalyFristSeekTime  musicInfos.get(0).playtime ==="  + musicInfos.get(0).playtime);
+		Global.debug("\r\n GetPalyFristSeekTime  musicInfos.size() ==="  + musicInfos.size());
 		int playtime = 0;
 		
 		for(int i = 0; i < musicInfos.size(); i++)
 		{
-			Global.debug("\r\n  musicInfos.get(0).playtime ==="  + musicInfos.get(i).playtime);
-			Global.debug("\r\n  musicInfos.get(0).path ==="  + musicInfos.get(i).path);
-			Global.debug("\r\n  filename ==="  + filename);
+			Global.debug("\r\n  musicInfos.get("+i+").playtime ==="  + musicInfos.get(i).playtime);
+			Global.debug("  musicInfos.get("+i+").path ==="  + musicInfos.get(i).path);
+			Global.debug("  filename ==="  + filename);
 			
 			if(musicInfos.get(i).path.equals(filename)){
 				playtime = musicInfos.get(i).playtime;
 				break;
 			}
 		}
-	
+		Global.debug("\r\n GetPalyFristSeekTi playtime ==="  + playtime);
+		if(playtime == 0){
+			playtime = 1;
+		}
 		return playtime;
 	}
 }
