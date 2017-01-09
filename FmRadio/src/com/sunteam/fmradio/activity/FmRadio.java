@@ -43,6 +43,7 @@
  */
 package com.sunteam.fmradio.activity;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -250,7 +251,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
       //  mView.setFrequencyStep(mFrequencyStep);
         
         
-        if(true ){  // 耳机插入
+        if(false ){  // 耳机插入
         	speakerFlag = true;
         	ArrayList<String> mTmpList = new ArrayList<String>();
 	        mTmpList = getChanelData();
@@ -508,8 +509,8 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
                     return;
                 }
                 Global.debug("Airplane Mode ON !!.. Shutting down the fm Radio..");
-                Toast.makeText(getApplicationContext(), "Shutting down FMRadio in Airplane mode",
-                        Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), "Shutting down FMRadio in Airplane mode",
+                //        Toast.LENGTH_SHORT).show();
                 if (mFmReceiver != null)
                     mFmReceiver.setAudioPath(FmProxy.AUDIO_PATH_NONE);
                 bFinishCalled = true;
@@ -702,10 +703,10 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	    }
 	   
 	    else if(keyCode == KeyEvent.KEYCODE_8){
-	    	setHearToSpeak(true);
+//	    	setHearToSpeak(true);
 	    }
 	    else if(keyCode == KeyEvent.KEYCODE_0){
-	    	setHearToSpeak(false);
+//	    	setHearToSpeak(false);
 	    }
 	   
 	    else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){  // // 下键处理  搜索下一台
@@ -791,7 +792,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			   updateFrequency(i_freq); 
 		   }
 		   
-		   if(gheadin == false){  //没有危机插入 切换到正常
+		   if(gheadin == false){  //没有耳机插入 切换到正常 外放
 			   setHearToSpeak(true); 
 		   }
 		   else{
@@ -2263,18 +2264,42 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	
 	// 切换发音
 	private void setHearToSpeak(Boolean flag) {
+		Global.debug("\r\n[setHearToSpeak]  ====  flag =" + flag);
 		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		if(true == flag){  //切换到外放
-			audioManager.setMode(AudioManager.MODE_NORMAL);
-			audioManager.setSpeakerphoneOn(true);
-			Toast.makeText(this, "   切换外放  ", 0).show();
+		Class<AudioManager> c = AudioManager.class;
+		Method method;
+		
+		if(true == flag){  //切换到外放	
+			try {
+				method = c.getMethod("setWiredDeviceConnectionState", int.class, int.class, String.class);
+				method.setAccessible(true);
+				method.invoke(audioManager, 8, 55, "h2w"); // close headset and open speak
+			} catch (NoSuchMethodException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}	
 			
+		//	audioManager.setMode(AudioManager.MODE_NORMAL);
+			audioManager.setSpeakerphoneOn(true);
+			//Toast.makeText(this, "   切换外放  ", 0).show();
+			//audioManager.setWiredDeviceConnectionState(8, 0, "h2w");
 			
 		}
 		else{  // 切换到 耳机
 			//audioManager.setMode(AudioManager.ROUTE_HEADSET);
+			//audioManager.setSpeakerphoneOn(false);
+			//Toast.makeText(this, "   切换耳机  ", 0).show();;
 			audioManager.setSpeakerphoneOn(false);
-			Toast.makeText(this, "   切换耳机  ", 0).show();;
+            audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
 		}
 	}
 	
