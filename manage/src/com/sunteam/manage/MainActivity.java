@@ -5,9 +5,13 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.xml.transform.Templates;
+
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -95,6 +99,14 @@ public class MainActivity extends MenuActivity implements ShowView{
 		super.onCreate(savedInstanceState);
 
 		mMenuView.setShowView(this);
+		
+		registerTFcardPlugReceiver();   // 注册tf卡插拔消息
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO 自动生成的方法存根
+		super.onDestroy();
+		unregisterReceiver(tfCardPlugReceiver);
 	}
 	@Override
 	protected void onResume() {
@@ -131,6 +143,12 @@ public class MainActivity extends MenuActivity implements ShowView{
 		
 // 按键 OK键处理
 	public void KeyUp_Enter(int selectItem) {
+		
+		if(mMenuList.size() <= 0){  // 空文件夹 直接弹出菜单键
+			showMenuList();
+			return ;
+		}
+		
 		File mFile = new File(Global.gFilePaths.get(selectItem).toString()); //
 /*	
 		if (false == mFile.exists()) {
@@ -165,7 +183,9 @@ public class MainActivity extends MenuActivity implements ShowView{
 			if(true == showList(Global.gFilePaths.get(selectItem).toString(), Global.gFileName.get(selectItem).toString())){
 				onResume();
 			}
-		} else {
+		} 
+		
+		else {
 			Global.debug("selectID is file=====mMenuView= " + mMenuList);
 			//Global.debug("****1111**********33333*********mMenuView = \r\n"+ mMenuView);
 			Global.gtempID = selectItem;
@@ -310,18 +330,19 @@ public class MainActivity extends MenuActivity implements ShowView{
 		}
 		else if(keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER)  // ok 键
 		{
-			if(mMenuList.size() <= 0)
+			/*if(mMenuList.size() <= 0)
 			{
 				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_file));
 				mPromptDialog.show();
 				return true;
-			}
+			}*/
 			KeyUp_Enter(getSelectItem());
 			
 			return true;
 		}
 		else if(keyCode == KeyEvent.KEYCODE_MENU){
 //			Global.debug("onKeyDown -------KEYCODE_MENU--- Global.gPathNum = "+ Global.gPathNum);
+			
 			showMenuList();
 			return true;
 		}
@@ -646,4 +667,88 @@ public class MainActivity extends MenuActivity implements ShowView{
 		ImageView ivMenu = null; // // 图片
 	}
 	
+	
+	// 获取当前路径
+	private String getCurPath(){
+		return Global.gPath.get(Global.gPathNum -1);
+	}
+	// 更新界面
+	private void updateShowList(){
+		Global.gName.clear();
+		Global.gPath.clear();
+		
+		Global.gPath.add(Global.ROOT_PATH_FLAG);
+		Global.gName.add(getResources().getString(R.string.app_name));
+		Global.gPathNum = 1;
+
+		Global.gFilePaths.clear();
+		Global.gFileName.clear();
+
+		Global.gFileName.add(getResources().getString(R.string.phone));
+		Global.gFilePaths.add(Global.ROOT_PATH);
+
+		Global.gFileName.add(getResources().getString(R.string.sdcard));
+		Global.gFilePaths.add(Global.USER_PATH);
+
+		Global.gFileName.add(getResources().getString(R.string.udisk));
+		Global.gFilePaths.add(Global.USB_PATH);
+		
+		setListData(Global.gFileName);
+		mMenuView.setSelectItem(gSelecyId[Global.gPathNum]);
+		Global.debug("[******]gSelecyId[gPathNum] === " + gSelecyId[Global.gPathNum]);
+		setTitle(getResources().getString(R.string.app_name));
+		super.onResume();
+	}
+	
+	// tf卡插拔消息 注册
+	private void registerTFcardPlugReceiver() {   
+        IntentFilter intentFilter = new IntentFilter();   
+       
+        intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED); // SD卡插入
+        intentFilter.addAction(Intent.ACTION_MEDIA_EJECT); // SD卡拔出
+        intentFilter.addDataScheme("file");
+        
+        registerReceiver(tfCardPlugReceiver, intentFilter);  
+        Global.debug("\r\n  registerTFcardPlugReceiver ==========================");
+    } 
+	// 插拔消息  接收
+    private BroadcastReceiver tfCardPlugReceiver = new BroadcastReceiver() { 
+   
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+        	 Global.debug("\r\n  tfCardPlugReceiver ========2222==================");   
+            String action = intent.getAction();
+            
+            String mData = intent.getDataString();  // 获取路径
+            Global.debug("\r\n mData ============== " + mData);
+            if (Intent.ACTION_MEDIA_MOUNTED.equals(action)) { // 插入
+                
+                Global.debug("\r\n tf卡插入============== ");
+            }
+            else if(Intent.ACTION_MEDIA_EJECT.equals(action)){  // Tf 卡拔出
+            	
+            	String mPath = getCurPath();
+            	Global.debug("\r\n mPath ============== " + mPath);
+            	if(mData.contains(mPath)){  // 包含
+	            	if(mData.contains(Global.MENU_PATH_EXTSD) ){  // 存储卡
+	            		Global.debug("\r\n tf卡 列表更新============== ");
+	            		updateShowList();
+	            	}
+	            	else if(mData.contains(Global.MENU_PATH_UDISK) ){  // U盘
+	            		Global.debug("\r\n U盘 列表更新============== ");
+	            		updateShowList();
+	            	}
+            	}
+            	Global.debug("\r\n tf卡 拔出============== ");
+            }
+            else if(Intent.ACTION_MEDIA_REMOVED.equals(action)){
+            	Global.debug("\r\n tf卡 ACTION_MEDIA_REMOVED============== ");
+            }
+            else if(Intent.ACTION_MEDIA_SHARED.equals(action)){
+            	Global.debug("\r\n tf卡 ACTION_MEDIA_SHARED============== ");
+            }
+            
+        } 
+           
+    };
 }

@@ -99,6 +99,13 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 			gSelectID = getSelectItem();
 			
 			if (gSelectID == Global.COPY_ID) {  // 复制
+				if(Global.gtempID < 0){   // 空目录
+					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.copy_error));
+					mPromptDialog.show();
+					mPromptDialog.setPromptListener(this);
+					return true;
+				}
+				
 				Global.gCopyFlag = true;
 				Global.gCutFlag = false;
 				Global.debug("\r\n[onActivityResult] gtempID ====== "+ Global.gtempID);
@@ -113,6 +120,14 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 				mPromptDialog.setPromptListener(this);
 				
 			} else if (gSelectID == Global.CUT_ID) {  //剪切
+				
+				if(Global.gtempID < 0){   // 空目录
+					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.cut_error2));
+					mPromptDialog.show();
+					mPromptDialog.setPromptListener(this);
+					return true;
+				}
+				
 				Global.gCopyFlag = false;
 				Global.gCutFlag = true;
 				Global.gCopyPath_src = Global.gFilePaths.get(Global.gtempID).toString();
@@ -123,10 +138,18 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 				mPromptDialog.show();
 				mPromptDialog.setPromptListener(this);
 				
-			} else if (gSelectID == Global.DEl_ID) {  // 删除				
+			} else if (gSelectID == Global.DEl_ID) {  // 删除		
+				
+				if(Global.gtempID < 0){   // 空目录
+					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.del_error));
+					mPromptDialog.show();
+					mPromptDialog.setPromptListener(this);
+					return true;
+				}
+				
 				ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.del_ask), 
-																		getResources().getString(R.string.ok),
-																		getResources().getString(R.string.cancel));
+																		getResources().getString(R.string.yes),
+																		getResources().getString(R.string.no));
 				mConfirmDialog.show();
 				mConfirmDialog.setConfirmListener(this);
 				
@@ -154,9 +177,15 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 					if(mFile.exists()){
 						PromptDialog mPromptDialog = new PromptDialog(ManageMenuActivity.this, getResources().getString(R.string.pasteing));
 						mPromptDialog.show();
-						mPromptDialog.setPromptListener(this);
-						gPastFlag = true;
-						gthread.start();
+						mPromptDialog.setPromptListener(new PromptListener() {
+							
+							@Override
+							public void onComplete() {
+								// TODO 自动生成的方法存根
+								gPastFlag = true;
+								gthread.start();
+							}
+						});	
 					}
 					else{
 						PromptDialog mPromptDialog = new PromptDialog(ManageMenuActivity.this, getResources().getString(R.string.past_error));
@@ -328,7 +357,26 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 			Global.debug("\r\n pasteFile =111= Global.gCopyPath_src =="+ Global.gCopyPath_src);
 			Global.debug("\r\n pasteFile =222= tempFile =="+ tempFile);
 			
-			if(Global.gCopyPath_src.equals(tempFile) || tempFile.contains(Global.gCopyPath_src)){  // 相同文件
+			if(Global.gCopyPath_src.equals(tempFile)) {  // 文件夹名相同 加后缀
+				int num = 1;
+				File tFile1 = null;
+				String tempFile1 = null;
+				tempFile1 = Global.gCopyPath_desk + java.io.File.separator + Global.gCopyName + "-" + num ;
+				Global.debug("[*******] tempFile1 ===== " + tempFile1);
+				tFile1 = new File(tempFile1);
+				while (tFile1.exists()) {
+					num++;
+					tempFile1 = Global.gCopyPath_desk + java.io.File.separator + Global.gCopyName+ "-" + num ;
+					tFile1 = new File(tempFile1);
+				}
+				Global.debug("[*******] tempFile1 ====1111  = " + tempFile1);
+				Global.gPastName = tempFile1;
+				copyDirectiory(Global.gCopyPath_src, tempFile1);
+				if(true == gPastFlag){
+					SpeakContentend(getResources().getString(R.string.paste_finsh));
+				}
+			}
+			else if(tempFile.contains(Global.gCopyPath_src)){  // 相同文件
 				SpeakContentend(getResources().getString(R.string.paste_check));
 				Global.debug("\r\n pasteFile =33= Global.gCopyPath_src =="+ Global.gCopyPath_src);
 				Global.debug("\r\n pasteFile =44= tempFile =="+ tempFile);

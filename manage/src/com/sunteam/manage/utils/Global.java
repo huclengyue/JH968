@@ -24,6 +24,10 @@ public class Global {
 	// Environment.getExternalStorageDirectory().toString();;
 	public static final String USB_PATH = "/mnt/usbhost1"; // 优盘
 	public static final String ROOT_PATH_FLAG = "/root";
+	
+	
+	public static final String MENU_PATH_EXTSD = "/mnt/extsd"; // 扩展SD卡
+	public static final String MENU_PATH_UDISK = "/mnt/usbhost1"; // U盘
 
 	//private boolean gMeunViewFlag = false; // menu 界面标志
 

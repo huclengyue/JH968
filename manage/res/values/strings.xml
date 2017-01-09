@@ -26,7 +26,7 @@
     <string name="copy_finsh">复制完成</string>
     <string name="pasteing">正在粘贴</string>
     <string name="paste_finsh">粘贴完成</string>
-    <string name="del_ask">请确认是否删除</string>
+    <string name="del_ask">确认删除</string>
     <string name="del_finsh">文件已删除</string>
     <string name="cut_finsh">文件已剪切</string>
     <string name="paste_check">请检查粘贴路径是否正确</string>
@@ -40,9 +40,13 @@
     <string name="no_file">无文件</string>
     <string name="past_error">操作无效,没有可粘贴的文件</string>
     <string name="cut_error">操作无效,请检查粘贴路径</string>
+    <string name="copy_error">操作无效,请检查复制路径</string>
+    <string name="cut_error2">操作无效,请检查剪切路径</string>
+    <string name="del_error">操作无效,请检查删除路径</string>
+    
     <string name="file_error">文件不存在</string>
     
-    <string name="past_exit">文件正在复制是否退出</string>
+    <string name="past_exit">正在粘贴，确认退出</string>
     <string name="yes">是</string>
     <string name="no">否</string>
    
