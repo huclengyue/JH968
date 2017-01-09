@@ -53,7 +53,8 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	private int gday = 0;
 	
 	private int gFlag = 0;
-	
+	Alarminfo alarminfo = null;
+	int alarm_flag = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -105,7 +106,9 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
 		mTvTitle.setHeight(mTools.convertSpToPixel(fontSize));	
 		//int flag = getAlarmType();
-		Alarminfo alarminfo = new Alarminfo();  // 
+		
+		alarminfo = new Alarminfo();  //
+		
 		alarminfo = getAlarmData();
 		Alarmpublic.debug("\r\n[] alarminfo   ===== " + alarminfo);
 		if(alarminfo == null){
@@ -119,6 +122,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			return ;
 		}
 		
+		//myPlayer.stopPlayback();
 		myPlayer = MyPlayer.getInstance(this,mHandler);
 		myPlayer.setOnStateChangedListener(this);
 		gFilename = alarminfo.path;   // 获取文件名
@@ -132,14 +136,14 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			
 			Alarmpublic.debug("\r\n[33333] gFilename =======");
 			//AssetFileDescriptor fd = getResources().openRawResourceFd();
-		
+			//gFilename = 
 			//Alarmpublic.debug("\r\n[4444] gFilename =====fileDescriptor.getFileDescriptor()==" + fd.getFileDescriptor());
 			myPlayer.startPlayback2(this, R.raw.alarm, true);
 			
 			Alarmpublic.debug("\r\n[33333] gFilename =======");
 		}
 		
-		int alarm_flag = getAlarmType();
+		alarm_flag = getAlarmType();
 		
 		// 获取时间
 		Calendar calendar = Calendar.getInstance();  // 获取日历
@@ -148,9 +152,17 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		gmonth = calendar.get(Calendar.MONTH) +1;  // 月份从0开始，需要+1
 		gday = calendar.get(Calendar.DAY_OF_MONTH);
 				
+		showallinfo();
 		
+		Alarmpublic.debug("\r\n ================alarm_flag ============ "+ alarm_flag);
 		
-		Alarmpublic.debug("\r\n alarm_flag ==== "+ alarm_flag);
+		Alarmpublic.UpateAlarm(this);
+//		total = myPlayer.fileDuration();
+
+	}
+	
+	
+	private void showallinfo(){
 		if(Alarmpublic.ALARM_TYPE_ALARM == alarm_flag){
 			mTv_Year1.setText("" + gyear);
 			mTv_Year2.setText("-");
@@ -263,17 +275,16 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		}
 		mFilename.setText(alarminfo.filename);
 		Alarmpublic.debug("\r\n alarm_flag ====999999" );
-		Alarmpublic.UpateAlarm(this);
-//		total = myPlayer.fileDuration();
-
 	}
 	
 	@Override
 	protected void onResume() {
 		// TODO 自动生成的方法存根
 		super.onResume();
-		
+		Alarmpublic.debug("\r\nonResume =================================== ");
 		acquireWakeLock(this);
+		
+		showallinfo();
 	}
 	
 	@Override
@@ -293,7 +304,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 				myPlayer.stopPlayback();
 				setResult(RESULT_OK, intent);
 				finish();
-				Alarmpublic.debug(" \r\n mHandler  ={}====111");
+				Alarmpublic.debug(" \r\n 音频播放结束  mHandler  ={}====111");
 				
 			}else if(msg.what == 0){
 				myPlayer.startPlayback(0, gFilename, false);
@@ -361,8 +372,13 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
-				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
+				if((gFlag == Alarmpublic.BOOT_FLAG) && (gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
 					dbAlarmInfo.closeDb();  // 关闭数据库
+					return Alarmpublic.ALARM_TYPE_ALARM;
+				}
+				else if ((gFlag == Alarmpublic.NORMAL_FLAG) && (gHour == tempinfo.hour) && (gmin == tempinfo.minute)){
+					dbAlarmInfo.closeDb();  // 关闭数据库
+					Alarmpublic.debug("找到数据   === 闹钟===2===\r\n");
 					return Alarmpublic.ALARM_TYPE_ALARM;
 				}
 			}
@@ -430,12 +446,12 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 				
 				if((gFlag == Alarmpublic.BOOT_FLAG) && (gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
 					dbAlarmInfo.closeDb();  // 关闭数据库
-					Alarmpublic.debug("找到数据   === 闹钟======\r\n");
+					Alarmpublic.debug("找到数据   === 闹钟==1====\r\n");
 					return tempinfo;
 				}
 				else if ((gFlag == Alarmpublic.NORMAL_FLAG) && (gHour == tempinfo.hour) && (gmin == tempinfo.minute)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
-					Alarmpublic.debug("找到数据   === 闹钟======\r\n");
+					Alarmpublic.debug("找到数据   === 闹钟===2===\r\n");
 					return tempinfo;
 				}
 			}

@@ -1,5 +1,7 @@
 package com.sunteam.receiver;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,10 +20,9 @@ public class Alarm_Receiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 		//Toast.makeText(context, "闹铃响了, 可以做点事情了~~", Toast.LENGTH_LONG).show();
 		Alarmpublic.debug("[###]Alarm_Receiver  ==2222222222222222222= \r\n");
-		Intent mIntent = new Intent(context , Alarm_receiver_Activity.class);
-		//Bundle bundle = new Bundle();//
 		
-//		/bundle.putInt("FLAG", Alarmpublic.NORMAL_FLAG); // 修改项
+		Intent mIntent = new Intent(context , Alarm_receiver_Activity.class);
+
 		mIntent.putExtra("FLAG", Alarmpublic.NORMAL_FLAG); // 传入参数 
 		
 		mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
