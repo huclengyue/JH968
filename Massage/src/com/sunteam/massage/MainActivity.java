@@ -1,6 +1,7 @@
 package com.sunteam.massage;
 
 import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.massage.utils.Global;
 
@@ -20,6 +21,15 @@ public class MainActivity extends MenuActivity {
 		super.onCreate(savedInstanceState);  // 调用父类的 oncreat
 	}
 
+	@Override
+	protected void onDestroy() {
+		// TODO 自动生成的方法存根
+		super.onDestroy();
+		
+		if (TtsUtils.getInstance() != null) {
+			TtsUtils.getInstance().destroy();
+		}
+	}
 	@Override
 	protected void onResume() {
 		super.onResume();  // 父类的 onResum

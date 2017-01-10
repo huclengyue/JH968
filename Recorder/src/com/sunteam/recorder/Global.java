@@ -23,6 +23,9 @@ public class Global {
 	private HashMap<Object, Object> map;
 	public static int LONG_PRESS_DOWN = 0;
 	public static int LONG_PRESS_UP = 1;
+	
+	public static int CALL_CALENDAR = 2;
+	public static int CALL_FM = 4;
 	public static String storagePath;
 	
 	public static WakeLock mWakeLock; // ½ûÖ¹ÐÝÃß

@@ -45,7 +45,9 @@ package com.sunteam.fmradio.activity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -421,12 +423,14 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
     protected void onDestroy() {
         super.onDestroy();
         
-        
+        if (TtsUtils.getInstance() != null) {
+			TtsUtils.getInstance().destroy();
+		}
         updateMuted(true);
-        Global.debug("\r\n onDestroy   speakerFlag ==== " + speakerFlag);
+/*        Global.debug("\r\n onDestroy   speakerFlag ==== " + speakerFlag);
         if(speakerFlag == true){  // 外放 要改成耳机
 			setWiredDeviceConnectionState(false);
-		}
+		}*/
 		 
     	Global.debug("Calling onDestroy()");
         Global.debug("FmRadio --------------ondestroy- go to set linein- disable---");
@@ -443,7 +447,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
         
 //        mTelephonyManager.listen(mPhoneStateListener, 0);
 
-       // doSoundEffect(true);       //adding
+        doSoundEffect(true);       //adding
     }
 
 
@@ -791,13 +795,15 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 				
 			   updateFrequency(i_freq); 
 		   }
-		   
+/*		   
 		   if(gheadin == false){  //没有耳机插入 切换到正常 外放
-			   setHearToSpeak(true); 
+			   setHearToSpeak(true);
+			   //setWiredDeviceConnectionState(true);
 		   }
 		   else{
 			   setHearToSpeak(false); 
-		   }
+			   //setWiredDeviceConnectionState(false);
+		   }*/
 	   }
 	   
         return super.onKeyUp(keyCode, event);
@@ -957,13 +963,37 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		}
 		else if (selectItem == Global.RECORD_CHANEL_ID) {  // 内录
 			
+			startRecord();
 			
 			super.onResume();
 		}
 			//gMeunViewFlag = false;
 	}
 
-
+	private void startRecord() {
+		// TODO 自动生成的方法存根
+		Intent intent = new Intent();
+		//String packageName = "com.sunteam.calendar";
+		String packageName = "com.sunteam.recorder";
+		String className = "com.sunteam.recorder.activity.RecordActivity";
+		String path = Global.FM_PATH; //Environment.getExternalStorageDirectory().getAbsolutePath() + "/tixing";
+		
+		Date dt = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String fileName = "FM" + sdf.format(dt) + ".wav";
+		
+		
+		intent.putExtra("callerId", 4); // 0: 默认由录音机调用; 1: 热键进入录音; 2: 万年历中提醒录音;
+										// 3: 语音备忘录音; 后两者在退出时返回到调用者!
+		intent.putExtra("path", path); // 文件路径
+		intent.putExtra("fileName", fileName); // 文件名
+		intent.setClassName(packageName, className);
+		//intent.setClass(this, TimeSetActivity.class);
+		
+		//startActivity(intent);
+		startActivityForResult(intent , 0);  // 设置标志
+		//startActivityForResult(intent , Global.FLAG_RECORD_ID);  // 设置标志
+	}
     
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -2274,6 +2304,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 				method = c.getMethod("setWiredDeviceConnectionState", int.class, int.class, String.class);
 				method.setAccessible(true);
 				method.invoke(audioManager, 8, 55, "h2w"); // close headset and open speak
+			//	method.invoke(audioManager, 8, 0, "h2w"); // close headset and open speak
 			} catch (NoSuchMethodException e) {
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
@@ -2288,7 +2319,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 				e.printStackTrace();
 			}	
 			
-		//	audioManager.setMode(AudioManager.MODE_NORMAL);
+			//audioManager.setMode(AudioManager.MODE_NORMAL);
 			audioManager.setSpeakerphoneOn(true);
 			//Toast.makeText(this, "   切换外放  ", 0).show();
 			//audioManager.setWiredDeviceConnectionState(8, 0, "h2w");

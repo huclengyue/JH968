@@ -14,7 +14,6 @@ import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
 import com.sunteam.receiver.Alarmpublic;
 
-import android.accounts.NetworkErrorException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -24,11 +23,8 @@ public class calendarMenuActivity extends MenuActivity{
 //	private FrameLayout mFlContainer = null;  // 帧 数据
 //	private MainView mMenuView = null;			// 主界面
 
-	@SuppressWarnings("unused")
 	private int gYear = 0;   // 年
-	@SuppressWarnings("unused")
 	private int gMonth = 0;  // 月
-	@SuppressWarnings("unused")
 	private int gDay = 0;	// 日
 	
 	private int gSelectId = 0;	// 
@@ -42,6 +38,7 @@ public class calendarMenuActivity extends MenuActivity{
 	private int INTERFACE_MENU = 0;  // 菜单界面
 	private int INTERFACE_RENID_LIST = 1;  // 查看 提醒界面
 	private int INTERFACE_DEL_REMIND = 2;  // 删除提醒界面
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//setContentView(R.layout.activity_menu);
@@ -231,7 +228,7 @@ public class calendarMenuActivity extends MenuActivity{
 					@Override
 					public void doCancel() {
 						// TODO 自动生成的方法存根
-						
+						onResume();
 					}
 				});
 				
@@ -265,7 +262,7 @@ public class calendarMenuActivity extends MenuActivity{
 			bundle.putInt("ONOFF", tempinfo.onoff);
 			
 			bundle.putString("FILENAME", tempinfo.filename);
-			bundle.putString("PATH", tempinfo.path);
+			bundle.putString("PATH", /*tempinfo.path*/ Global.TIXING_PATH);
 
 			//intent.setClass(MainActivity.this, MenuActivity.class);
 			intent.putExtras(bundle); // 传入参数
@@ -287,16 +284,17 @@ public class calendarMenuActivity extends MenuActivity{
 					Global.debug("\r\n del id ===== " + gSelectId);
 					if(true == delDbdata(gSelectId))
 					{
+						Alarmpublic.UpateAlarm(calendarMenuActivity.this);
+						mMenuList = getDbdata();
+						setListData(mMenuList);
+						onResume();
 						PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this, getResources().getString(R.string.del_ok));
 						mPromptDialog.show();
 						mPromptDialog.setPromptListener(new PromptListener() {
 							
 							@Override
 							public void onComplete() {
-								// TODO 自动生成的方法存根
-								Alarmpublic.UpateAlarm(calendarMenuActivity.this);
-								mMenuList = getDbdata();
-								setListData(mMenuList);
+								
 								int selectid = 0;
 								Global.debug("\r\n mMenuList.size() =============="+mMenuList.size());
 								Global.debug("\r\n gSelectId =============="+gSelectId);
@@ -332,11 +330,13 @@ public class calendarMenuActivity extends MenuActivity{
 									selectid = 0;//mMenuList.size() - 1;
 									Global.debug("\r\n selectid =============="+selectid);
 									mMenuView.setSelectItem(selectid);
+									onResume();
 								}
 								else{
 									selectid = gSelectId;
 									Global.debug("\r\n selectid =============="+selectid);
 									mMenuView.setSelectItem(selectid);
+									onResume();
 								}
 
 							}
@@ -360,7 +360,7 @@ public class calendarMenuActivity extends MenuActivity{
 				@Override
 				public void doCancel() {
 					// TODO 自动生成的方法存根
-					//onResume();
+					onResume();
 				}
 			});
 			

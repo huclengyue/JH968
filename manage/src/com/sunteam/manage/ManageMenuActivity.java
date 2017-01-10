@@ -15,7 +15,10 @@ import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.manage.utils.Global;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
@@ -38,7 +41,15 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		gthread=new Thread(this); 
 		gPastFlag = false;
 		//gthread.start();
-        
+        registerTFcardPlugReceiver();  // 注册TF插拔消息
+	}
+
+	
+	@Override
+	protected void onDestroy() {
+		// TODO 自动生成的方法存根
+		super.onDestroy();
+		unregisterReceiver(tfCardPlugReceiver);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -97,6 +108,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 				return true;
 			}
 			gSelectID = getSelectItem();
+			Global.debug("\r\n[onKeyUp] gSelectID === " + gSelectID + "  Global.COPY_ID == "+Global.COPY_ID);
+			Global.debug("\r\n[onKeyUp] Global.gtempID === " + Global.gtempID);
 			
 			if (gSelectID == Global.COPY_ID) {  // 复制
 				if(Global.gtempID < 0){   // 空目录
@@ -160,12 +173,12 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 				Global.debug("Global.gCutFlag == " + Global.gCutFlag + " Global.gCopyFlag   == " + Global.gCopyFlag);
 				if((Global.gCopyFlag == true) || (Global.gCutFlag == true)){   // 可复制
 					File mFile = new File(Global.gCopyPath_src);  // 源文件存在
-					Global.debug("【*qqq**】 gCopyPath_src =" + Global.gCopyPath_src);
+					//Global.debug("【*qqq**】 gCopyPath_src =" + Global.gCopyPath_src);
 					Global.debug("【*qqq**】 gCopyPath_src =" + Global.gCopyPath_src);
 					if((Global.gCutFlag == true)){
 						String tempFile = Global.gCopyPath_desk + java.io.File.separator + Global.gCopyName;
-						File mFile1 = new File(tempFile);  // 剪切到的文件也存在
-						if(mFile1.exists()){  // 剪切是不能剪切同目录的文件或文件夹
+						//File mFile1 = new File(tempFile);  // 剪切到的文件也存在
+						if(/*mFile1.exists()*/tempFile.equals(Global.gCopyPath_src)){  // 剪切是不能剪切同目录的文件或文件夹
 							PromptDialog mPromptDialog = new PromptDialog(ManageMenuActivity.this, getResources().getString(R.string.cut_error));
 							mPromptDialog.show();
 							mPromptDialog.setPromptListener(ManageMenuActivity.this);	
@@ -357,6 +370,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 			Global.debug("\r\n pasteFile =111= Global.gCopyPath_src =="+ Global.gCopyPath_src);
 			Global.debug("\r\n pasteFile =222= tempFile =="+ tempFile);
 			
+			File tFile_temp = new File(tempFile);  // 原始文件 目的目录下是否有相同文件
+			
 			if(Global.gCopyPath_src.equals(tempFile)) {  // 文件夹名相同 加后缀
 				int num = 1;
 				File tFile1 = null;
@@ -372,8 +387,61 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 				Global.debug("[*******] tempFile1 ====1111  = " + tempFile1);
 				Global.gPastName = tempFile1;
 				copyDirectiory(Global.gCopyPath_src, tempFile1);
-				if(true == gPastFlag){
-					SpeakContentend(getResources().getString(R.string.paste_finsh));
+				
+				if (Global.gCopyFlag == true) {
+					if(true == gPastFlag){
+						SpeakContentend(getResources().getString(R.string.paste_finsh));
+					}
+				} 
+				else if (Global.gCutFlag == true) {
+					final File tFile11 = new File(Global.gCopyPath_src);
+					if (tFile11.isFile()) {
+						// 删除文件
+						tFile11.delete();
+					} else {
+						// 删除文件夹
+						deleteFolder(tFile11);
+					}
+					Global.gCutFlag = false;
+					if(true == gPastFlag){
+						SpeakContentend(getResources().getString(R.string.paste_finsh));
+					}
+				}
+			}
+			else if(tFile_temp.exists()){  //  原始文件 目的目录下是有相同文件
+				int num = 1;
+				File tFile1 = null;
+				String tempFile1 = null;
+				tempFile1 = Global.gCopyPath_desk + java.io.File.separator + Global.gCopyName + "-" + num ;
+				Global.debug("[*******] tempFile1 ===== " + tempFile1);
+				tFile1 = new File(tempFile1);
+				while (tFile1.exists()) {
+					num++;
+					tempFile1 = Global.gCopyPath_desk + java.io.File.separator + Global.gCopyName+ "-" + num ;
+					tFile1 = new File(tempFile1);
+				}
+				Global.debug("[*******] tempFile1 ====1111  = " + tempFile1);
+				Global.gPastName = tempFile1;
+				copyDirectiory(Global.gCopyPath_src, tempFile1);
+				
+				if (Global.gCopyFlag == true) {
+					if(true == gPastFlag){
+						SpeakContentend(getResources().getString(R.string.paste_finsh));
+					}
+				} 
+				else if (Global.gCutFlag == true) {
+					final File tFile11 = new File(Global.gCopyPath_src);
+					if (tFile11.isFile()) {
+						// 删除文件
+						tFile11.delete();
+					} else {
+						// 删除文件夹
+						deleteFolder(tFile11);
+					}
+					Global.gCutFlag = false;
+					if(true == gPastFlag){
+						SpeakContentend(getResources().getString(R.string.paste_finsh));
+					}
 				}
 			}
 			else if(tempFile.contains(Global.gCopyPath_src)){  // 相同文件
@@ -383,14 +451,28 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 			}
 			else{
 				copyDirectiory(Global.gCopyPath_src, tempFile);
-				if(true == gPastFlag){
-					SpeakContentend(getResources().getString(R.string.paste_finsh));
+				
+				if (Global.gCopyFlag == true) {
+					if(true == gPastFlag){
+						SpeakContentend(getResources().getString(R.string.paste_finsh));
+					}
+				} 
+				else if (Global.gCutFlag == true) {
+					final File tFile11 = new File(Global.gCopyPath_src);
+					if (tFile11.isFile()) {
+						// 删除文件
+						tFile11.delete();
+					} else {
+						// 删除文件夹
+						deleteFolder(tFile11);
+					}
+					Global.gCutFlag = false;
+					if(true == gPastFlag){
+						SpeakContentend(getResources().getString(R.string.paste_finsh));
+					}
 				}
 			}
-			//SpeakContentend(getResources().getString(R.string.paste_Not_support));
-			//PromptDialog mPromptDialog1 = new PromptDialog(ManageMenuActivity.this, getResources().getString(R.string.paste_finsh));
-			//mPromptDialog1.show();
-			
+
 			return;
 		}
 		else{
@@ -613,4 +695,67 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		} catch (Exception e) {
 		}
 	}
+	
+	
+	private void go_back(){
+		
+		if(gPastFlag == true){
+			gPastFlag = false;
+			DeleteFile(Global.gPastName);
+		}
+		//Global.gPastName();
+		
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();	//新建 bundl
+		bundle.putInt("selectItem", getSelectItem());
+		bundle.putInt("goback", 1);
+		intent.putExtras(bundle); // 参数传递
+		
+		setResult(Global.MENU_INTERFACE_FLAG, intent);
+		finish();
+	}
+	// tf卡插拔消息 注册
+	private void registerTFcardPlugReceiver() {   
+        IntentFilter intentFilter = new IntentFilter();   
+       
+        intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED); // SD卡插入
+        intentFilter.addAction(Intent.ACTION_MEDIA_EJECT); // SD卡拔出
+        intentFilter.addDataScheme("file");
+        
+        registerReceiver(tfCardPlugReceiver, intentFilter);  
+        Global.debug("\r\n  registerTFcardPlugReceiver ==========================");
+    } 
+	// 插拔消息  接收
+    private BroadcastReceiver tfCardPlugReceiver = new BroadcastReceiver() { 
+   
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+        	 Global.debug("\r\n  tfCardPlugReceiver ========2222==================");   
+            String action = intent.getAction();
+            
+            String mData = intent.getDataString();  // 获取路径
+            mData = mData.substring(7,mData.length());
+            Global.debug("\r\n mData ============== " + mData);
+            if (Intent.ACTION_MEDIA_MOUNTED.equals(action)) { // 插入
+                
+                Global.debug("\r\n tf卡插入============== ");
+            }
+            else if(Intent.ACTION_MEDIA_EJECT.equals(action)){  // Tf 卡拔出
+            	
+            	String mPath = Global.gPath.get(Global.gPathNum -1);
+            	Global.debug("\r\n mPath ============== " + mPath);
+            	if(mPath.contains(mData)){  // 包含
+	            	if(mData.contains(Global.MENU_PATH_EXTSD) ){  // 存储卡
+	            		Global.debug("\r\n tf卡 列表更新============== ");
+	            		go_back();
+	            	}
+	            	else if(mData.contains(Global.MENU_PATH_UDISK) ){  // U盘
+	            		Global.debug("\r\n U盘 列表更新============== ");
+	            		go_back();
+	            	}
+            	}
+            	Global.debug("\r\n tf卡 拔出============== ");
+            }
+        }            
+    };
 }

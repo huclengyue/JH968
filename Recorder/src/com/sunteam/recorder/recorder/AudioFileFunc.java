@@ -10,6 +10,7 @@ import android.os.Environment;
 public class AudioFileFunc {
     //音频输入-麦克风
     public final static int AUDIO_INPUT = MediaRecorder.AudioSource.MIC;
+    public final static int AUDIO_INPUT2 = 9;//MediaRecorder.AudioSource.CAMCORDER;
      
     //采用频率
     //44100是目前的标准，但是某些设备仍然支持22050，16000，11025

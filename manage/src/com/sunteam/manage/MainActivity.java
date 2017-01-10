@@ -107,6 +107,10 @@ public class MainActivity extends MenuActivity implements ShowView{
 		// TODO 自动生成的方法存根
 		super.onDestroy();
 		unregisterReceiver(tfCardPlugReceiver);
+		
+		if (TtsUtils.getInstance() != null) {
+			TtsUtils.getInstance().destroy();
+		}
 	}
 	@Override
 	protected void onResume() {
@@ -205,7 +209,15 @@ public class MainActivity extends MenuActivity implements ShowView{
 
 	// 真正显示菜单界面
 	private void startMenu(int defaultItem, String title, String[] list) {
-		Global.gtempID = getSelectItem();  
+
+		if(mMenuList.size() <= 0){
+			Global.gtempID = -1;
+		}
+		else{
+			Global.gtempID = getSelectItem();
+		}
+		unregisterReceiver(tfCardPlugReceiver);
+		Global.debug("\r\n startMenu ===22==== wwwww==Global.gtempID=" + Global.gtempID);
 		Intent intent = new Intent();
 		intent.putExtra("title", title); // 设置标题
 		intent.putExtra("list", list); // 设置数据
@@ -221,7 +233,8 @@ public class MainActivity extends MenuActivity implements ShowView{
 		//super.onActivityResult(requestCode, resultCode, data);
 //		Global.debug("\r\n onActivityResult =====mMenuView= " + mMenuList);
 //		Global.debug("\r\n [^^^] onActivityResult =======resultCode= " + resultCode + " requestCode = "+ requestCode);
-		if (Global.MENU_INTERFACE_FLAG != resultCode || Global.MENU_INTERFACE_FLAG != requestCode) { // 鍦ㄥ瓙鑿滃崟涓洖浼犵殑鏍囧織
+		registerTFcardPlugReceiver();
+		if (Global.MENU_INTERFACE_FLAG != resultCode || Global.MENU_INTERFACE_FLAG != requestCode) { // 菜单界面返回
 			Global.debug("onActivityResult === error =");
 
 //			gMeunViewFlag = false;
@@ -233,6 +246,12 @@ public class MainActivity extends MenuActivity implements ShowView{
 				
 		int selectItem = 0; // 先获取子菜单上次的设置值
 		selectItem = data.getIntExtra("selectItem", selectItem);
+		int flag = 0;
+		flag = data.getIntExtra("goback", flag);
+		if(flag  == 1){
+			updateShowList();
+			return ;
+		}
 //		gSelect = data.getIntExtra("selectItem", selectItem);
 		// String selectStr = data.getStringExtra("selectStr");
 		Global.debug("onActivityResult === selectItem =" + selectItem);
@@ -342,7 +361,9 @@ public class MainActivity extends MenuActivity implements ShowView{
 		}
 		else if(keyCode == KeyEvent.KEYCODE_MENU){
 //			Global.debug("onKeyDown -------KEYCODE_MENU--- Global.gPathNum = "+ Global.gPathNum);
-			
+			if (1 == Global.gPathNum){
+				return true;
+			}
 			showMenuList();
 			return true;
 		}

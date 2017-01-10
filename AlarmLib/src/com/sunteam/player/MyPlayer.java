@@ -35,8 +35,13 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
     }
   
 	public MyPlayer() {
-		
+
 	}
+	
+	/*public MyPlayer(Context context,Handler handler) {
+		mcontext = context;
+		mHandler = handler;
+	}*/
 	
 	public synchronized static MyPlayer getInstance(Context context,Handler handler) {
 		if (mInstance == null){
@@ -50,7 +55,7 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 	 * 
 	 * @param percentage
 	 * @param mSampleFile
-	 * @param keyType �ǲ���ȷ�ϼ�
+	 * @param keyType
 	 */
 	public void startPlayback(float percentage,String path,boolean keyType) {
 		if (state() == PLAYING_PAUSED_STATE) {
@@ -174,6 +179,7 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
     }
 
 	public void stopPlayback() {
+		Alarmpublic.debug("[Myplayer]stopPlayback ==== mPlayer="+ mPlayer);
 	    if (mPlayer == null) // we were not in playback
 	        return;	
 	    mPlayer.stop();

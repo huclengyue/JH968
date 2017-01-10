@@ -6,6 +6,9 @@ import java.util.Calendar;
 
 import com.sunteam.alarmlib.R;
 import com.sunteam.common.menu.BaseActivity;
+import com.sunteam.common.menu.MenuGlobal;
+import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.CommonUtils;
 //import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.dao.Alarminfo;
@@ -55,18 +58,20 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	private int gFlag = 0;
 	Alarminfo alarminfo = null;
 	int alarm_flag = 0;
+ //   private MyPlayer mInstance = null;
+	Alarm_receiver_Activity gthis ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.alarm_receiver_activity);
-		Alarmpublic.debug("\r\n Alarm_receiver_Activity ====================\r\n");
+//		Alarmpublic.debug("\r\n Alarm_receiver_Activity ========[onCreate]============this ="+ this);
 		Tools mTools = new Tools(this);
 		
 		Intent intent = getIntent();	//获取Intent
 		//Bundle bundle = intent.getExtras();	//获取 Bundle
-		Alarmpublic.debug("\r\n Alarm_receiver_Activity =========2222===========\r\n");
+//		Alarmpublic.debug("\r\n Alarm_receiver_Activity =========2222===========\r\n");
 		gFlag = intent.getIntExtra("FLAG", gFlag);  // 获取进入标志
-		Alarmpublic.debug("\r\n Alarm_receiver_Activity ===========3333=========gFlag ="+ gFlag);
+//		Alarmpublic.debug("\r\n Alarm_receiver_Activity ===========3333=========gFlag ="+ gFlag);
 				
 		mTvTitle = (TextView) this.findViewById(R.id.title); // 标题栏
 		mTv_Year1 = (TextView) this.findViewById(R.id.Year_tv1); // 年
@@ -110,7 +115,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		alarminfo = new Alarminfo();  //
 		
 		alarminfo = getAlarmData();
-		Alarmpublic.debug("\r\n[] alarminfo   ===== " + alarminfo);
+//		Alarmpublic.debug("\r\n[] alarminfo   ===== " + alarminfo);
 		if(alarminfo == null){
 			
 			Alarmpublic.debug("  没有找到闹钟=================\r\n");
@@ -122,7 +127,10 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			return ;
 		}
 		
-		//myPlayer.stopPlayback();
+/*		if(myPlayer != null){
+			myPlayer.stopPlayback();
+		}*/
+		
 		myPlayer = MyPlayer.getInstance(this,mHandler);
 		myPlayer.setOnStateChangedListener(this);
 		gFilename = alarminfo.path;   // 获取文件名
@@ -154,7 +162,8 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 				
 		showallinfo();
 		
-		Alarmpublic.debug("\r\n ================alarm_flag ============ "+ alarm_flag);
+		//Alarmpublic.debug("\r\n ================alarm_flag ============ "+ alarm_flag);
+		MenuGlobal.debug("[alarmlib-Alarm_receiver_Activity][onCreate], this = " + this);
 		
 		Alarmpublic.UpateAlarm(this);
 //		total = myPlayer.fileDuration();
@@ -274,19 +283,32 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			}
 		}
 		mFilename.setText(alarminfo.filename);
-		Alarmpublic.debug("\r\n alarm_flag ====999999" );
+		//Alarmpublic.debug("\r\n alarm_flag ====999999" );
 	}
 	
+	@Override
+	protected void onDestroy() {
+		// TODO 自动生成的方法存根
+		super.onDestroy();
+		if (!CommonUtils.isAppOnForeground(this)) { // 如果是自己启动自己，则不必销毁TtsUtils实例!
+			TtsUtils.getInstance().destroy();
+		}
+	}
 	@Override
 	protected void onResume() {
 		// TODO 自动生成的方法存根
 		super.onResume();
-		Alarmpublic.debug("\r\nonResume =================================== ");
+		//MenuGlobal.debug("[alarmlib-Alarm_receiver_Activity][onResume], this = " + this);
+
+		//Alarmpublic.debug("\r\n [onResume] =========================== this= "+ this);
 		acquireWakeLock(this);
 		
 		showallinfo();
+		gthis = this;
+		
 	}
-	
+
+
 	@Override
 	public void onPanelClosed(int featureId, Menu menu) {
 		// TODO 自动生成的方法存根
@@ -298,7 +320,8 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
-			Alarmpublic.debug(" \r\n mHandler  ={}====1110000000000000");
+//			Alarmpublic.debug(" \r\n mHandler  ={}====1110000000000000");
+			
 			if(msg.what == 1){   // 音乐播放结束消息
 				Intent intent = new Intent();
 				myPlayer.stopPlayback();
@@ -378,7 +401,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 				}
 				else if ((gFlag == Alarmpublic.NORMAL_FLAG) && (gHour == tempinfo.hour) && (gmin == tempinfo.minute)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
-					Alarmpublic.debug("找到数据   === 闹钟===2===\r\n");
+			//		Alarmpublic.debug("找到数据   === 闹钟===2===\r\n");
 					return Alarmpublic.ALARM_TYPE_ALARM;
 				}
 			}
@@ -439,19 +462,19 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		for(int i= 0; i < mAlarmAll.size(); i++)
 		{
 			tempinfo = mAlarmAll.get(i);
-			Alarmpublic.debug("\r\nGetNearAlarm === tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
+		//	Alarmpublic.debug("\r\nGetNearAlarm === tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
 			
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);	
 				
 				if((gFlag == Alarmpublic.BOOT_FLAG) && (gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1))){
 					dbAlarmInfo.closeDb();  // 关闭数据库
-					Alarmpublic.debug("找到数据   === 闹钟==1====\r\n");
+			//		Alarmpublic.debug("找到数据   === 闹钟==1====\r\n");
 					return tempinfo;
 				}
 				else if ((gFlag == Alarmpublic.NORMAL_FLAG) && (gHour == tempinfo.hour) && (gmin == tempinfo.minute)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
-					Alarmpublic.debug("找到数据   === 闹钟===2===\r\n");
+			//		Alarmpublic.debug("找到数据   === 闹钟===2===\r\n");
 					return tempinfo;
 				}
 			}
@@ -464,8 +487,8 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			tempinfo = mAlarmAll.get(i);
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);
-				Alarmpublic.debug("\r\nGetNearAlarm === tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
-				Alarmpublic.debug("\r\nGetNearAlarm === tempinfo.day = "+ tempinfo.day + " tempinfo.month = "+ tempinfo.month);
+			//	Alarmpublic.debug("\r\nGetNearAlarm === tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
+			//	Alarmpublic.debug("\r\nGetNearAlarm === tempinfo.day = "+ tempinfo.day + " tempinfo.month = "+ tempinfo.month);
 				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1)) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
@@ -480,8 +503,8 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 			tempinfo = mAlarmAll.get(i);
 			if(tempinfo.onoff == Alarmpublic.ALARM_ON){  // 是打开状态
 			//	Global.debug("\r\nGetNearAlarm === i = "+ i);
-				Alarmpublic.debug("\r\nGetNearAlarm =1== tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
-				Alarmpublic.debug("\r\nGetNearAlarm =2== tempinfo.day = "+ tempinfo.day + " tempinfo.month = "+ tempinfo.month);
+			//	Alarmpublic.debug("\r\nGetNearAlarm =1== tempinfo_later.hour = "+ tempinfo.hour + " tempinfo.minute = "+ tempinfo.minute);
+			//	Alarmpublic.debug("\r\nGetNearAlarm =2== tempinfo.day = "+ tempinfo.day + " tempinfo.month = "+ tempinfo.month);
 				if((gHour == tempinfo.hour) && ((gmin - tempinfo.minute) == 0 ||((gmin - tempinfo.minute) == 1)) &&
 						(gday == tempinfo.day) && (gmonth == tempinfo.month)&&(gyear == tempinfo.year)){
 					dbAlarmInfo.closeDb();  // 关闭数据库
@@ -504,8 +527,8 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		}
 		else if(state == myPlayer.IDLE_STATE){
 			myPlayer.stopPlayback();
-			Alarmpublic.debug("onStateChanged ===== 1111=================myPlayer.IDLE_STATE==" + myPlayer.IDLE_STATE);
-			finish();
+			//Alarmpublic.debug("onStateChanged ===== 1111=================myPlayer.IDLE_STATE==" + myPlayer.IDLE_STATE);
+			//finish();  // 在第一个闹钟来时 会改变播放状态 这里也会调 这样会将界面销毁    这里不需要
 		}
 	}
 	@Override
@@ -516,7 +539,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	// 按键处理 抬起处理
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		
+		Alarmpublic.debug("\r\nonKeyUp  ==================== ");
 		// 确认键
 		myPlayer.stopPlayback();
 	//	myPlayer.release();

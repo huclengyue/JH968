@@ -2,7 +2,6 @@ package com.sunteam.recorder.activity;
 
 import java.util.List;
 
-import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
@@ -437,8 +436,23 @@ Runnable finishActivityDelayed = new Runnable() {
 	                       status == BatteryManager.BATTERY_STATUS_FULL;
 		           if(level<10){
 	            		if(myPlayer.state() == MyPlayer.PLAYING_STATE){
-	            			Global.showToast(PlayActivity.this, R.string.cannot_play,mHandler,0);
-	            			myPlayer.pausePlayback();
+	            		//	Global.showToast(PlayActivity.this, R.string.cannot_play,mHandler,0);
+	            		//	myPlayer.pausePlayback();
+	            			PromptDialog mPromptDialog = new PromptDialog(PlayActivity.this, getResources().getString(R.string.cannot_play));
+	            			mPromptDialog.show();
+	            			mPromptDialog.setPromptListener(new PromptListener() {
+								
+								@Override
+								public void onComplete() {
+									// TODO 自动生成的方法存根
+									myPlayer.stopPlayback();
+			        				Intent intent = new Intent();
+			        				intent.putExtra("currentIndex", currentIndex);
+			        				PlayActivity.this.setResult(RESULT_OK, intent);
+			        				finish();
+								}
+							});
+	            			
 	            		}
 	            }else if(level < 20 &&!isCharging){
 	            //	Global.showToast(PlayActivity.this, R.string.low_battery,null,-1);

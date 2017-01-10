@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.iflytek.thridparty.m;
 import com.sunteam.calendar.constant.Global;
+import com.sunteam.calendar.player.MyPlayer;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.ConfirmDialog;
@@ -18,11 +18,9 @@ import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
 import com.sunteam.receiver.Alarmpublic;
 
-import android.R.bool;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.KeyEvent;
 
 public class RemindActivity extends MenuActivity{
@@ -49,7 +47,9 @@ public class RemindActivity extends MenuActivity{
 	private int gonoff = Alarmpublic.ALARM_ON;   // 开关标志
 	
 	private int gSelectID = 0;   // 选择标志
-		
+	private MyPlayer myPlayer = null;
+	
+	//private MediaPlayer MyPlayer = new MediaPlayer();  // 播放器
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -108,14 +108,52 @@ public class RemindActivity extends MenuActivity{
 		}
 		
 		mMenuList = ArrayUtils.strArray2List(mlist);
-				
+		selectItem = 0;		
 		super.onCreate(savedInstanceState);
+		
+		myPlayer = MyPlayer.getInstance(this,null);
+		
+		playRecordSound();
 	}
 	
+	
+	private void playRecordSound(){
+		
+		Global.debug("\r\n [playRecordSound]    getSelectItem() == " + getSelectItem());
+		if(0 == getSelectItem()){  // 反显第一项 录音项
+			if(!gFileName.equals(Global.ALARM_FILE_NAME)){  // 有文件 播放
+				
+				if(gPath.equals(Global.TIXING_PATH)){
+					Global.debug("\r\n [playRecordSound] [1]   gFileName == " + gPath+ "/" +gFileName);
+					myPlayer.startPlayback(myPlayer.playProgress(), gPath+ "/" +gFileName ,true);
+				}
+				else{
+					Global.debug("\r\n [playRecordSound]  [2]  gFileName == " + gPath);
+					myPlayer.startPlayback(myPlayer.playProgress(), gPath ,true);
+				}
+			}
+			else{
+				Global.debug("\r\n [playRecordSound]    stop == " );
+				myPlayer.stopPlayback();
+			}
+		}
+		else{
+			myPlayer.stopPlayback();
+		}
+	}
 	// 键按下
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	
+		if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN||
+				keyCode == KeyEvent.KEYCODE_DPAD_UP||
+				keyCode == KeyEvent.KEYCODE_DPAD_LEFT||
+				keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
+			
+			super.onKeyDown(keyCode, event);
+			playRecordSound();
+			return true;
+		}
 		return super.onKeyDown(keyCode, event);
 	}
 	// 键抬起
@@ -165,7 +203,7 @@ public class RemindActivity extends MenuActivity{
 							Global.debug("\r\n ******* Global.REMIND_ADD_FLAG_ID ===" + Global.REMIND_ADD_FLAG_ID);
 							setResult(Global.REMIND_ADD_FLAG_ID,intent);	//返回界面
 						}
-						
+						myPlayer.stopPlayback();
 						finish();
 					}
 				});
@@ -197,6 +235,7 @@ public class RemindActivity extends MenuActivity{
 								
 								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
 							}
+							myPlayer.stopPlayback();
 							finish();
 						}
 					});
@@ -470,6 +509,7 @@ public class RemindActivity extends MenuActivity{
 					
 						setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
 					}
+					myPlayer.stopPlayback();
 					finish();
 				}
 			});
@@ -522,6 +562,7 @@ public class RemindActivity extends MenuActivity{
 								
 								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
 							}
+							myPlayer.stopPlayback();
 							finish();
 						}
 						
@@ -537,6 +578,7 @@ public class RemindActivity extends MenuActivity{
 								
 								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
 							}
+							myPlayer.stopPlayback();
 							finish();
 						}
 					});

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.sunteam.alarm.utils.Global;
 import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
@@ -54,7 +55,14 @@ public class Alarm_MainActivity extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_main);
 	}
-	
+	@Override
+	protected void onDestroy() {
+		// TODO 自动生成的方法存根
+		super.onDestroy();
+		if (TtsUtils.getInstance() != null) {
+			TtsUtils.getInstance().destroy();
+		}
+	}
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO 自动生成的方法存根

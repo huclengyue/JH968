@@ -9,6 +9,7 @@ import java.util.Comparator;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.menulistadapter.ShowView;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.SharedPrefUtils;
@@ -156,6 +157,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 		// TODO 自动生成的方法存根
 		super.onDestroy();
 		unregisterReceiver(tfCardPlugReceiver);
+		if (TtsUtils.getInstance() != null) {
+			TtsUtils.getInstance().destroy();
+		}
 	}
 	// 键抬起
 	@Override

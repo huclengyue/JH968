@@ -30,7 +30,7 @@ public class Alarmpublic {
 	public static final int MAX_NUM = 8;  // 数据最大记录数
 	
 	public static final String ALARM_FILE_NAME = "alarm.mp3";
-	public static final String ALARM_FILE_PATH = Environment.getExternalStorageDirectory() + "//Alarms//";
+	public static final String ALARM_FILE_PATH = Environment.getExternalStorageDirectory() + "//Alarms//" + ALARM_FILE_NAME;
 	
 	public static final int DEF_HOUR = 8;  //  默认小时
 	public static final int DEF_MIN = 0;  //  默认分
@@ -114,7 +114,7 @@ public class Alarmpublic {
 			AlarmManager manager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 			//manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
 			manager.cancel(sender);
-			Alarmpublic.debug("\r\n =================1==========================1\r\n");
+		//	Alarmpublic.debug("\r\n =================1==========================1\r\n");
 			manager.set(/*AlarmManager.RTC_SHUTDOWN_WAKEUP*/4, calendar.getTimeInMillis(), sender);
 			
 			//manager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, 1*1000, sender);
@@ -158,7 +158,7 @@ public class Alarmpublic {
 				later_sec = (int) (calendar_later.getTimeInMillis()/ 1000);  //秒
 				//
 				data_sec = later_sec - now_sec;
-				Alarmpublic.debug("\r\n[11] data_sec = " + data_sec);
+				//Alarmpublic.debug("\r\n[11] data_sec = " + data_sec);
 				if(data_sec < 0) // 时间过啦
 				{
 					if(tempinfo_later.type == Alarmpublic.ALARM_TYPE2)  // 工作日 需要判断是不是 周5，6
@@ -183,7 +183,7 @@ public class Alarmpublic {
 				}
 				else{
 					
-					Alarmpublic.debug("\r\n tempinfo_later.type ==== " + tempinfo_later.type + "\r\n week === "+week);
+				//	Alarmpublic.debug("\r\n tempinfo_later.type ==== " + tempinfo_later.type + "\r\n week === "+week);
 					if(tempinfo_later.type == Alarmpublic.ALARM_TYPE2)  // 工作日 需要判断是不是 周5，6
 					{
 					//	if(week == 5){ // 周5
@@ -198,7 +198,7 @@ public class Alarmpublic {
 					}
 				}
 				
-				Alarmpublic.debug("\r\n[22]data_sec = " + data_sec);
+				//Alarmpublic.debug("\r\n[22]data_sec = " + data_sec);
 				if(data_sec > 0 && (min_sec == 0)) // 第一个需要的闹钟
 				{
 					min_sec = data_sec;
@@ -211,7 +211,7 @@ public class Alarmpublic {
 					}
 				}
 				else {	  // 已经过了的
-					Alarmpublic.debug("[***** ]data_sec = " + data_sec);
+					//Alarmpublic.debug("[***** ]data_sec = " + data_sec);
 					if(Alarmpublic.ALARM_TYPE1 ==  tempinfo_later.type){ // 仅闹一次 则关闭
 						tempinfo_later.onoff = Alarmpublic.ALARM_OFF;
 						dbAlarmInfo.update(tempinfo_later, Alarmpublic.ALARM_TABLE);
@@ -264,7 +264,7 @@ public class Alarmpublic {
 				later_sec = (int) (calendar_later.getTimeInMillis()/ 1000);
 				
 				data_sec = later_sec - now_sec;
-				Alarmpublic.debug("data_sec = " + data_sec);
+			//	Alarmpublic.debug("data_sec = " + data_sec);
 				if(data_sec > 0 && (min_sec == 0))
 				{
 					min_sec = data_sec;
@@ -328,7 +328,7 @@ public class Alarmpublic {
 				if(data_sec > 0 && (min_sec == 0))
 				{
 					min_sec = data_sec;
-					Alarmpublic.debug("\r\n [***** ] min_sec  = "+ min_sec);
+				//	Alarmpublic.debug("\r\n [***** ] min_sec  = "+ min_sec);
 				}
 				else if ((data_sec > 0) && (min_sec > 0))
 				{

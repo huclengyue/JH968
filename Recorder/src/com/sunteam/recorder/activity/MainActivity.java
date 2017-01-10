@@ -13,9 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
-
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.recorder.Global;
@@ -68,6 +65,15 @@ public class MainActivity extends MenuActivity {
 		registerReceiver(reciver, intentFilter);
 		
 		super.onResume();
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO 自动生成的方法存根
+		super.onDestroy();
+		
+		if (TtsUtils.getInstance() != null) {
+			TtsUtils.getInstance().destroy();
+		}
 	}
 
 	@Override

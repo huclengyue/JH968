@@ -1,13 +1,10 @@
 package com.sunteam.music;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import com.sunteam.common.menu.BaseActivity;
-import com.sunteam.common.tts.TtsUtils;
-import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.SharedPrefUtils;
 import com.sunteam.common.utils.Tools;
@@ -21,11 +18,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;

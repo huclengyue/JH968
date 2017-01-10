@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+import com.sunteam.recorder.Global;
+
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 
@@ -52,6 +54,28 @@ public class AudioRecorder {
 		}
 	}
 
+	public int startRecordAndFile_forFm() {
+		// 判断是否有外部存储设备sdcard
+		if (AudioFileFunc.isSdcardExit()) {
+			if (isRecord) {
+				return ErrorCode.E_STATE_RECODING;
+			} else {
+				Global.debug("\r\n startRecordAndFile_forFm   ---- audioRecord ="+audioRecord);
+				//if (audioRecord == null) {
+					creatAudioRecord_forFm();
+			//	}
+				audioRecord.startRecording();
+				// 让录制状态为true
+				isRecord = true;
+				// 开启音频文件写入线程
+				new Thread(new AudioRecordThread()).start();
+				return ErrorCode.SUCCESS;
+			}
+		} else {
+			return ErrorCode.E_NOSDCARD;
+		}
+	}
+	
 	public void stopRecordAndFile() {
 		close();
 	}
@@ -89,6 +113,25 @@ public class AudioRecorder {
 
 		// 创建AudioRecord对象
 		audioRecord = new AudioRecord(AudioFileFunc.AUDIO_INPUT,
+				AudioFileFunc.AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_STEREO,
+				AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
+	}
+	private void creatAudioRecord_forFm() {
+		Global.debug("\r\n[creatAudioRecord_forFm]    1111==== \r\n");
+		// 获取音频文件路径
+		NewAudioName = AudioFileFunc.getWavFilePath();
+
+		// 获得缓冲区字节大小
+		bufferSizeInBytes = AudioRecord.getMinBufferSize(
+				AudioFileFunc.AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_STEREO,
+				AudioFormat.ENCODING_PCM_16BIT);
+
+		// int BufferElements2Rec = 1024; // want to play 2048 (2K) since 2
+		// bytes we use only 1024
+		// int BytesPerElement = 2; // 2 bytes in 16bit format
+
+		// 创建AudioRecord对象
+		audioRecord = new AudioRecord(AudioFileFunc.AUDIO_INPUT2,
 				AudioFileFunc.AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_STEREO,
 				AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
 	}

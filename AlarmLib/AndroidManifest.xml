@@ -23,11 +23,11 @@
         android:name="com.sunteam.receiver.Alarm_receiver_Activity"
         android:label="@string/alarm_title"
         android:screenOrientation="landscape"
-        android:launchMode="singleInstance"
-         android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-         >
-    </activity>
         
+        android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+        >
+    </activity>
+       <!--  android:launchMode="singleInstance" -->
       <!-- 必须要注册才行 -->
     <receiver
         android:name="com.sunteam.receiver.Alarm_Receiver"

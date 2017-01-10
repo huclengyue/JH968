@@ -166,11 +166,13 @@ public class MainActivity extends BaseActivity {
 // 界面销毁
 	@Override
 	protected void onDestroy() {
+		
+		Global.debug("===== onDestroy ==== ");
+		super.onDestroy();
+		
 		if (TtsUtils.getInstance() != null) {
 			TtsUtils.getInstance().destroy();
 		}
-		Global.debug("===== onDestroy ==== ");
-		super.onDestroy();
 	}	
 	// 初始化
 	private void init() {
@@ -378,7 +380,7 @@ public class MainActivity extends BaseActivity {
 		mMonthInfo.setText(Integer.toString(gmonth));
 		Global.debug(" data ==========3444==============");
 		data  = null;
-		data = getAnimalsYear(gyear) + getResources().getString(R.string.year) +
+		data = getAnimalsYear(gyear, gmonth, gday) + getResources().getString(R.string.year) +
 				getLunarMon(gyear, gmonth, gday)+
 				getLunarDay(gyear, gmonth, gday);
 		
@@ -413,7 +415,7 @@ public class MainActivity extends BaseActivity {
 				
 				str1 = getResources().getString(R.string.lunarlendar);
 				str1 = str1 + ",";
-				str1 = getAnimalsYear(gyear) + getResources().getString(R.string.year)+  // 年
+				str1 = getAnimalsYear(gyear, gmonth, gday) + getResources().getString(R.string.year)+  // 年
 				"," +
 				getLunarMon(gyear, gmonth, gday)+
 				getLunarDay(gyear, gmonth, gday);
@@ -469,7 +471,7 @@ public class MainActivity extends BaseActivity {
 		
 		str1 = getResources().getString(R.string.lunarlendar);
 		str1 = str1 + ",";
-		str1 = getAnimalsYear(gyear) + getResources().getString(R.string.year)+  // 年
+		str1 = getAnimalsYear(gyear, gmonth, gday) + getResources().getString(R.string.year)+  // 年
 		"," +
 		getLunarMon(gyear, gmonth, gday)+
 		getLunarDay(gyear, gmonth, gday);
@@ -820,9 +822,9 @@ public class MainActivity extends BaseActivity {
 	 * @param 
 	 * @return  生肖年 
 	 */
-	public String getAnimalsYear(int year) {
-		
-		return lc.animalsYear(year);
+	public String getAnimalsYear(int year,int mon, int day) {
+		lc.getLunarDate(year, mon, day, true);
+		return lc.animalsYear( lc.getYear());
 	}
 		
 }

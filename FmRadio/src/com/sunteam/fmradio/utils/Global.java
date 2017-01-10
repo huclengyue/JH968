@@ -46,6 +46,7 @@ public class Global {
 	public static Context mContext;
 	public static Handler mHandler;
 	public static int MENU_FLAG = 0x100;
+	public static String FM_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FM录音";
 	
 	public static int SEARCH_ALL_ID	=	0 ;  // 搜索电台
 	public static int AUDIO_APEAK_ID	=	1 ;  // 外放开关

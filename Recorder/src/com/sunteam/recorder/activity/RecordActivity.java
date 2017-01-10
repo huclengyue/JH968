@@ -39,7 +39,7 @@ import com.sunteam.recorder.recorder.ErrorCode;
 
 @SuppressLint({ "HandlerLeak", "SimpleDateFormat" })
 public class RecordActivity extends BaseActivity {
-	private int callerId = 0; // 0: 默认由录音机调用; 1: 热键进入录音; 2: 万年历中提醒录音; 3: 语音备忘;
+	private int callerId = 0; // 0: 默认由录音机调用; 1: 热键进入录音; 2: 万年历中提醒录音; 3: 语音备忘  4:FM;
 								// 后两者在退出时返回到调用者!
 	private String fileName = ""; // 来自Intent的文件名;
 									// 来自Intent的录音文件保存文件夹已经给Global.storagePath赋值了
@@ -131,6 +131,7 @@ public class RecordActivity extends BaseActivity {
 		// 通过Intent传递调用者id、录音文件保存路径、录音文件名
 		Intent intent = getIntent();
 		callerId = intent.getIntExtra("callerId", callerId);
+		Global.debug("RecordActivity  [onCreate] =======================callerId ==" + callerId);
 		String path = intent.getStringExtra("path");
 		if (null == path || path.equals("")) {
 			path = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -173,11 +174,12 @@ public class RecordActivity extends BaseActivity {
 		tvTime.setTextSize(rs.getDimensionPixelSize(R.dimen.textsize));
 
 		tvTime.setText(getRecordLength());
-
+		Global.debug("\r\n leftSpace =====" + leftSpace);
 		if (leftSpace <= 0) {
 			speakNotRecord();
 		} else {
-			if ((2 == callerId) || (3 == callerId)) {
+			Global.debug("\r\n callerId =====" + callerId);
+			if ((Global.CALL_CALENDAR == callerId) || (3 == callerId) || (Global.CALL_FM == callerId)) {
 				CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_ENTER);
 			}
 			speakTimeLeft();
@@ -273,7 +275,7 @@ public class RecordActivity extends BaseActivity {
 
 					showSurface();
 
-					TtsUtils.getInstance().setCompletedListener(
+				/*	TtsUtils.getInstance().setCompletedListener(
 							new TtsCompletedListener() {
 
 								@Override
@@ -283,7 +285,7 @@ public class RecordActivity extends BaseActivity {
 								}
 							});
 					TtsUtils.getInstance().speak(rs.getString(R.string.startRecord),
-							TextToSpeech.QUEUE_FLUSH);
+							TextToSpeech.QUEUE_FLUSH);*/
 					//showDialog();
 					Global.acquireWakeLock(this);   // 禁止休眠
 				}
@@ -326,7 +328,7 @@ public class RecordActivity extends BaseActivity {
 	 * 返回准备就绪界面
 	 */
 	private void goback() {
-		if (2 == callerId || 3 == callerId) {
+		if (Global.CALL_CALENDAR == callerId || 3 == callerId || (Global.CALL_FM == callerId)) {
 			finish();
 			return;
 		}
@@ -414,7 +416,7 @@ public class RecordActivity extends BaseActivity {
 	 * 播报剩余时间
 	 */
 	private void speakTimeLeft() {
-		if ((2 == callerId) || (3 == callerId)) {
+		if ((Global.CALL_CALENDAR == callerId) || (3 == callerId)||(Global.CALL_FM == callerId)) {
 			return;
 		}
 		if (sb.equals("00:00:00")) {
@@ -578,7 +580,14 @@ public class RecordActivity extends BaseActivity {
 		int mResult = -1;
 		// int mResult = 1000;
 		AudioRecorder mRecord_1 = AudioRecorder.getInstance();
-		mResult = mRecord_1.startRecordAndFile();
+		Global.debug("\r\n record === mRecord_1 " + mRecord_1);
+		Global.debug("\r\n record === callerId " + callerId);
+		if(callerId == Global.CALL_FM){
+			mResult = mRecord_1.startRecordAndFile_forFm();
+		}
+		else{
+			mResult = mRecord_1.startRecordAndFile();
+		}
 		if (mResult == ErrorCode.SUCCESS) {
 			mState = mFlag;
 			mSampleStart = System.currentTimeMillis();
@@ -716,6 +725,7 @@ public class RecordActivity extends BaseActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals(Intent.ACTION_SHUTDOWN)) {
+				Global.debug("\r\n [ShutdownReceiver] ======================mState==");
 				if (mState == 0) {
 					stop();
 					goback();
