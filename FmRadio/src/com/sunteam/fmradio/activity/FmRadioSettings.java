@@ -46,6 +46,8 @@ package com.sunteam.fmradio.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 
 import java.util.ArrayList;
@@ -117,34 +119,7 @@ public class FmRadioSettings extends MenuActivity {
 					
 					@Override
 					public void doConfirm() {
-						// TODO 自动生成的方法存根
-						String temp = null;
-						
-						String s = getResources().getString(R.string.fm)+String.format("%.1f", gfreq / Global.fmScale);
-					        
-						if(true == delChanelData(gfreq)){
-							temp = s + getResources().getString(R.string.del_ok);
-						}
-						else{
-							temp = s + getResources().getString(R.string.del_error);
-						}
-						PromptDialog mPromptDialog = new PromptDialog(FmRadioSettings.this, temp);
-					
-						mPromptDialog.show();
-						mPromptDialog.setPromptListener(new PromptListener() {
-							
-							@Override
-							public void onComplete() {
-								// TODO 自动生成的方法存根
-								Intent intent = new Intent();
-								Bundle bundle = new Bundle();	//新建 bundl
-								bundle.putInt("selectItem", getSelectItem());
-								intent.putExtras(bundle); // 参数传递
-								setResult(Global.MENU_FLAG, intent);
-								finish();
-							}
-						});
-						
+						mHandler.sendEmptyMessage(Global.MSG_DEL_CHANEL);
 					}
 					
 					@Override
@@ -172,23 +147,7 @@ public class FmRadioSettings extends MenuActivity {
 					public void doConfirm() {
 						// TODO 自动生成的方法存根
 						delChanelAllData();  // 清空数据
-						
-						PromptDialog mPromptDialog = new PromptDialog(FmRadioSettings.this, getResources().getString(R.string.delall_ok));
-						mPromptDialog.show();
-						mPromptDialog.setPromptListener(new PromptListener() {
-							
-							@Override
-							public void onComplete() {
-								// TODO 自动生成的方法存根
-								Intent intent = new Intent();
-								Bundle bundle = new Bundle();	//新建 bundl
-								bundle.putInt("selectItem", getSelectItem());
-								intent.putExtras(bundle); // 参数传递
-								setResult(Global.MENU_FLAG, intent);
-								finish();
-							}
-						});
-
+						mHandler.sendEmptyMessage(Global.MSG_DELALL_CHANEL);
 					}
 					
 					@Override
@@ -279,5 +238,72 @@ public class FmRadioSettings extends MenuActivity {
 		dbFmInfo.detele(Global.FM_LIST);
 				
 		dbFmInfo.closeDb();
+	}
+	
+	
+	// 处理弹框
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_DEL_CHANEL){   // 音乐播放结束消息
+				showDelChanelPromptDialog();
+			}else if(msg.what == Global.MSG_DELALL_CHANEL){
+				showDelAllChanelPromptDialog();		
+			}
+			else if(msg.what == Global.MSG_ONRESUM){
+				onResume();
+			}
+			
+			super.handleMessage(msg);
+		}
+
+	};
+	
+	// 删除电台
+	private void showDelChanelPromptDialog() {
+		String temp = null;
+		
+		String s = getResources().getString(R.string.fm)+String.format("%.1f", gfreq / Global.fmScale);
+	        
+		if(true == delChanelData(gfreq)){
+			temp = s + getResources().getString(R.string.del_ok);
+		}
+		else{
+			temp = s + getResources().getString(R.string.del_error);
+		}
+		PromptDialog mPromptDialog = new PromptDialog(FmRadioSettings.this, temp);
+	
+		mPromptDialog.show();
+		mPromptDialog.setPromptListener(new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				// TODO 自动生成的方法存根
+				Intent intent = new Intent();
+				Bundle bundle = new Bundle();	//新建 bundl
+				bundle.putInt("selectItem", getSelectItem());
+				intent.putExtras(bundle); // 参数传递
+				setResult(Global.MENU_FLAG, intent);
+				finish();
+			}
+		});		
+	}
+	// 清空电台
+	private void showDelAllChanelPromptDialog() {
+		PromptDialog mPromptDialog = new PromptDialog(FmRadioSettings.this, getResources().getString(R.string.delall_ok));
+		mPromptDialog.show();
+		mPromptDialog.setPromptListener(new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				// TODO 自动生成的方法存根
+				Intent intent = new Intent();
+				Bundle bundle = new Bundle();	//新建 bundl
+				bundle.putInt("selectItem", getSelectItem());
+				intent.putExtras(bundle); // 参数传递
+				setResult(Global.MENU_FLAG, intent);
+				finish();
+			}
+		});		
 	}
 }

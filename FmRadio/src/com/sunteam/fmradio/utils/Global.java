@@ -55,6 +55,10 @@ public class Global {
 	public static int DELALL_CHANEL_ID	=	4 ;  // 删除所有电台
 	public static int RECORD_CHANEL_ID	=	5 ;  // 内录电台
 	
+	public static final int MSG_DEL_CHANEL = 1;  // 删除电台
+	public static final int MSG_DELALL_CHANEL = 2;  // 清空电台
+	public static final int MSG_ONRESUM = 3;
+	
 	//public static final String MHZ = "Mhz";   // 最近播放
 
 	public static Context getContext() {
