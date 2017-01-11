@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 
 public class ManageMenuActivity extends MenuActivity implements PromptListener, ConfirmListener, Runnable   {
@@ -288,10 +290,6 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 
 		final File tFile = new File(path);
 		Global.debug("DeleteFile ==== 1111 path =" + path+ " mMenuList=="+ mMenuList);
-		// gDialog = new CustomDialog(this, this,
-		// getResources().getString(R.string.del_ask),
-		// getResources().getString(R.string.ok),
-		// getResources().getString(R.string.cancel));
 
 		if (tFile.isFile()) {
 			// 是文件直接删除
@@ -302,9 +300,6 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 			Global.debug("DeleteFile ==== 1111 is path ");
 			deleteFolder(tFile);
 		}
-		// mTtsUtils.speak(getResources().getString(R.string.del_finsh));
-		// Global.getTts().speak(getResources().getString(R.string.del_finsh));
-		//SpeakContentend(getResources().getString(R.string.del_finsh));
 	}
 
 	// 删除文件夹
@@ -390,7 +385,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 				
 				if (Global.gCopyFlag == true) {
 					if(true == gPastFlag){
-						SpeakContentend(getResources().getString(R.string.paste_finsh));
+						//SpeakContentend(getResources().getString(R.string.paste_finsh));
+						mHandler.sendEmptyMessage(Global.MSG_PAST_FINSH);
 					}
 				} 
 				else if (Global.gCutFlag == true) {
@@ -404,7 +400,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 					}
 					Global.gCutFlag = false;
 					if(true == gPastFlag){
-						SpeakContentend(getResources().getString(R.string.paste_finsh));
+						//SpeakContentend(getResources().getString(R.string.paste_finsh));
+						mHandler.sendEmptyMessage(Global.MSG_PAST_FINSH);
 					}
 				}
 			}
@@ -426,7 +423,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 				
 				if (Global.gCopyFlag == true) {
 					if(true == gPastFlag){
-						SpeakContentend(getResources().getString(R.string.paste_finsh));
+						//SpeakContentend(getResources().getString(R.string.paste_finsh));
+						mHandler.sendEmptyMessage(Global.MSG_PAST_FINSH);
 					}
 				} 
 				else if (Global.gCutFlag == true) {
@@ -440,12 +438,14 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 					}
 					Global.gCutFlag = false;
 					if(true == gPastFlag){
-						SpeakContentend(getResources().getString(R.string.paste_finsh));
+						//SpeakContentend(getResources().getString(R.string.paste_finsh));
+						mHandler.sendEmptyMessage(Global.MSG_PAST_FINSH);
 					}
 				}
 			}
 			else if(tempFile.contains(Global.gCopyPath_src)){  // 相同文件
-				SpeakContentend(getResources().getString(R.string.paste_check));
+			//	SpeakContentend(getResources().getString(R.string.paste_check));
+				mHandler.sendEmptyMessage(Global.MSG_PAST_CHECK);
 				Global.debug("\r\n pasteFile =33= Global.gCopyPath_src =="+ Global.gCopyPath_src);
 				Global.debug("\r\n pasteFile =44= tempFile =="+ tempFile);
 			}
@@ -454,7 +454,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 				
 				if (Global.gCopyFlag == true) {
 					if(true == gPastFlag){
-						SpeakContentend(getResources().getString(R.string.paste_finsh));
+						//SpeakContentend(getResources().getString(R.string.paste_finsh));
+						mHandler.sendEmptyMessage(Global.MSG_PAST_FINSH);
 					}
 				} 
 				else if (Global.gCutFlag == true) {
@@ -468,7 +469,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 					}
 					Global.gCutFlag = false;
 					if(true == gPastFlag){
-						SpeakContentend(getResources().getString(R.string.paste_finsh));
+						//SpeakContentend(getResources().getString(R.string.paste_finsh));
+						mHandler.sendEmptyMessage(Global.MSG_PAST_FINSH);
 					}
 				}
 			}
@@ -514,7 +516,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 	
 				if (Global.gCopyFlag == true) {
 					if(true == gPastFlag){
-						SpeakContentend(getResources().getString(R.string.paste_finsh));
+						//SpeakContentend(getResources().getString(R.string.paste_finsh));
+						mHandler.sendEmptyMessage(Global.MSG_PAST_FINSH);
 					}
 				} 
 				else if (Global.gCutFlag == true) {
@@ -531,7 +534,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 					}
 					Global.gCutFlag = false;
 					if(true == gPastFlag){
-						SpeakContentend(getResources().getString(R.string.paste_finsh));
+						//SpeakContentend(getResources().getString(R.string.paste_finsh));
+						mHandler.sendEmptyMessage(Global.MSG_PAST_FINSH);
 					}
 				}				
 			//showList(gCopyPath_desk, gFileName.get(gPathNum - 2).toString());
@@ -554,7 +558,8 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 					Global.gPastName = tempFile1;
 					copyFile(Global.gCopyPath_src, tempFile1);
 					if(true == gPastFlag){
-						SpeakContentend(getResources().getString(R.string.paste_finsh));
+						//SpeakContentend(getResources().getString(R.string.paste_finsh));
+						mHandler.sendEmptyMessage(Global.MSG_PAST_FINSH);
 					}
 				}
 			}
@@ -655,10 +660,7 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 	public void doConfirm() {
 		// TODO 自动生成的方法存根
 		DeleteFile(Global.gFilePaths.get(Global.gtempID).toString());
-		
-		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.del_finsh));
-		mPromptDialog.show();
-		mPromptDialog.setPromptListener(this);
+		mHandler.sendEmptyMessage(Global.MSG_DEL_OK);
 	}
 
 	@Override
@@ -671,7 +673,7 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 			pasteFile();
 			if(gPastFlag == true){
 				gPastFlag = false;
-				onComplete();
+				//onComplete();
 			}
 			Global.releaseWakeLock();
 		} catch (IOException e) {
@@ -758,4 +760,40 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
             }
         }            
     };
+    
+    private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_DEL_OK){   // 音乐播放结束消息
+				showDelOkPromptDialog();
+			}
+			else if(msg.what == Global.MSG_PAST_FINSH){
+				showPastFinshPromptDialog();
+			}
+			else if(msg.what == Global.MSG_PAST_CHECK){
+				showPastCheckPromptDialog();
+			}
+			super.handleMessage(msg);
+		}
+	};
+	// 显示删除成功
+	private void showDelOkPromptDialog() {
+		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.del_finsh));
+		mPromptDialog.show();
+		mPromptDialog.setPromptListener(this);
+	}	
+	// 粘贴完成
+	private void showPastFinshPromptDialog() {
+		
+		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.paste_finsh));
+		mPromptDialog.show();
+		mPromptDialog.setPromptListener(this);
+	}
+	// 检查粘贴路径
+	private void showPastCheckPromptDialog() {
+		// TODO 自动生成的方法存根
+		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.paste_check));
+		mPromptDialog.show();
+		mPromptDialog.setPromptListener(this);
+	}
 }

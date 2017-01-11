@@ -49,7 +49,7 @@ public class RemindActivity extends MenuActivity{
 	private int gSelectID = 0;   // 选择标志
 	private MyPlayer myPlayer = null;
 	
-	//private MediaPlayer MyPlayer = new MediaPlayer();  // 播放器
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -115,8 +115,6 @@ public class RemindActivity extends MenuActivity{
 		
 		playRecordSound();
 	}
-	
-	
 	private void playRecordSound(){
 		
 		Global.debug("\r\n [playRecordSound]    getSelectItem() == " + getSelectItem());
@@ -169,37 +167,24 @@ public class RemindActivity extends MenuActivity{
 					
 					@Override
 					public void doConfirm() {  // 进入录音
-						// TODO 自动生成的方法存根
 						startRecord();
 					}
 					
 					@Override
 					public void doCancel() {
-						// TODO 自动生成的方法存根
 						if(gCall_Flag == Global.REMIND_CALL_MENU){
 							Intent intent = new Intent();	//新建 INtent
 							Bundle bundle = new Bundle();	//新建 bundle
 							
 							intent.putExtras(bundle); // 参数传递
-							/*if(gCall_Flag == Global.REMIND_CALL_MENU){
-								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
-								
-							}
-							else{*/
 							Global.debug("\r\n ******* Global.REMIND_FLAG_ID ===" + Global.REMIND_FLAG_ID);
 							setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
-							//}
+							
 						}
 						else if(gCall_Flag == Global.REMIND_CALL_ADD_MENU){
 							Intent intent = new Intent();	//新建 INtent
-							Bundle bundle = new Bundle();	//新建 bundle
-							
+							Bundle bundle = new Bundle();	//新建 bundle		
 							intent.putExtras(bundle); // 参数传递
-							/*if(gCall_Flag == Global.REMIND_CALL_MENU){
-								setResult(Global.REMIND_FLAG_ID,intent);	//返回界面
-								
-							}
-							else{*/
 							Global.debug("\r\n ******* Global.REMIND_ADD_FLAG_ID ===" + Global.REMIND_ADD_FLAG_ID);
 							setResult(Global.REMIND_ADD_FLAG_ID,intent);	//返回界面
 						}
@@ -207,7 +192,6 @@ public class RemindActivity extends MenuActivity{
 						finish();
 					}
 				});
-			
 			}
 			else{
 				
@@ -226,7 +210,6 @@ public class RemindActivity extends MenuActivity{
 						
 						@Override
 						public void onComplete() {
-							// TODO 自动生成的方法存根
 							if(gCall_Flag == Global.REMIND_CALL_MENU){
 								Intent intent = new Intent();	//新建 INtent
 								Bundle bundle = new Bundle();	//新建 bundle
@@ -253,18 +236,6 @@ public class RemindActivity extends MenuActivity{
 		Global.debug("\r\nsetResultCode ======================gSelectID==" + gSelectID);
 		if(selectItem == RECORD_ID)  // 录音
 		{
-/*
-			bundle.putInt("SELECT", selectItem); // 传入参数 年	
-			bundle.putInt("YEAR", gyear); // 传入参数 年			
-			bundle.putInt("MONTH", gmonth); // 传入参数 年
-			bundle.putInt("DAY", gday); // 传入参数 年
-			//intent.setClass(MainActivity.this, MenuActivity.class);
-			intent.putExtras(bundle); // 传入参数
-			//intent.setAction("RecordActivity");// 启动界面
-			intent.setClass(this, RecordActivity.class);
-			
-			startActivityForResult(intent , Global.FLAG_RECORD_ID);  // 设置标志
-*/
 			if(gFileName.equals(Global.ALARM_FILE_NAME)){  // 没有文件
 				startRecord();
 			}
@@ -277,18 +248,15 @@ public class RemindActivity extends MenuActivity{
 					
 					@Override
 					public void doConfirm() {
-						// TODO 自动生成的方法存根
 						startRecord();
 					}
 					
 					@Override
 					public void doCancel() {
-						// TODO 自动生成的方法存根
 						onResume();
 					}
 				});
 			}
-
 		}
 		else if(selectItem == TIME_ID) // 时间设置
 		{
@@ -358,11 +326,8 @@ public class RemindActivity extends MenuActivity{
 		intent.putExtra("path", path); // 文件路径
 		intent.putExtra("fileName", fileName); // 文件名
 		intent.setClassName(packageName, className);
-		//intent.setClass(this, TimeSetActivity.class);
 		
-		//startActivity(intent);
 		startActivityForResult(intent , Global.FLAG_RECORD_ID);  // 设置标志
-		//startActivityForResult(intent , Global.FLAG_RECORD_ID);  // 设置标志
 	}
 
 	// 参数返回 从设置界面返回
@@ -371,37 +336,23 @@ public class RemindActivity extends MenuActivity{
 		Global.debug("[*********]onActivityResult requestCode =" + requestCode + " resultCode = " + resultCode);
 		
 		if (requestCode == Global.FLAG_RECORD_ID /*&& resultCode == Global.FLAG_RECORD_ID*/) {   // 录音界面返回
-/*
-			Bundle bundle = data.getExtras();
-			int temp_id = bundle.getInt("SELECID");
-			Global.debug("[*********]onActivityResult temp_id =" + temp_id);
-			
-			FileName = bundle.getString("FILENAME");
-			Path = bundle.getString("PATH");
-*/
-			//saveDataRemind();
 			File mFile = new File(gPath+ "/" +gFileName);
 			if(!mFile.exists()){ // 不存在  还用原来的文件
 				gFileName = gFileName_bk;
 			}
 			showList();
-			//saveDataRemind();
 		}
 		else if(requestCode == Global.FLAG_TIME_ID && resultCode == Global.FLAG_TIME_ID) {   // 时间界面返回
 			Global.debug("onActivityResult ========FLAG_TIME_ID=");
 			
 			Bundle bundle = data.getExtras();
-			//int temp_id = bundle.getInt("SELECID");
-		
 			ghour = bundle.getInt("HOUR");
 			gmin = bundle.getInt("MINUTE");
 			
-
 			Global.debug("\r\n ghour =="+ ghour);
 			Global.debug(" \r\n gmin =="+ gmin);
 			
 			showList();
-		//	saveDataRemind();
 		}
 		else if(requestCode == Global.FLAG_ONOFF_ID && resultCode == Global.FLAG_ONOFF_ID) {   // 时间界面返回
 			Bundle bundle = data.getExtras();
@@ -409,7 +360,6 @@ public class RemindActivity extends MenuActivity{
 			gonoff = bundle.getInt("ONOFF");
 
 			showList();
-//			saveDataRemind();
 		}
 	}
 	

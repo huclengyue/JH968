@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import com.sunteam.calendar.constant.Global;
 import com.sunteam.common.menu.BaseActivity;
-import com.sunteam.common.menu.menulistadapter.ShowView;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.PromptDialog;
@@ -15,6 +14,8 @@ import com.sunteam.dao.Alarminfo;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -220,28 +221,7 @@ public class TimeSetActivity extends BaseActivity {
 	
 	// back 键  确认设置
 	private void KeyBack_doConfirm(){
-		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.set_ok));
-		mDialog.show();
-		mDialog.setPromptListener(new PromptListener() {
-			
-			@Override
-			public void onComplete() {
-				// TODO 自动生成的方法存根
-				Intent intent = new Intent();			
-				Bundle bundle = new Bundle();//
-
-				bundle.putInt("HOUR", ghour); // 传入参数 年			
-				bundle.putInt("MINUTE", gminute); // 传入参数 年
-				
-				//intent.setClass(MainActivity.this, MenuActivity.class);
-				intent.putExtras(bundle); // 传入参数
-				intent.setAction("remind_action");// 启动界面
-				setResult(Global.FLAG_TIME_ID,intent);	//返回界面
-				
-				// Ok键 
-				finish();
-			}
-		});
+		mHandler.sendEmptyMessage(Global.MSG_SETOK);
 	
 	}
 	
@@ -366,94 +346,15 @@ public class TimeSetActivity extends BaseActivity {
 				
 				@Override
 				public void onComplete() {
-					/*   -- 12-26 修改为不退出
-					Intent intent = new Intent();			
-					Bundle bundle = new Bundle();//
-
-					bundle.putInt("HOUR", ghour); // 传入参数 年			
-					bundle.putInt("MINUTE", gminute); // 传入参数 年
 					
-					//intent.setClass(MainActivity.this, MenuActivity.class);
-					intent.putExtras(bundle); // 传入参数
-					intent.setAction("remind_action");// 启动界面
-					setResult(Global.FLAG_TIME_ID,intent);	//返回界面
-					
-					// Ok键 
-					finish();	
-					*/	
 					showTextView(ghour, gminute);
 				}
 			});
-			
-			//TtsUtils.getInstance().speak(getResources().getString(R.string.time_after));
 		}
 		else{
 			Global.debug("\r\n ghour ===111=="+ghour);
 			Global.debug("\r\n gminute ==1111==="+gminute);
-			
-/*		
-			if(d){
-			GetDbInfo dbInfo = new GetDbInfo(this);  // 打开数据库
-			int max_num = dbInfo.getCount(Alarmpublic.REMIND_TABLE); // 记录条数
-			int max_Id = dbInfo.getMaxId(Alarmpublic.REMIND_TABLE); // 记录条数
-			if(max_num <= 0) // 无数据
-			{
-				 // 增加数据
-				tempinfo._id = max_Id +1;
-				dbInfo.add(tempinfo, Alarmpublic.REMIND_TABLE);	
-				dbInfo.closeDb();
-				Alarmpublic.UpateAlarm(this);
-			}
-			else{  // 已经有数据 
-				
-				Alarminfo tempinfo_1 = new Alarminfo();  // 临时变量
-				boolean flag = false;
-				ArrayList<Alarminfo> allData =   new ArrayList<Alarminfo>();
-				allData = dbInfo.getAllData(Alarmpublic.REMIND_TABLE);
-				for(int i = 0; i < max_num; i++) // 查找相同的 替换
-				{
-					tempinfo_1 = allData.get(i);
-					if((tempinfo.year ==  tempinfo_1.year) &&
-							(tempinfo.month == tempinfo_1.month)&&
-							(tempinfo.day == tempinfo_1.day))  // 同一天
-					{
-						tempinfo._id = tempinfo_1._id;
-						dbInfo.update(tempinfo, Alarmpublic.REMIND_TABLE);
-						flag = true;   // 数据以保存
-						break;
-					}
-				}
-				if(false == flag)  // 数据未保存
-				{
-					tempinfo._id = max_Id +1;
-					dbInfo.add(tempinfo, Alarmpublic.REMIND_TABLE);	// 增加数据
-				}
-				dbInfo.closeDb();
-				Alarmpublic.UpateAlarm(this);
-				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.add_ok));
-				mPromptDialog.show();
-				mPromptDialog.setPromptListener(new PromptListener() {
-					
-					@Override
-					public void onComplete() {
-						Intent intent = new Intent();			
-						Bundle bundle = new Bundle();//
-
-						bundle.putInt("HOUR", ghour); // 传入参数 年			
-						bundle.putInt("MINUTE", gminute); // 传入参数 年
-						
-						//intent.setClass(MainActivity.this, MenuActivity.class);
-						intent.putExtras(bundle); // 传入参数
-						intent.setAction("remind_action");// 启动界面
-						setResult(Global.FLAG_TIME_ID,intent);	//返回界面
-						
-						// Ok键 
-						finish();						
-					}
-				});
-			}
-			}
-			*/
+		
 			PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.set_ok));
 			mPromptDialog.show();
 			mPromptDialog.setPromptListener(new PromptListener() {
@@ -478,5 +379,53 @@ public class TimeSetActivity extends BaseActivity {
 			});
 			
 		}
+	}
+	
+	// 处理弹框
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_SETOK){   // 音乐播放结束消息
+				showSetOkPromptDialog();
+			}else if(msg.what == Global.MSG_NO_REMIND){
+			
+			}else if(msg.what == Global.MSG_DEL){
+			
+			}
+			else if(msg.what == Global.MSG_NO_REMIND_TOMAIN){
+				
+			}
+			else if(msg.what == Global.MSG_ONRESUM){
+				onResume();
+			}
+			
+			super.handleMessage(msg);
+		}
+	};
+	// 显示设置成功
+	private void showSetOkPromptDialog() {
+		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.set_ok));
+		mDialog.show();
+		mDialog.setPromptListener(new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				// TODO 自动生成的方法存根
+				Intent intent = new Intent();			
+				Bundle bundle = new Bundle();//
+
+				bundle.putInt("HOUR", ghour); // 传入参数 年			
+				bundle.putInt("MINUTE", gminute); // 传入参数 年
+				
+				//intent.setClass(MainActivity.this, MenuActivity.class);
+				intent.putExtras(bundle); // 传入参数
+				intent.setAction("remind_action");// 启动界面
+				setResult(Global.FLAG_TIME_ID,intent);	//返回界面
+				
+				// Ok键 
+				finish();
+			}
+		});
+		
 	}
 }

@@ -9,8 +9,8 @@ package com.sunteam.sunteamutilslib;
 
 public final class R {
     public static final class array {
-        public static int commoncmd_list=0x7f080001;
-        public static int langtype_list=0x7f080000;
+        public static int commoncmd_list=0x7f070001;
+        public static int langtype_list=0x7f070000;
     }
     public static final class attr {
     }
@@ -82,11 +82,11 @@ public final class R {
         public static int yellow=0x7f040040;
     }
     public static final class dimen {
-        public static int activity_horizontal_margin=0x7f060000;
-        public static int activity_vertical_margin=0x7f060001;
-        public static int dialog_bottom_padding=0x7f060010;
-        public static int dialog_left_padding=0x7f06000d;
-        public static int dialog_right_padding=0x7f06000e;
+        public static int activity_horizontal_margin=0x7f050000;
+        public static int activity_vertical_margin=0x7f050001;
+        public static int dialog_bottom_padding=0x7f050010;
+        public static int dialog_left_padding=0x7f05000d;
+        public static int dialog_right_padding=0x7f05000e;
         /** 
     <dimen name="title_height">24dp</dimen>
     <dimen name="item_left_padding">0dip</dimen>
@@ -96,20 +96,20 @@ public final class R {
     
  对话框中字体大小 
          */
-        public static int dialog_text_size=0x7f06000c;
-        public static int dialog_top_padding=0x7f06000f;
-        public static int item_text_size=0x7f06000b;
-        public static int text_big_size=0x7f060007;
-        public static int text_big_size_px=0x7f060004;
-        public static int text_middle_size=0x7f060008;
-        public static int text_middle_size_px=0x7f060005;
-        public static int text_small_size=0x7f060009;
-        public static int text_small_size_px=0x7f060006;
+        public static int dialog_text_size=0x7f05000c;
+        public static int dialog_top_padding=0x7f05000f;
+        public static int item_text_size=0x7f05000b;
+        public static int text_big_size=0x7f050007;
+        public static int text_big_size_px=0x7f050004;
+        public static int text_middle_size=0x7f050008;
+        public static int text_middle_size_px=0x7f050005;
+        public static int text_small_size=0x7f050009;
+        public static int text_small_size_px=0x7f050006;
         /**  text font 
          */
-        public static int text_super_size_px=0x7f060003;
-        public static int textsize=0x7f060002;
-        public static int title_text_size=0x7f06000a;
+        public static int text_super_size_px=0x7f050003;
+        public static int textsize=0x7f050002;
+        public static int title_text_size=0x7f05000a;
     }
     public static final class drawable {
         public static int black=0x7f020001;
@@ -155,13 +155,14 @@ public final class R {
         public static int common_toast_layout=0x7f030007;
     }
     public static final class string {
-        public static int common_delete=0x7f070004;
-        public static int common_dialog_confirm_cancel=0x7f070006;
-        public static int common_dialog_confirm_ok=0x7f070005;
-        public static int common_functionmenu=0x7f070003;
-        public static int settings_wifi_cancel=0x7f070002;
-        public static int settings_wifi_connect=0x7f070001;
-        public static int speech_app_id=0x7f070000;
+        public static int common_delete=0x7f060002;
+        public static int common_dialog_confirm_cancel=0x7f060004;
+        public static int common_dialog_confirm_no=0x7f060006;
+        public static int common_dialog_confirm_ok=0x7f060003;
+        public static int common_dialog_confirm_yes=0x7f060005;
+        public static int common_functionmenu=0x7f060001;
+        public static int common_tts_command_speak=0x7f060007;
+        public static int speech_app_id=0x7f060000;
     }
     public static final class style {
         /** 
@@ -189,12 +190,12 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static int AppBaseTheme=0x7f050002;
+        public static int AppBaseTheme=0x7f080002;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static int AppTheme=0x7f050003;
-        public static int common_dialog_confirm=0x7f050000;
-        public static int common_dialog_prompt=0x7f050001;
+        public static int AppTheme=0x7f080003;
+        public static int common_dialog_confirm=0x7f080000;
+        public static int common_dialog_prompt=0x7f080001;
     }
 }

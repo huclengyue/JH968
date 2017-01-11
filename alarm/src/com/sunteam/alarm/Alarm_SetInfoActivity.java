@@ -52,22 +52,6 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 				mTemp = getPathAudioList();
 				if(mTemp.size() <= 0){
 					gonFileFlag = true;
-					/*
-					super.onCreate(savedInstanceState);
-					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_file));
-					mPromptDialog.show();
-					
-					mPromptDialog.setPromptListener(new PromptListener() {
-						
-						@Override
-						public void onComplete() {
-							// TODO 自动生成的方法存根
-							finish();
-						}
-					});
-					
-					return;
-					*/
 				}
 				else{  // 有文件
 					gSetID = mTemp.indexOf(gfileName);
@@ -101,20 +85,6 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 				mTemp = getPathAudioList();
 				if(mTemp.size() <= 0){
 					gonFileFlag = true;
-					/*
-					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_file));
-					mPromptDialog.show();
-					mPromptDialog.setPromptListener(new PromptListener() {
-						
-						@Override
-						public void onComplete() {
-							// TODO 自动生成的方法存根
-							finish();
-						}
-					});
-					
-					return;
-					*/
 				}
 				else{
 					gSetID = mTemp.indexOf(gfileName);
@@ -223,8 +193,6 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 					finish();
 				}
 			});
-			
-
 			return true;
 		}
 		else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN ||
@@ -251,8 +219,6 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 		Global.debug("can read === filePath =" + Alarmpublic.ALARM_FILE_PATH);
 		if (mFile.canRead()) // 可读
 		{
-			
-			// String fileName = mFile.getName();
 			if (mFile.isDirectory()) // 是文件夹
 			{
 				// 顾虑条件
@@ -273,25 +239,25 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 
 				Global.debug("is Directory === length =" + mFiles.length);
 				/* 获取文件列表 */
-					// 获取文件列表
-					for (File mCurrentFile : mFiles) {
-						if (mCurrentFile.getName().equals("LOST.DIR")) // 去除LOST.DIR
-						{
-							continue;
-						}
-						File mFile2 = new File(mCurrentFile.getPath()); // 获取路径内容
+				// 获取文件列表
+				for (File mCurrentFile : mFiles) {
+					if (mCurrentFile.getName().equals("LOST.DIR")) // 去除LOST.DIR
+					{
+						continue;
+					}
+					File mFile2 = new File(mCurrentFile.getPath()); // 获取路径内容
 
-						if (mFile2.isFile()) {  // 是文件							
+					if (mFile2.isFile()) {  // 是文件							
 
-							String prefix = getExtensionName(mCurrentFile.getName());  // 获取文件名 后缀
-							if(prefix.equals("mp3") || prefix.equals("MP3")||
-									prefix.equals("wav") || prefix.equals("WAV")||
-									prefix.equals("wma") || prefix.equals("WMA"))
-							{								
-								temp.add(mCurrentFile.getName());
-							}
+						String prefix = getExtensionName(mCurrentFile.getName());  // 获取文件名 后缀
+						if(prefix.equals("mp3") || prefix.equals("MP3")||
+								prefix.equals("wav") || prefix.equals("WAV")||
+								prefix.equals("wma") || prefix.equals("WMA"))
+						{								
+							temp.add(mCurrentFile.getName());
 						}
 					}
+				}
 			}
 		}
 		

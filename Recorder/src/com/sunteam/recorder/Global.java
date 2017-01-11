@@ -28,6 +28,9 @@ public class Global {
 	public static int CALL_FM = 4;
 	public static String storagePath;
 	
+	public static int MSG_GOBACK = 1;  // 界面返回
+	public static int MSG_GOBACK_SAVE = 2;  // 界面返回
+	public static int MSG_ONRESUM = 3;
 	public static WakeLock mWakeLock; // 禁止休眠
 	
 	@SuppressWarnings("deprecation")

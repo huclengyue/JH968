@@ -35,6 +35,16 @@ public class Global {
 	public static String ALARM_FILE_NAME = null;//getResources().getsting(R.string.remind_noFile);
 	public static String TIXING_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/提醒";
 	
+	public static final int MSG_DEL_ALL = 1;  // 关delall_Remind 提示
+	public static final int MSG_NO_REMIND = 2;  // 无提醒 _Remind 提示
+	public static final int MSG_NO_REMIND_TOMAIN = 3;  // 无提醒 _Remind返回主菜单 提示
+	public static final int MSG_DEL = 4;  // 删除提醒
+	public static final int MSG_ONRESUM = 5;  // 刷新界面
+	
+	public static final int MSG_TO_MAIN = 6;  // 刷新界面
+	
+	public static final int MSG_SETOK = 7;  // 设置成功
+	
 	public static void debug(String s) {
 		Log.d(TAG, s);
 	}

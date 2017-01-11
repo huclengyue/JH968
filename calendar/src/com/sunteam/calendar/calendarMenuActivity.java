@@ -16,6 +16,8 @@ import com.sunteam.receiver.Alarmpublic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 
 public class calendarMenuActivity extends MenuActivity{
@@ -65,7 +67,7 @@ public class calendarMenuActivity extends MenuActivity{
 		{
 			if((gInterfaceflag == INTERFACE_RENID_LIST) || (gInterfaceflag == INTERFACE_DEL_REMIND)) // 查看提醒 界面
 			{
-				mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
+			/*	mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
 				
 				mTitle = getResources().getString(R.string.title_menu);
 				setListData(mMenuList);
@@ -76,9 +78,9 @@ public class calendarMenuActivity extends MenuActivity{
 				else{
 					mMenuView.setSelectItem(2);
 				}
-				gInterfaceflag = INTERFACE_MENU;
+				gInterfaceflag = INTERFACE_MENU;*/
 				
-				onResume();
+				mHandler.sendEmptyMessage(Global.MSG_NO_REMIND_TOMAIN);
 				//finish();
 				return true;
 			}
@@ -134,26 +136,26 @@ public class calendarMenuActivity extends MenuActivity{
 					setTitle(mTitle);
 					mMenuView.setSelectItem(0);
 					gInterfaceflag = INTERFACE_RENID_LIST;
-					onResume();
+					mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
 				}
 				else{
-					//TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
 					PromptDialog mPrompt = new PromptDialog(this, getResources().getString(R.string.no_remind));
-					mPrompt.show();
 					mPrompt.setPromptListener(new PromptListener() {
 						
 						@Override
 						public void onComplete() {
 							// TODO 自动生成的方法存根
-							mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
+						/*	mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
 							
 							mTitle = getResources().getString(R.string.title_menu);
 							setListData(mMenuList);
 							setTitle(mTitle);;
 							gInterfaceflag = INTERFACE_MENU;
-							onResume();
+							mHandler.sendEmptyMessage(Global.MSG_ONRESUM);*/
+							mHandler.sendEmptyMessage(Global.MSG_TO_MAIN);
 						}
 					});
+					mPrompt.show();
 				}
 			}
 			else if(selectItem == DEL_REMIND_ID) // 删除提醒
@@ -165,7 +167,7 @@ public class calendarMenuActivity extends MenuActivity{
 					setTitle(mTitle);
 					mMenuView.setSelectItem(0);
 					gInterfaceflag = INTERFACE_DEL_REMIND;
-					onResume();
+					mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
 				}
 				else {
 					TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
@@ -176,13 +178,14 @@ public class calendarMenuActivity extends MenuActivity{
 						@Override
 						public void onComplete() {
 							// TODO 自动生成的方法存根
-							mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
+							/*mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
 							
 							mTitle = getResources().getString(R.string.title_menu);
 							setListData(mMenuList);
 							setTitle(mTitle);;
 							gInterfaceflag = INTERFACE_MENU;	
-							onResume();
+							mHandler.sendEmptyMessage(Global.MSG_ONRESUM);*/
+							mHandler.sendEmptyMessage(Global.MSG_TO_MAIN);
 						}
 					});
 				}
@@ -197,79 +200,22 @@ public class calendarMenuActivity extends MenuActivity{
 					
 					@Override
 					public void doConfirm() {
-						// TODO 自动生成的方法存根
 						delAllDbdata();
 						Alarmpublic.UpateAlarm(calendarMenuActivity.this);
-						PromptDialog mPromptDialog=new PromptDialog(calendarMenuActivity.this, 
-																	getResources().getString(R.string.delall_Remind));
-						mPromptDialog.show();
-						mPromptDialog.setPromptListener(new PromptListener() {
-							
-							@Override
-							public void onComplete() {
-								// TODO 自动生成的方法存根
-								PromptDialog mPromptDialog=new PromptDialog(calendarMenuActivity.this, 
-										getResources().getString(R.string.no_remind));
-								mPromptDialog.show();
-								mPromptDialog.setPromptListener(new PromptListener() {
-								
-								@Override
-								public void onComplete() {
-									// TODO 自动生成的方法存根
-									
-									onResume();
-								}
-								});
-								
-							}
-						});
+						mHandler.sendEmptyMessage(Global.MSG_DEL_ALL);
 					}
 					
 					@Override
 					public void doCancel() {
 						// TODO 自动生成的方法存根
-						onResume();
+						mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
 					}
-				});
-				
+				});				
 			}
 		}
 		else if(gInterfaceflag == INTERFACE_RENID_LIST) // 查看提醒 界面
 		{
-			Alarminfo tempinfo = new Alarminfo();  // 
-			GetDbInfo dbInfo = new GetDbInfo(this);  // 打开数据库
-			ArrayList<Alarminfo> alarminfos = new ArrayList<Alarminfo>();
-			
-			Global.debug("INTERFACE_RENID_LIST=========1111==\r\n");
-			alarminfos = dbInfo.getAllData(Alarmpublic.REMIND_TABLE);
-			dbInfo.closeDb();
-			Global.debug("INTERFACE_RENID_LIST=========22222==\r\n");
-			tempinfo = alarminfos.get(gSelectId);
-			
-			Intent intent = new Intent();			
-			Bundle bundle = new Bundle();//  
-				
-			bundle.putInt("CALLID", Global.REMIND_CALL_MENU);
-			
-			bundle.putInt("ID", tempinfo._id);
-			bundle.putInt("YEAR", tempinfo.year);
-			bundle.putInt("MONTH", tempinfo.month);
-			bundle.putInt("DAY", tempinfo.day);
-			
-			bundle.putInt("HOUR", tempinfo.hour);
-			bundle.putInt("MINUTE", tempinfo.minute);
-			
-			bundle.putInt("ONOFF", tempinfo.onoff);
-			
-			bundle.putString("FILENAME", tempinfo.filename);
-			bundle.putString("PATH", /*tempinfo.path*/ Global.TIXING_PATH);
-
-			//intent.setClass(MainActivity.this, MenuActivity.class);
-			intent.putExtras(bundle); // 传入参数
-			intent.setClass(this, RemindActivity.class);
-			Global.debug("INTERFACE_RENID_LIST=========33333==\r\n");
-			startActivityForResult(intent , Global.REMIND_FLAG_ID);  // 设置标志
-			Global.debug("INTERFACE_RENID_LIST=========4444==\r\n");
+			startRemindInfo();
 		}
 		else if(gInterfaceflag == INTERFACE_DEL_REMIND){   // 删除列表
 			ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.ask_del),
@@ -284,88 +230,62 @@ public class calendarMenuActivity extends MenuActivity{
 					Global.debug("\r\n del id ===== " + gSelectId);
 					if(true == delDbdata(gSelectId))
 					{
-						Alarmpublic.UpateAlarm(calendarMenuActivity.this);
-						mMenuList = getDbdata();
-						setListData(mMenuList);
-						onResume();
-						PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this, getResources().getString(R.string.del_ok));
-						mPromptDialog.show();
-						mPromptDialog.setPromptListener(new PromptListener() {
-							
-							@Override
-							public void onComplete() {
-								
-								int selectid = 0;
-								Global.debug("\r\n mMenuList.size() =============="+mMenuList.size());
-								Global.debug("\r\n gSelectId =============="+gSelectId);
-								if(mMenuList.size() <= 0){  // 无提醒
-									PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this, getResources().getString(R.string.no_remind));
-									mPromptDialog.show();
-									mPromptDialog.setPromptListener(new PromptListener() {
-										
-										@Override
-										public void onComplete() {
-											// TODO 自动生成的方法存根
-											mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
-											
-											mTitle = getResources().getString(R.string.title_menu);
-											setListData(mMenuList);
-											setTitle(mTitle);;
-											if(gInterfaceflag == INTERFACE_RENID_LIST){
-												mMenuView.setSelectItem(1);
-											}
-											else{
-												mMenuView.setSelectItem(2);
-											}
-											gInterfaceflag = INTERFACE_MENU;
-											
-											onResume();
-											//finish();
-											
-										}
-									});
-									
-								}
-								else if(gSelectId > (mMenuList.size() - 1) && (mMenuList.size() > 0)){
-									selectid = 0;//mMenuList.size() - 1;
-									Global.debug("\r\n selectid =============="+selectid);
-									mMenuView.setSelectItem(selectid);
-									onResume();
-								}
-								else{
-									selectid = gSelectId;
-									Global.debug("\r\n selectid =============="+selectid);
-									mMenuView.setSelectItem(selectid);
-									onResume();
-								}
-
-							}
-						});
-					//onResume();
+						mHandler.sendEmptyMessage(Global.MSG_DEL);
 					}
 					else{
-						PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this, getResources().getString(R.string.no_remind));
-						mPromptDialog.show();
-						mPromptDialog.setPromptListener(new PromptListener() {
-							
-							@Override
-							public void onComplete() {
-								// TODO 自动生成的方法存根
-								onResume();
-							}
-						}); 
+						mHandler.sendEmptyMessage(Global.MSG_NO_REMIND);
 					}
 				}
 				
 				@Override
 				public void doCancel() {
 					// TODO 自动生成的方法存根
-					onResume();
+					mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
 				}
 			});
 			
 		}
 	}
+	
+	// 提醒详情
+	private void startRemindInfo() {
+		Alarminfo tempinfo = new Alarminfo();  // 
+		GetDbInfo dbInfo = new GetDbInfo(this);  // 打开数据库
+		ArrayList<Alarminfo> alarminfos = new ArrayList<Alarminfo>();
+		
+		Global.debug("INTERFACE_RENID_LIST=========1111==\r\n");
+		alarminfos = dbInfo.getAllData(Alarmpublic.REMIND_TABLE);
+		dbInfo.closeDb();
+		Global.debug("INTERFACE_RENID_LIST=========22222==\r\n");
+		tempinfo = alarminfos.get(gSelectId);
+		
+		Intent intent = new Intent();			
+		Bundle bundle = new Bundle();//  
+			
+		bundle.putInt("CALLID", Global.REMIND_CALL_MENU);
+		
+		bundle.putInt("ID", tempinfo._id);
+		bundle.putInt("YEAR", tempinfo.year);
+		bundle.putInt("MONTH", tempinfo.month);
+		bundle.putInt("DAY", tempinfo.day);
+		
+		bundle.putInt("HOUR", tempinfo.hour);
+		bundle.putInt("MINUTE", tempinfo.minute);
+		
+		bundle.putInt("ONOFF", tempinfo.onoff);
+		
+		bundle.putString("FILENAME", tempinfo.filename);
+		bundle.putString("PATH", /*tempinfo.path*/ Global.TIXING_PATH);
+
+		//intent.setClass(MainActivity.this, MenuActivity.class);
+		intent.putExtras(bundle); // 传入参数
+		intent.setClass(this, RemindActivity.class);
+		Global.debug("INTERFACE_RENID_LIST=========33333==\r\n");
+		startActivityForResult(intent , Global.REMIND_FLAG_ID);  // 设置标志
+		Global.debug("INTERFACE_RENID_LIST=========4444==\r\n");
+		
+	}
+
 	// 获取list
 	private ArrayList<String> getDbdata()
 	{
@@ -435,8 +355,6 @@ public class calendarMenuActivity extends MenuActivity{
 	// 获取list
 	private Boolean delDbdata(int id)
 	{
-
-		//String[] guser_List = new String[]; // list信息
 		Alarminfo tempinfo = new Alarminfo();  // 
 		GetDbInfo dbInfo = new GetDbInfo(this);  // 打开数据库
 		ArrayList<Alarminfo> allData = new ArrayList<Alarminfo>();
@@ -453,26 +371,11 @@ public class calendarMenuActivity extends MenuActivity{
 				Global.debug("i == "+ i + " id =="+ id);
 				if(id == i){
 					dbInfo.deteleForOne(tempinfo._id, Alarmpublic.REMIND_TABLE);
-					return true;
-				//	TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
-					/*PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.del_ok));
-					mPromptDialog.show();
-					mPromptDialog.setPromptListener(new PromptListener() {
-						
-						@Override
-						public void onComplete() {
-							// TODO 自动生成的方法存根
-							onResume();
-						}
-					});
-					break;*/
+					return true;	
 				}
 			}
 		}
 		else{
-			//TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
-		//	PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_remind));
-		//	mPromptDialog.show();
 			return false;
 		}
 		return true;
@@ -500,7 +403,7 @@ public class calendarMenuActivity extends MenuActivity{
 				setTitle(mTitle);
 				mMenuView.setSelectItem(gSelectId);
 				
-				onResume();
+				mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
 			}
 			else{
 				//TtsUtils.getInstance().speak(getResources().getString(R.string.no_remind));	
@@ -517,7 +420,7 @@ public class calendarMenuActivity extends MenuActivity{
 						setListData(mMenuList);
 						setTitle(mTitle);;
 						gInterfaceflag = INTERFACE_MENU;
-						onResume();
+						mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
 					}
 				});
 			}
@@ -533,8 +436,148 @@ public class calendarMenuActivity extends MenuActivity{
 			setListData(mMenuList);
 			setTitle(mTitle);
 			mMenuView.setSelectItem(0);
-			onResume();
+			mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
 		}
 			
 	}
+	
+	// 处理弹框
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_DEL_ALL){   // 音乐播放结束消息
+				showDelALLPromptDialog();
+			}else if(msg.what == Global.MSG_NO_REMIND){
+				showNoRemindPromptDialog();		
+			}else if(msg.what == Global.MSG_DEL){
+				showDelPromptDialog();
+			}
+			else if(msg.what == Global.MSG_NO_REMIND_TOMAIN){
+				showNoRemindToMainPromptDialog();
+			}
+			else if(msg.what == Global.MSG_ONRESUM){
+				onResume();
+			}
+			else if(msg.what == Global.MSG_TO_MAIN){
+				showRemindToMainPromptDialog();
+			}
+			
+			super.handleMessage(msg);
+		}
+	};
+	// 提示无提醒
+	private void showNoRemindPromptDialog() {
+		PromptDialog mPromptDialog=new PromptDialog(calendarMenuActivity.this, 
+				getResources().getString(R.string.no_remind));
+		mPromptDialog.show();
+		mPromptDialog.setPromptListener(new PromptListener() {
+			@Override
+			public void onComplete() {
+				mHandler.sendEmptyMessage(Global.MSG_TO_MAIN);
+			}
+		});
+		
+	}
+	// 提示无提醒 返回主菜单
+	private void showNoRemindToMainPromptDialog() {
+		PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this, getResources().getString(R.string.no_remind));
+
+		mPromptDialog.setPromptListener(new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				// TODO 自动生成的方法存根
+				mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
+				
+				mTitle = getResources().getString(R.string.title_menu);
+				setListData(mMenuList);
+				setTitle(mTitle);;
+				if(gInterfaceflag == INTERFACE_RENID_LIST){
+					mMenuView.setSelectItem(1);
+				}
+				else{
+					mMenuView.setSelectItem(2);
+				}
+				gInterfaceflag = INTERFACE_MENU;
+				
+				mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
+			}
+		});
+		mPromptDialog.show();
+	}
+	
+	// 提示无提醒 返回主菜单
+	private void showRemindToMainPromptDialog() {
+
+		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.menu_list));
+		
+		mTitle = getResources().getString(R.string.title_menu);
+		setListData(mMenuList);
+		setTitle(mTitle);;
+		if(gInterfaceflag == INTERFACE_RENID_LIST){
+			mMenuView.setSelectItem(1);
+		}
+		else if(gInterfaceflag == INTERFACE_DEL_REMIND){
+			mMenuView.setSelectItem(2);
+		}
+		else{
+			mMenuView.setSelectItem(gSelectId);
+		}
+		gInterfaceflag = INTERFACE_MENU;
+		
+		mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
+	}
+	// 提示全部删除
+	private void showDelALLPromptDialog() {
+		
+		Alarmpublic.UpateAlarm(calendarMenuActivity.this);
+		mMenuList = getDbdata();
+		setListData(mMenuList);
+		onResume();
+		
+		PromptDialog mPromptDialog=new PromptDialog(calendarMenuActivity.this, 
+				getResources().getString(R.string.delall_Remind));
+		//mPromptDialog.show();
+		mPromptDialog.setPromptListener(new PromptListener() {
+		@Override
+			public void onComplete() {
+				mHandler.sendEmptyMessage(Global.MSG_NO_REMIND);
+			}
+		});
+
+		mPromptDialog.show();		
+	}
+	// 提示删除
+	private void showDelPromptDialog() {
+		// TODO 自动生成的方法存根
+		PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this, getResources().getString(R.string.del_ok));
+		mPromptDialog.show();
+		mPromptDialog.setPromptListener(new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				
+				int selectid = 0;
+				Global.debug("\r\n mMenuList.size() =============="+mMenuList.size());
+				Global.debug("\r\n gSelectId =============="+gSelectId);
+				if(mMenuList.size() <= 0){  // 无提醒
+					mHandler.sendEmptyMessage(Global.MSG_NO_REMIND_TOMAIN);
+				}
+				else if(gSelectId > (mMenuList.size() - 1) && (mMenuList.size() > 0)){
+					selectid = 0;//mMenuList.size() - 1;
+					Global.debug("\r\n selectid =============="+selectid);
+					mMenuView.setSelectItem(selectid);
+					mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
+				}
+				else{
+					selectid = gSelectId;
+					Global.debug("\r\n selectid =============="+selectid);
+					mMenuView.setSelectItem(selectid);
+					mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
+				}
+
+			}
+		});
+	}	
+	
 }

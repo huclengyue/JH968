@@ -55,6 +55,10 @@ public class Global {
 	public static ArrayList<String> gName = null;
 	public static int gPathNum = 0;
 	
+	public static final int MSG_DEL_OK = 1; // 删除成功提示
+	public static final int MSG_PAST_FINSH = 2; // 粘贴完成
+	public static final int MSG_PAST_CHECK = 3; // 粘贴路径不对
+	
 	public static void debug(String s) {
 		Log.d(TAG, s);
 	}

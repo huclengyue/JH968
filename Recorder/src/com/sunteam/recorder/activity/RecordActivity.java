@@ -131,6 +131,9 @@ public class RecordActivity extends BaseActivity {
 		// 通过Intent传递调用者id、录音文件保存路径、录音文件名
 		Intent intent = getIntent();
 		callerId = intent.getIntExtra("callerId", callerId);
+		if(callerId == Global.CALL_FM || callerId == 3 || callerId == Global.CALL_FM){
+			TtsUtils.getInstance(this, null);
+		}
 		Global.debug("RecordActivity  [onCreate] =======================callerId ==" + callerId);
 		String path = intent.getStringExtra("path");
 		if (null == path || path.equals("")) {
@@ -275,7 +278,7 @@ public class RecordActivity extends BaseActivity {
 
 					showSurface();
 
-				/*	TtsUtils.getInstance().setCompletedListener(
+					TtsUtils.getInstance().setCompletedListener(
 							new TtsCompletedListener() {
 
 								@Override
@@ -285,7 +288,7 @@ public class RecordActivity extends BaseActivity {
 								}
 							});
 					TtsUtils.getInstance().speak(rs.getString(R.string.startRecord),
-							TextToSpeech.QUEUE_FLUSH);*/
+							TextToSpeech.QUEUE_FLUSH);
 					//showDialog();
 					Global.acquireWakeLock(this);   // 禁止休眠
 				}
@@ -366,42 +369,15 @@ public class RecordActivity extends BaseActivity {
 			
 			@Override
 			public void doConfirm() {
-				// TODO 自动生成的方法存根
-				goback();
-				speakTimeLeft();
+				mHandler.sendEmptyMessage(Global.MSG_GOBACK_SAVE);
 			}
 			
 			@Override
 			public void doCancel() {
-				// TODO 自动生成的方法存根
-				deleteFile();
-				goback();
-				speakTimeLeft();
+				mHandler.sendEmptyMessage(Global.MSG_GOBACK);
+				
 			}
 		});
-		/*
-		final CustomDialog customDialog = new CustomDialog(RecordActivity.this,
-				title, yes, rs.getString(R.string.no), RecordHandler);
-		customDialog.show();
-		customDialog.setCanceledOnTouchOutside(false);
-		customDialog.setClicklistener(new CustomDialog.ClickListenerInterface() {
-					@Override
-					public void doConfirm() {
-						customDialog.dismiss();
-						Global.showToast(RecordActivity.this,
-								R.string.save_success, RecordHandler, 4);
-						Log.e("yes", "yes");
-					}
-
-					@Override
-					public void doCancel() {
-						customDialog.dismiss();
-						deleteFile();
-						goback();
-						speakTimeLeft();
-						Log.e("no", "no");
-					}
-				});*/
 	}
 
 	private void speakNotRecord() {
@@ -602,7 +578,6 @@ public class RecordActivity extends BaseActivity {
 			if (mResult != ErrorCode.E_STATE_RECODING) {
 				uiHandler.sendMessage(msg); // 向Handler发送消息,更新UI
 			}
-
 		}
 	}
 
@@ -738,6 +713,12 @@ public class RecordActivity extends BaseActivity {
 	protected void onDestroy() {
 		unregisterReceiver(shutdownReceiver);
 		super.onDestroy();
+		
+		if(callerId == Global.CALL_FM || callerId == 3 || callerId == Global.CALL_FM){
+			if (TtsUtils.getInstance() != null) {
+				TtsUtils.getInstance().destroy();
+			}
+		}
 	}
 
 	@Override
@@ -762,5 +743,32 @@ public class RecordActivity extends BaseActivity {
 	public void downSlip() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	// 处理弹框
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_GOBACK){   // 音乐播放结束消息
+				Record_goBack();
+			}else if(msg.what == Global.MSG_GOBACK_SAVE){
+				Record_goBackSave();		
+			}
+			else if(msg.what == Global.MSG_ONRESUM){
+				onResume();
+			}
+			super.handleMessage(msg);
+		}
+	};
+	
+	private void Record_goBackSave() {
+		goback();
+		speakTimeLeft();
+	}
+	
+	private void Record_goBack() {
+		deleteFile();
+		goback();
+		speakTimeLeft();
 	}
 }

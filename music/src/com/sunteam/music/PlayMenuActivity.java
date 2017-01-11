@@ -14,6 +14,8 @@ import com.sunteam.music.utils.Global;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 
 public class PlayMenuActivity extends MenuActivity implements PromptListener , ConfirmListener{
@@ -34,11 +36,9 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 		gFileName = bundle.getString("FILENAME"); // 获取用户ID
 				
 		mTitle = getResources().getString(R.string.Menu_Title);
-		//mMenuList = getResources().getStringArray(R.array.menu_list);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.play_menu_list));
 		
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_save_menu);
 	}
 	
 	
@@ -71,15 +71,6 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 					PromptDialog mcm = new PromptDialog(this, getResources().getString(R.string.file_exists));
 					mcm.show();
 					mcm.setPromptListener(this);
-/*					
-				Intent intent = new Intent();
-				Bundle bundle = new Bundle();	//新建 bundl
-				bundle.putInt("selectItem", getSelectItem());
-				intent.putExtras(bundle); // 参数传递
-				
-				setResult(Global.PLAY_MENU_FLAG, intent);
-				finish();
-				*/
 				}
 			}
 			return true;
@@ -91,49 +82,20 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 	@Override
 	public void doCancel() {
 		// TODO 自动生成的方法存根
-		onResume();
+		//onResume();
+		mHandler.sendEmptyMessage(Global.MSG_RESUME);
 	}
-
 
 	@Override
 	public void doConfirm() {
-		// TODO 自动生成的方法存根
-		Global.debug("############################21111### ");
+
 		if(gSelectID == Global.MENU_DEL_FILE){
 			MusicDelPlayList(gPath, gFileName);
-			
-			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del));
-			mDialog.show();
-			if(true == MusicGetHavePalyList()){ // 还有数据
-				mDialog.setPromptListener(this);
-			}
-			else{ // 数据为空
-				mDialog.setPromptListener(new PromptListener() {
-					
-					@Override
-					public void onComplete() {
-						// TODO 自动生成的方法存根
-						PromptDialog mDialog1 = new PromptDialog(PlayMenuActivity.this, getResources().getString(R.string.no_file));
-						mDialog1.show();
-						mDialog1.setPromptListener(PlayMenuActivity.this);
-					}
-				});
-			}
+			mHandler.sendEmptyMessage(Global.MSG_DEL_OK);
 		}
 		else if(gSelectID == Global.MENU_DEL_ALL){
 			MusicDelAllPlayList();
-			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del_all));
-			mDialog.show();
-			mDialog.setPromptListener(new PromptListener() {
-				
-				@Override
-				public void onComplete() {
-					// TODO 自动生成的方法存根
-					PromptDialog mDialog1 = new PromptDialog(PlayMenuActivity.this, getResources().getString(R.string.no_file));
-					mDialog1.show();
-					mDialog1.setPromptListener(PlayMenuActivity.this);
-				}
-			});
+			mHandler.sendEmptyMessage(Global.MSG_DELALL_OK);
 		}
 	}
 
@@ -210,9 +172,6 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 		MusicInfo musicinfo = new MusicInfo();   //创建 结构体
 		GetDbInfo dbMusicInfo = new GetDbInfo( this ); // 打开数据库
 		
-		//String Filename = gFileName.get(getSelectItem());
-    	//String FilePath = gFilePaths.get(getSelectItem());
-    	//int max_id = dbMusicInfo.getMaxId(Global.SAVE_LIST_ID);
     	int max_id = dbMusicInfo.getCount(Global.SAVE_LIST_ID);  // 获取数据数
     	Global.debug("\r\n MusicAddSaveList ===== max_id = " + max_id);
     	
@@ -222,9 +181,7 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
     		musicinfo.filename = gFileName;
     		
     		dbMusicInfo.add(musicinfo , Global.SAVE_LIST_ID);
-    		
-//    		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_add_ok));
-//    		mDialog.show();
+
     		return true;		
     	}   
     	else{
@@ -243,10 +200,10 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
     		}
     		
     		if(true == flag){  // 文件重复
-    			PromptDialog mpro = new PromptDialog(this, getResources().getString(R.string.file_exists));
+    		/*	PromptDialog mpro = new PromptDialog(this, getResources().getString(R.string.file_exists));
     			
     			mpro.show();
-    			dbMusicInfo.closeDb();
+    			dbMusicInfo.closeDb();*/
     			return false;
     		}
     		else{  // 添加文件
@@ -257,11 +214,63 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 	    		dbMusicInfo.add(musicinfo, Global.SAVE_LIST_ID);
 	    		dbMusicInfo.closeDb();
 	    		
-	    		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_add_ok));
-	    		mDialog.show();
-	    		//TtsUtils.getInstance().speak(getResources().getString(R.string.file_add_ok));
+	    		/*PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_add_ok));
+	    		mDialog.show();*/
 	    		return true;
     		}
     	}
+	}
+	
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_NO_FILE){   // 音乐播放结束消息
+				showNoFilePromptDialog();
+			}else if(msg.what == Global.MSG_DEL_OK){
+				showDelOkPromptDialog();		
+			}else if(msg.what == Global.MSG_DELALL_OK){
+				showDelAllPromptDialog();
+			}else if(msg.what == Global.MSG_RESUME){
+				onResume();
+			}
+			
+			super.handleMessage(msg);
+		}	
+	};
+	// 显示无文件
+	private void showNoFilePromptDialog() {
+		PromptDialog mDialog1 = new PromptDialog(PlayMenuActivity.this, getResources().getString(R.string.no_file));
+		mDialog1.show();
+		mDialog1.setPromptListener(PlayMenuActivity.this);
+	}
+	// 文件删除提示
+	private void showDelOkPromptDialog() {
+		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del));
+		mDialog.show();
+		if(true == MusicGetHavePalyList()){ // 还有数据
+			mDialog.setPromptListener(this);
+		}
+		else{ // 数据为空
+			mDialog.setPromptListener(new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					mHandler.sendEmptyMessage(Global.MSG_NO_FILE);		
+				}
+			});
+		}			
+	}
+	// 删除全部
+	private void showDelAllPromptDialog() {
+		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del_all));
+		mDialog.show();
+		mDialog.setPromptListener(new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				mHandler.sendEmptyMessage(Global.MSG_NO_FILE);
+			}
+		});
+		
 	}
 }

@@ -325,9 +325,7 @@ public class FunctionMenuActivity extends MenuActivity implements ConfirmListene
 			}
 			
 			super.handleMessage(msg);
-		}
-
-			
+		}		
 	};
 
 	

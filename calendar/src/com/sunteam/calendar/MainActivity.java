@@ -88,60 +88,11 @@ public class MainActivity extends BaseActivity {
 		
 		Global.ALARM_FILE_NAME = getResources().getString(R.string.remind_noFile);
 		
-		TtsUtils.getInstance(this, mTtsListener);
+		TtsUtils.getInstance(this, null);
 		// 初始化
 		init();
 	}
-	
-	private TtsListener mTtsListener = new TtsListener() {
-		@Override
-		public void onInit(int code) {
-			// showToast("Text-To-Speech engine is initialized, code = " + code);
-			MenuGlobal.debug("onInit(): code = " + code);
-		}
-
-		@Override
-		public void onSpeakBegin() {
-			MenuGlobal.debug("onSpeakBegin()");
-			// showToast("开始播放");
-		}
-
-		@Override
-		public void onSpeakPaused() {
-			MenuGlobal.debug("onSpeakPaused()");
-			// showToast("暂停播放");
-		}
-
-		@Override
-		public void onSpeakResumed() {
-			MenuGlobal.debug("onSpeakResumed()");
-			// showToast("继续播放");
-		}
-
-		@Override
-		public void onBufferProgress(int percent, int beginPos, int endPos, String info) {
-			// 合成进度
-			// mPercentForBuffering = percent;
-			// MenuGlobal.debug("onBufferProgress(): "+ "缓冲进度为" + mPercentForBuffering + "%, " + "播放进度为" + mPercentForPlaying + "%");
-			// showToast("缓冲进度为" + mPercentForBuffering + "%, " + "播放进度为" + mPercentForPlaying + "%");
-		}
-
-		@Override
-		public void onSpeakProgress(int percent, int beginPos, int endPos) {
-			// 播放进度
-			// mPercentForPlaying = percent;
-			// MenuGlobal.debug("onSpeakProgress(): "+ "缓冲进度为" + mPercentForBuffering + "%, " + "播放进度为" + mPercentForPlaying + "%");
-			// showToast("缓冲进度为" + mPercentForBuffering + "%, " + "播放进度为" + mPercentForPlaying + "%");
-		}
-
-		@Override
-		public void onCompleted(String error) {
-//			MenuGlobal.debug("onCompleted(): error = " + error);
-//			MenuGlobal.sendMessage(MenuConstant.MSG_TTSSPEAKING_END, null);
-		}
-
-	};
-	
+		
 	// 回复界面
 		@Override
 	protected void onResume() {

@@ -55,6 +55,10 @@ public class Global {
 	public static final int MENU_PLAY_MODE_SINGLE = 1;   // 单曲循环
 	public static final int MENU_PLAY_MODE_RAND = 2;   // 随机播放
 	
+	public static final int MSG_NO_FILE = 1;   // 无文件
+	public static final int MSG_DEL_OK = 2;   // 文件 已删除
+	public static final int MSG_DELALL_OK = 3;   // 文件 已清空
+	public static final int MSG_RESUME = 4;   // 刷新
 	
 	public static int MAX_RANK = 128;// 最大级数
 	

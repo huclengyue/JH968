@@ -14,6 +14,8 @@ import com.sunteam.music.utils.Global;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 
 public class SaveMenuActivity extends MenuActivity implements ConfirmListener, PromptListener{
@@ -75,47 +77,20 @@ public class SaveMenuActivity extends MenuActivity implements ConfirmListener, P
 	@Override
 	public void doCancel() {
 		// TODO 自动生成的方法存根
-		onResume();
+		//onResume();
+		mHandler.sendEmptyMessage(Global.MSG_RESUME);
 	}
-
 
 	@Override
 	public void doConfirm() {
 		// TODO 自动生成的方法存根
 		if(gSelectID == Global.MENU_DEL_FILE){
 			MusicDelSaveList(gPath, gFileName);
-			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del));
-			mDialog.show();
-			if(true == MusicGetHaveSaveList()){  // 
-				mDialog.setPromptListener(this);
-			}
-			else{
-				mDialog.setPromptListener(new PromptListener() {
-					
-					@Override
-					public void onComplete() {
-						// TODO 自动生成的方法存根
-						PromptDialog mDialog1 = new PromptDialog(SaveMenuActivity.this, getResources().getString(R.string.no_file));
-						mDialog1.show();
-						mDialog1.setPromptListener(SaveMenuActivity.this);
-					}
-				});
-			}
+			mHandler.sendEmptyMessage(Global.MSG_DEL_OK);	
 		}
 		else if(gSelectID == Global.MENU_DEL_ALL){
 			MusicDelAllSaveList();
-			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del_all));
-			mDialog.show();
-			mDialog.setPromptListener(new PromptListener() {
-				
-				@Override
-				public void onComplete() {
-					// TODO 自动生成的方法存根
-					PromptDialog mDialog1 = new PromptDialog(SaveMenuActivity.this, getResources().getString(R.string.no_file));
-					mDialog1.show();
-					mDialog1.setPromptListener(SaveMenuActivity.this);
-				}
-			});
+			mHandler.sendEmptyMessage(Global.MSG_DELALL_OK);
 		}	
 	}
 
@@ -179,10 +154,62 @@ public class SaveMenuActivity extends MenuActivity implements ConfirmListener, P
 	// 删除我的收藏 列表文件
 	public void MusicDelAllSaveList()
 	{
-		//MusicInfo musicinfo = new MusicInfo();   //创建 结构体
 		GetDbInfo dbMusicInfo = new GetDbInfo( this ); // 打开数据库
-		
-    	dbMusicInfo.detele(Global.SAVE_LIST_ID);
-    	//TtsUtils.getInstance().speak(getResources().getString(R.string.file_delall));					
+    	dbMusicInfo.detele(Global.SAVE_LIST_ID);				
 	}	
+	
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_NO_FILE){   // 音乐播放结束消息
+				showNoFilePromptDialog();
+			}else if(msg.what == Global.MSG_DEL_OK){
+				showDelOkPromptDialog();		
+			}else if(msg.what == Global.MSG_DELALL_OK){
+				showDelAllPromptDialog();
+			}
+			else if(msg.what == Global.MSG_RESUME){
+				onResume();
+			}
+			
+			super.handleMessage(msg);
+		}	
+	};
+	// 显示无文件
+	private void showNoFilePromptDialog() {
+		PromptDialog mDialog1 = new PromptDialog(this, getResources().getString(R.string.no_file));
+		mDialog1.show();
+		mDialog1.setPromptListener(this);
+	}
+	// 文件删除提示
+	private void showDelOkPromptDialog() {
+		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del));
+		mDialog.show();
+		if(true == MusicGetHaveSaveList()){ // 还有数据
+			mDialog.setPromptListener(this);
+		}
+		else{ // 数据为空
+			mDialog.setPromptListener(new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					mHandler.sendEmptyMessage(Global.MSG_NO_FILE);		
+				}
+			});
+		}			
+	}
+	// 删除全部
+	private void showDelAllPromptDialog() {
+		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del_all));
+		mDialog.show();
+		mDialog.setPromptListener(new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				mHandler.sendEmptyMessage(Global.MSG_NO_FILE);
+			}
+		});
+		
+	}
+	
 }

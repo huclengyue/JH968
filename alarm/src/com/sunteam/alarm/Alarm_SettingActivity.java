@@ -320,7 +320,6 @@ public class Alarm_SettingActivity extends BaseActivity {
 							gDay = 1;
 						}
 					}
-				
 				}
 			}
 			showInfo(false);
@@ -579,8 +578,6 @@ public class Alarm_SettingActivity extends BaseActivity {
 					tv3.setBackgroundColor(new Tools(this).getBackgroundColor()); // 设置颜色反显
 				}
 			}
-			
-		}		
-
+		}
 	}
 }
