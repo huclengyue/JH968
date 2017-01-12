@@ -1,6 +1,7 @@
 package com.sunteam.alarm.utils;
 
 import android.content.Context;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
@@ -47,6 +48,10 @@ public class Global {
 	public static int TIME_LEN1 = 60*60;
 	public static int TIME_LEN2 = 90*60;
 	public static int TIME_LEN3 = 120*60;
+	
+	
+	//public static final String ALARM_FILE_PATH = Environment.getExternalStorageDirectory() + "//Alarms//" + ALARM_FILE_NAME;
+//	public static final String ALARM_FILE_PATH1 = Environment.getExternalStorageDirectory() + "/"+ getResources().getString(R.string.alarm_title) + "/";
 	
 	public static void debug(String s) {
 		Log.d(TAG, s);

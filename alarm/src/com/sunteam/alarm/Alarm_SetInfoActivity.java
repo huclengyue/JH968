@@ -3,8 +3,11 @@ package com.sunteam.alarm;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import com.sunteam.alarm.utils.Global;
+import com.sunteam.alarm.utils.Pinyin4jUtils;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.dialog.PromptListener;
@@ -12,6 +15,7 @@ import com.sunteam.receiver.Alarmpublic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 
 public class Alarm_SetInfoActivity extends MenuActivity {
@@ -54,6 +58,7 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 					gonFileFlag = true;
 				}
 				else{  // 有文件
+					Collections.sort(mTemp, new UsernameComparator());
 					gSetID = mTemp.indexOf(gfileName);
 					if(gSetID < 0){
 						gSetID = 0;
@@ -215,8 +220,8 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 	{
 		ArrayList<String> temp = new ArrayList<String>();
 		
-		File mFile = new File(Alarmpublic.ALARM_FILE_PATH); // 获取路径内容
-		Global.debug("can read === filePath =" + Alarmpublic.ALARM_FILE_PATH);
+		File mFile = new File(Alarmpublic.ALARM_PATH + getResources().getString(R.string.folder)+"/"); // 获取路径内容
+		Global.debug("can read === filePath =" + Alarmpublic.ALARM_PATH + getResources().getString(R.string.folder)+"/");
 		if (mFile.canRead()) // 可读
 		{
 			if (mFile.isDirectory()) // 是文件夹
@@ -277,5 +282,94 @@ public class Alarm_SetInfoActivity extends MenuActivity {
             }    
         }    
         return filename;    
-    }	
+    }
+    
+    // 文件排序 按照
+	private class UsernameComparator implements Comparator<String> {
+		public int compare(String entity1, String entity2) {
+			
+			String str1 = "";
+			String str2 = "";
+			
+			String str10 = "";
+			String str11 = "";
+			String str20 = "";
+			String str21 = "";
+			
+			try 
+			{
+				str1 = Pinyin4jUtils.converterToSpell( entity1 );
+				str2 = Pinyin4jUtils.converterToSpell( entity2 );
+				
+				for( int i = 0; i < str1.length(); i++ )
+				{
+					String str = str1.substring(i, i+1);
+					if( isNumber( str ) )
+					{
+						str10 += str;
+					}
+					else
+					{
+						str11 += str1.substring(i);
+						break;
+					}
+				}
+				
+				for( int i = 0; i < str2.length(); i++ )
+				{
+					String str = str2.substring(i, i+1);
+					if( isNumber( str ) )
+					{
+						str20 += str;
+					}
+					else
+					{
+						str21 += str2.substring(i);
+						break;
+					}
+				}
+				
+				if( !TextUtils.isEmpty(str10) && !TextUtils.isEmpty(str20) )
+				{
+					float f1 = Float.parseFloat(str10);
+					float f2 = Float.parseFloat(str20);
+					
+					if( f1 > f2 )
+					{
+						return	1;
+					}
+					else if( f1 < f2 )
+					{
+						return	-1;
+					}
+					else
+					{
+						return str11.compareToIgnoreCase(str21);
+					}
+				}
+				else
+				{
+					return str1.compareToIgnoreCase(str2);
+				}
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+
+				return str1.compareToIgnoreCase(str2);
+			}
+		}
+		
+		private boolean isNumber( String str )
+		{
+			if( "0".equals(str) || "1".equals(str) || "2".equals(str) || "3".equals(str) || "4".equals(str) || "5".equals(str) || 
+				"6".equals(str) || "7".equals(str) || "8".equals(str) || "9".equals(str) || ".".equals(str) )
+			{
+				return	true;
+			}
+			
+			return	false;
+		}
+	}
+    
 }

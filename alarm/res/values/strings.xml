@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="folder">铃声</string> <!-- 次字串为目录文件 只可在修改语言时 修改对应的字串 -->
+    
     <string name="app_name">定时闹钟</string>
     <string name="hello_world">Hello world!</string>
 

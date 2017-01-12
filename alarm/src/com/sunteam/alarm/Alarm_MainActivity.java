@@ -1,8 +1,10 @@
 package com.sunteam.alarm;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.sunteam.alarm.R.string;
 import com.sunteam.alarm.utils.Global;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.tts.TtsUtils;
@@ -54,6 +56,14 @@ public class Alarm_MainActivity extends MenuActivity {
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.main_list));	
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_main);
+		String alarm_folder = Alarmpublic.ALARM_PATH+getResources().getString(R.string.folder);
+		Global.debug("\r\n【onCreate】 alarm_folder =======" + alarm_folder);
+		File mFile = new File(alarm_folder);
+		if(!mFile.exists()){
+			Global.debug("\r\n【onCreate】 alarm_folder =====mkdir==");
+			makeDirs(alarm_folder);
+		}
+		
 	}
 	@Override
 	protected void onDestroy() {
@@ -452,7 +462,7 @@ public class Alarm_MainActivity extends MenuActivity {
     			alarminfo.hour = Alarmpublic.DEF_HOUR;
     			alarminfo.minute = Alarmpublic.DEF_MIN;
     			alarminfo.filename = Alarmpublic.ALARM_FILE_NAME;
-    			alarminfo.path = Alarmpublic.ALARM_FILE_PATH;
+    			alarminfo.path = Alarmpublic.ALARM_PATH + getResources().getString(R.string.folder)+"/"+ Alarmpublic.ALARM_FILE_NAME;
     			alarminfo.onoff = Alarmpublic.DEF_ONOFF;
     			alarminfo.type = Alarmpublic.DEF_TYPE;
     			
@@ -516,8 +526,10 @@ public class Alarm_MainActivity extends MenuActivity {
     			alarminfo.day = Alarmpublic.DEF_DAY;
     			alarminfo.hour = Alarmpublic.DEF_HOUR;
     			alarminfo.minute = Alarmpublic.DEF_MIN;
+    		//	alarminfo.filename = Alarmpublic.ALARM_FILE_NAME;
+    		//	alarminfo.path = Alarmpublic.ALARM_FILE_PATH;
     			alarminfo.filename = Alarmpublic.ALARM_FILE_NAME;
-    			alarminfo.path = Alarmpublic.ALARM_FILE_PATH;
+    			alarminfo.path = Alarmpublic.ALARM_PATH + getResources().getString(R.string.folder)+"/"+ Alarmpublic.ALARM_FILE_NAME;
     			alarminfo.onoff = Alarmpublic.DEF_ONOFF;
     			alarminfo.type = Alarmpublic.DEF_TYPE;
     			
@@ -687,7 +699,7 @@ public class Alarm_MainActivity extends MenuActivity {
 					gFileName = bundle.getString("FILENAME");
 					Global.debug("id ====[1] ===gFileName= "+ gFileName);	
 	    			alarminfo.filename = gFileName;
-	    			alarminfo.path = Alarmpublic.ALARM_FILE_PATH + gFileName;	
+	    			alarminfo.path = Alarmpublic.ALARM_PATH + gFileName;	
 				}
 				else if(selectId == Global.ALARM_SET_TYPE){  // 
 					
@@ -734,7 +746,7 @@ public class Alarm_MainActivity extends MenuActivity {
 					gFileName = bundle.getString("FILENAME");
 					Global.debug("id ====[1] ===gFileName= "+ gFileName);
 	    			alarminfo.filename = gFileName;
-	    			alarminfo.path = Alarmpublic.ALARM_FILE_PATH + gFileName;	
+	    			alarminfo.path = Alarmpublic.ALARM_PATH + gFileName;	
 				}
 				else if(selectId == Global.ANNIVERSARY_SET_ONOFF)// 开关
 				{
@@ -847,5 +859,14 @@ public class Alarm_MainActivity extends MenuActivity {
             }
 			//((MyPlayer) myPlayer).startPlayback2(((MyPlayer) myPlayer).playProgress(), fd.getFileDescriptor(), true);
 		}	
-
+		
+		public static boolean makeDirs(String filePath) {
+	        
+	        if (filePath == null || filePath.isEmpty()) {
+	            return false;
+	        }
+	 
+	        File folder = new File(filePath);
+	        return (folder.exists() && folder.isDirectory()) ? true : folder.mkdirs();
+	    }
 }
