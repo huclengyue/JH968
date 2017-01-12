@@ -18,6 +18,8 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.music.dao.GetDbInfo;
 import com.sunteam.music.dao.MusicInfo;
 import com.sunteam.music.utils.Global;
+import com.sunteam.music.utils.Pinyin4jUtils;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -842,19 +844,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 						// Log.i("zbc","mCurrentFile.getPath() ="+mCurrentFile.getPath()
 						// + " mCurrentFile.getName()"+mCurrentFile.getName());
 					}
-					Collections.sort(mFileName, new Comparator<String>() {
-				       
-				        public int compare(String s1, String s2) {
-				            return s1.compareToIgnoreCase(s2);
-				        }
-				        
-				    });
-					Collections.sort(mFilePaths, new Comparator<String>() {
-				       
-				        public int compare(String s1, String s2) {
-				            return s1.compareToIgnoreCase(s2);
-				        }
-				    });
+					Collections.sort(mFileName, new UsernameComparator());
+					Collections.sort(mFilePaths, new UsernameComparator());
+					
 //					Collections.sort(mFileName);  // 排序
 //					Collections.sort(mFilePaths);  // 排序
 					// 重新赋值
@@ -919,18 +911,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 						// Log.i("zbc","mCurrentFile.getPath() ="+mCurrentFile.getPath()
 						// + " mCurrentFile.getName()"+mCurrentFile.getName());
 					}
-					Collections.sort(mFileName, new Comparator<String>() {
-					       
-				        public int compare(String s1, String s2) {
-				            return s1.compareToIgnoreCase(s2);
-				        }
-				    });
-					Collections.sort(mFilePaths, new Comparator<String>() {
-				       
-				        public int compare(String s1, String s2) {
-				            return s1.compareToIgnoreCase(s2);
-				        }
-				    });
+					Collections.sort(mFileName, new UsernameComparator());
+					Collections.sort(mFilePaths, new UsernameComparator());
+					
 					//Collections.sort(mFileName);
 					//Collections.sort(mFilePaths);  // 排序
 					
@@ -1428,4 +1411,92 @@ public class MainActivity extends MenuActivity implements ShowView {
             
         }            
     };
+    
+    // 文件排序 按照
+	private class UsernameComparator implements Comparator<String> {
+		public int compare(String entity1, String entity2) {
+			
+			String str1 = "";
+			String str2 = "";
+			
+			String str10 = "";
+			String str11 = "";
+			String str20 = "";
+			String str21 = "";
+			
+			try 
+			{
+				str1 = Pinyin4jUtils.converterToSpell( entity1 );
+				str2 = Pinyin4jUtils.converterToSpell( entity2 );
+				
+				for( int i = 0; i < str1.length(); i++ )
+				{
+					String str = str1.substring(i, i+1);
+					if( isNumber( str ) )
+					{
+						str10 += str;
+					}
+					else
+					{
+						str11 += str1.substring(i);
+						break;
+					}
+				}
+				
+				for( int i = 0; i < str2.length(); i++ )
+				{
+					String str = str2.substring(i, i+1);
+					if( isNumber( str ) )
+					{
+						str20 += str;
+					}
+					else
+					{
+						str21 += str2.substring(i);
+						break;
+					}
+				}
+				
+				if( !TextUtils.isEmpty(str10) && !TextUtils.isEmpty(str20) )
+				{
+					float f1 = Float.parseFloat(str10);
+					float f2 = Float.parseFloat(str20);
+					
+					if( f1 > f2 )
+					{
+						return	1;
+					}
+					else if( f1 < f2 )
+					{
+						return	-1;
+					}
+					else
+					{
+						return str11.compareToIgnoreCase(str21);
+					}
+				}
+				else
+				{
+					return str1.compareToIgnoreCase(str2);
+				}
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+
+				return str1.compareToIgnoreCase(str2);
+			}
+		}
+		
+		private boolean isNumber( String str )
+		{
+			if( "0".equals(str) || "1".equals(str) || "2".equals(str) || "3".equals(str) || "4".equals(str) || "5".equals(str) || 
+				"6".equals(str) || "7".equals(str) || "8".equals(str) || "9".equals(str) || ".".equals(str) )
+			{
+				return	true;
+			}
+			
+			return	false;
+		}
+	}
 }
