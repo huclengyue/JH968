@@ -3,6 +3,7 @@ package com.sunteam.receiver;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.sunteam.alarmlib.R;
 import com.sunteam.common.utils.SunteamDateUtils;
 import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
@@ -13,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
+import android.view.GestureDetector;
 
 public class Alarmpublic {
 	public static final String TAG = "alarmlib";
@@ -28,10 +30,7 @@ public class Alarmpublic {
 	public static final String CMD_TABLE = " (_id integer primary key, year integer, month integer,day integer, hour integer, minute integer, filename string, path string, type integer, onoff integer)";  // 数据库行程提醒 table
 	
 	public static final int MAX_NUM = 8;  // 数据最大记录数
-	
-	public static final String ALARM_FILE_NAME = "alarm.mp3";
-	public static final String ALARM_FILE_PATH = Environment.getExternalStorageDirectory() + "//Alarms//" + ALARM_FILE_NAME;
-	
+		
 	public static final int DEF_HOUR = 8;  //  默认小时
 	public static final int DEF_MIN = 0;  //  默认分
 	public static final int DEF_MONTH = 10;  // 默认月
@@ -52,6 +51,10 @@ public class Alarmpublic {
 	public static final int ALARM_TYPE_REMIND = 3;  // 行程提醒
 	
 	public static final int DAY_MAX_SEC = 24*60*60;  // 一天最大的秒
+	
+	
+	public static final String ALARM_FILE_NAME = "alarm.mp3";
+	public static final String ALARM_PATH = Environment.getExternalStorageDirectory() + "//";
 	
 	public static void debug(String s) {
 		Log.d(TAG, s);
