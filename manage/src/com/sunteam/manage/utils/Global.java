@@ -58,6 +58,7 @@ public class Global {
 	public static final int MSG_DEL_OK = 1; // 删除成功提示
 	public static final int MSG_PAST_FINSH = 2; // 粘贴完成
 	public static final int MSG_PAST_CHECK = 3; // 粘贴路径不对
+	public static final int MSG_STRAT_PAST = 4; // 开始粘贴
 	
 	public static void debug(String s) {
 		Log.d(TAG, s);

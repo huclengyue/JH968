@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 import javax.xml.transform.Templates;
 
@@ -30,6 +31,7 @@ import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.manage.utils.Global;
+import com.sunteam.manage.utils.Pinyin4jUtils;
 
 public class MainActivity extends MenuActivity implements ShowView{
 	// 全局变量
@@ -437,8 +439,10 @@ public class MainActivity extends MenuActivity implements ShowView{
 //						 Global.debug("mCurrentFile.getPath() ="+mCurrentFile.getPath()
 //						 + " mCurrentFile.getName()"+mCurrentFile.getName());
 					}
-					Collections.sort(mFileName);  // 排序
-					Collections.sort(mFilePath);  // 排序					
+					Collections.sort(mFileName, new UsernameComparator()); // 通过重写Comparator的实现类FileComparator来实现按文件名排序。
+					Collections.sort(mFilePath, new UsernameComparator()); // 通过重写Comparator的实现类FileComparator来实现按文件名排序。
+//					Collections.sort(mFileName);  // 排序
+//					Collections.sort(mFilePath);  // 排序					
 					for(int i = 0; i < mFileName.size(); i++){
 						Global.gFileName.add(mFileName.get(i));
 						Global.gFilePaths.add(mFilePath.get(i));
@@ -464,9 +468,11 @@ public class MainActivity extends MenuActivity implements ShowView{
 //						 Global.debug("mCurrentFile.getPath() ="+mCurrentFile.getPath()
 //						 + " mCurrentFile.getName()"+mCurrentFile.getName());
 					}
-					Collections.sort(mFileName);  // 排序
+//					Collections.sort(mFileName);  // 排序
 
-					Collections.sort(mFilePath);  // 排序
+//					Collections.sort(mFilePath);  // 排序
+					Collections.sort(mFileName, new UsernameComparator()); // 通过重写Comparator的实现类FileComparator来实现按文件名排序。
+					Collections.sort(mFilePath, new UsernameComparator()); // 通过重写Comparator的实现类FileComparator来实现按文件名排序。
 					for(int i = 0; i < mFileName.size(); i++){
 						Global.gFileName.add(mFileName.get(i));
 						Global.gFilePaths.add(mFilePath.get(i));
@@ -774,4 +780,98 @@ public class MainActivity extends MenuActivity implements ShowView{
             
         }            
     };
+    
+    // 文件排序 按照
+	private class UsernameComparator implements Comparator<String> {
+		public int compare(String entity1, String entity2) {
+			Global.debug("\r\n [UsernameComparator]     ===== entity1 =" + entity1);
+			Global.debug("\r\n [UsernameComparator]     ===== entity2 =" + entity2);
+			
+			String str1 = "";
+			String str2 = "";
+			
+			String str10 = "";
+			String str11 = "";
+			String str20 = "";
+			String str21 = "";
+			
+			try 
+			{
+				Global.debug("\r\n [UsernameComparator]  befor   ===== converterToSpell =");
+				str1 = Pinyin4jUtils.converterToSpell( entity1 );
+				str2 = Pinyin4jUtils.converterToSpell( entity2 );
+				
+				Global.debug("\r\n [UsernameComparator]     ===== str1 =" + str1);
+				Global.debug("\r\n [UsernameComparator]     ===== str1 =" + str2);
+				
+				for( int i = 0; i < str1.length(); i++ )
+				{
+					String str = str1.substring(i, i+1);
+					if( isNumber( str ) )
+					{
+						str10 += str;
+					}
+					else
+					{
+						str11 += str1.substring(i);
+						break;
+					}
+				}
+				
+				for( int i = 0; i < str2.length(); i++ )
+				{
+					String str = str2.substring(i, i+1);
+					if( isNumber( str ) )
+					{
+						str20 += str;
+					}
+					else
+					{
+						str21 += str2.substring(i);
+						break;
+					}
+				}
+				
+				if( !TextUtils.isEmpty(str10) && !TextUtils.isEmpty(str20) )
+				{
+					float f1 = Float.parseFloat(str10);
+					float f2 = Float.parseFloat(str20);
+					
+					if( f1 > f2 )
+					{
+						return	1;
+					}
+					else if( f1 < f2 )
+					{
+						return	-1;
+					}
+					else
+					{
+						return str11.compareToIgnoreCase(str21);
+					}
+				}
+				else
+				{
+					return str1.compareToIgnoreCase(str2);
+				}
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+
+				return str1.compareToIgnoreCase(str2);
+			}
+		}
+		
+		private boolean isNumber( String str )
+		{
+			if( "0".equals(str) || "1".equals(str) || "2".equals(str) || "3".equals(str) || "4".equals(str) || "5".equals(str) || 
+				"6".equals(str) || "7".equals(str) || "8".equals(str) || "9".equals(str) || ".".equals(str) )
+			{
+				return	true;
+			}
+			
+			return	false;
+		}
+	}
 }

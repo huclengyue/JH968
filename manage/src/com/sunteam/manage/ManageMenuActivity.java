@@ -196,9 +196,7 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 							
 							@Override
 							public void onComplete() {
-								// TODO 自动生成的方法存根
-								gPastFlag = true;
-								gthread.start();
+								mHandler.sendEmptyMessage(Global.MSG_STRAT_PAST);
 							}
 						});	
 					}
@@ -213,18 +211,6 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 					mPromptDialog.show();
 					mPromptDialog.setPromptListener(ManageMenuActivity.this);
 				}
-				
-				//gthread.start();  
-/*
-				try {
-					pasteFile();
-				} catch (IOException e) {
-					// TODO 自动生成的 catch 块
-					e.printStackTrace();
-				}
-*/				
-				
-				//onResume();
 			}
 			return true;
 		}
@@ -773,9 +759,19 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 			else if(msg.what == Global.MSG_PAST_CHECK){
 				showPastCheckPromptDialog();
 			}
+			else if(msg.what == Global.MSG_STRAT_PAST)
+			{
+				startPast();
+			}
 			super.handleMessage(msg);
 		}
+
 	};
+	// 开始粘贴
+	private void startPast() {
+		gPastFlag = true;
+		gthread.start();
+	}
 	// 显示删除成功
 	private void showDelOkPromptDialog() {
 		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.del_finsh));
