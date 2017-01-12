@@ -343,6 +343,7 @@ public class RecordActivity extends BaseActivity {
 		tvReady.setVisibility(View.VISIBLE);
 		sb.delete(0, sb.length());
 		tvTime.setText(getRecordLength());
+		
 	}
 
 	/**
@@ -596,6 +597,8 @@ public class RecordActivity extends BaseActivity {
 		msg.setData(b);
 		// uiHandler.sendMessageDelayed(msg, 1000); // 向Handler发送消息,更新UI
 		mState = state_no_record;
+		
+		Global.releaseWakeLock();  // 打开休眠
 	}
 
 	private final static int CMD_RECORDFAIL = 2001;

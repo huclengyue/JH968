@@ -408,20 +408,17 @@ public class MainActivity extends MenuActivity implements ShowView{
 						return !pathname.isHidden();// 过滤隐藏文件
 					}
 				};
-
-//				Global.debug("\r\n is Directory === ");
 				// 获取文件夹内文件
 				File[] mFiles = mFile.listFiles(ff);
 
 				Global.gFileName.clear();
 				Global.gFilePaths.clear();
 
-				//Global.debug("\r\n is Directory === length =" + mFiles.length);
 				/* 获取文件列表 */
 				if (mFiles.length > 0) {
-					
-					ArrayList<String> mFilePath = new ArrayList<String>();
-					ArrayList<String> mFileName = new ArrayList<String>();
+					ArrayList<FileInfo> mFileFile = new ArrayList<FileInfo>();
+					ArrayList<FileInfo> mFileFolder = new ArrayList<FileInfo>();
+					//FileInfo temp_File = new FileInfo();
 					// 循环获取文件夹列表
 					for (File mCurrentFile : mFiles) {
 						if (mCurrentFile.getName().equals("LOST.DIR")) // 去除LOST.DIR
@@ -431,96 +428,47 @@ public class MainActivity extends MenuActivity implements ShowView{
 						File mFile1 = new File(mCurrentFile.getPath()); // 获取路径内容
 
 						if (mFile1.isDirectory()) {
-							mFileName.add(mCurrentFile.getName());
-							mFilePath.add(mCurrentFile.getPath());
-							//Global.gFileName.add(mCurrentFile.getName());
-							//Global.gFilePaths.add(mCurrentFile.getPath());
+							FileInfo mFileInfo = new FileInfo();
+							mFileInfo.name = mCurrentFile.getName();
+							mFileInfo.path = mCurrentFile.getPath();
+							//Global.debug("mCurrentFile.getPath() ="+mCurrentFile.getPath() + " mCurrentFile.getName() = "+mCurrentFile.getName());
+							mFileFolder.add(mFileInfo);
 						}
-//						 Global.debug("mCurrentFile.getPath() ="+mCurrentFile.getPath()
-//						 + " mCurrentFile.getName()"+mCurrentFile.getName());
+						else{
+							FileInfo mFileInfo = new FileInfo();
+							mFileInfo.name = mCurrentFile.getName();
+							mFileInfo.path = mCurrentFile.getPath();
+							//Global.debug("mCurrentFile.getPath() ="+mCurrentFile.getPath() + " mCurrentFile.getName() = "+mCurrentFile.getName());
+							mFileFile.add(mFileInfo);
+						}
 					}
-					Collections.sort(mFileName, new UsernameComparator()); // 通过重写Comparator的实现类FileComparator来实现按文件名排序。
-					Collections.sort(mFilePath, new UsernameComparator()); // 通过重写Comparator的实现类FileComparator来实现按文件名排序。
-//					Collections.sort(mFileName);  // 排序
-//					Collections.sort(mFilePath);  // 排序					
-					for(int i = 0; i < mFileName.size(); i++){
-						Global.gFileName.add(mFileName.get(i));
-						Global.gFilePaths.add(mFilePath.get(i));
+					Collections.sort(mFileFile, new UsernameComparator()); // 通过重写Comparator的实现类FileComparator来实现按文件名排序。
+					Collections.sort(mFileFolder, new UsernameComparator());
+				// 文件夹在前
+					for(int i = 0; i < mFileFolder.size(); i++){
+						Global.gFileName.add(mFileFolder.get(i).name);
+						Global.gFilePaths.add(mFileFolder.get(i).path);
 					}
-					mFileName.clear();
-					mFilePath.clear();
+					// 文件在后
+					for(int i = 0; i < mFileFile.size(); i++){
+						Global.gFileName.add(mFileFile.get(i).name);
+						Global.gFilePaths.add(mFileFile.get(i).path);
+					}
+					mFileFile.clear();
+					mFileFolder.clear();
 					
-//					Global.debug("****1111**********11111*********\r\n");
-					// 获取文件列表
-					for (File mCurrentFile : mFiles){
-						if (mCurrentFile.getName().equals("LOST.DIR")) // 去除LOST.DIR
-						{
-							continue;
-						}
-						File mFile2 = new File(mCurrentFile.getPath()); // 获取路径内容
-
-						if (mFile2.isFile()) {
-							//Global.gFileName.add(mCurrentFile.getName());
-							//Global.gFilePaths.add(mCurrentFile.getPath());
-							mFileName.add(mCurrentFile.getName());
-							mFilePath.add(mCurrentFile.getPath());
-						}
-//						 Global.debug("mCurrentFile.getPath() ="+mCurrentFile.getPath()
-//						 + " mCurrentFile.getName()"+mCurrentFile.getName());
-					}
-//					Collections.sort(mFileName);  // 排序
-
-//					Collections.sort(mFilePath);  // 排序
-					Collections.sort(mFileName, new UsernameComparator()); // 通过重写Comparator的实现类FileComparator来实现按文件名排序。
-					Collections.sort(mFilePath, new UsernameComparator()); // 通过重写Comparator的实现类FileComparator来实现按文件名排序。
-					for(int i = 0; i < mFileName.size(); i++){
-						Global.gFileName.add(mFileName.get(i));
-						Global.gFilePaths.add(mFilePath.get(i));
-					}
-					mFileName.clear();
-					mFilePath.clear();
-					
-//					Global.debug("****1111**********22222*********\r\n");
 					mMenuList = Global.gFileName;
-//					Global.debug("****1111**********33333*********mMenuView = \r\n"+ mMenuView);
 					mMenuView.setListData(mMenuList);
-//					Global.debug("***********************************");
-					mMenuView.setSelectItem(gSelecyId[Global.gPathNum]);
-					//mMenuView.setSelectItem(0);
-				
+					mMenuView.setSelectItem(gSelecyId[Global.gPathNum]);				
 				} 
 				else {   // 无文件
 					mMenuList = Global.gFileName;
 					mMenuView.setListData(mMenuList);
-					//mMainView.SetListNameData(Global.gFileName);
-//					mMainView.SetListPathData(Global.gFilePaths);
 				}
 //				Global.debug("*************************1111**********");
 				mTitle = fileName;
 				mMenuView.setTitle(fileName);
-				Global.debug("\r\n***************1111**********mMenuList.size() ==" + mMenuList.size());
-				/*
-				if(mMenuList.size() <= 0){   // 提示无文件
-					
-					Global.debug("\r\n***************222**********mMenuList.size() ==" + mMenuList.size());
-					PromptDialog mpDialog = new PromptDialog(MainActivity.this, getResources().getString(R.string.no_file));
-					mpDialog.show();
-					
-					mpDialog.setPromptListener(new PromptListener() {
-						
-						@Override
-						public void onComplete() {
-							// TODO 自动生成的方法存根
-							onResume();
-						}
-					});
-					
-					//onResume();
-				}
-				else{
-					onResume();
-				}
-			*/
+				Global.debug("\r\n***************1111**********mMenuList.size() ==" + mMenuList.size());	
 			}
 			return true;
 		}
@@ -782,10 +730,8 @@ public class MainActivity extends MenuActivity implements ShowView{
     };
     
     // 文件排序 按照
-	private class UsernameComparator implements Comparator<String> {
-		public int compare(String entity1, String entity2) {
-			Global.debug("\r\n [UsernameComparator]     ===== entity1 =" + entity1);
-			Global.debug("\r\n [UsernameComparator]     ===== entity2 =" + entity2);
+	private class UsernameComparator implements Comparator<FileInfo> {
+		public int compare(FileInfo entity1, FileInfo entity2) {
 			
 			String str1 = "";
 			String str2 = "";
@@ -797,12 +743,9 @@ public class MainActivity extends MenuActivity implements ShowView{
 			
 			try 
 			{
-				Global.debug("\r\n [UsernameComparator]  befor   ===== converterToSpell =");
-				str1 = Pinyin4jUtils.converterToSpell( entity1 );
-				str2 = Pinyin4jUtils.converterToSpell( entity2 );
-				
-				Global.debug("\r\n [UsernameComparator]     ===== str1 =" + str1);
-				Global.debug("\r\n [UsernameComparator]     ===== str1 =" + str2);
+			
+				str1 = Pinyin4jUtils.converterToSpell( entity1.name );
+				str2 = Pinyin4jUtils.converterToSpell( entity2.name );
 				
 				for( int i = 0; i < str1.length(); i++ )
 				{
@@ -873,5 +816,10 @@ public class MainActivity extends MenuActivity implements ShowView{
 			
 			return	false;
 		}
+	}
+	
+	private class FileInfo {
+		String name ; // // 菜单名称
+		String path ; // // 图片
 	}
 }

@@ -81,7 +81,6 @@ Runnable finishActivityDelayed = new Runnable() {
 		}
 	};
 	
-	
 	Runnable finishActivity = new Runnable() {
 		
 		@Override
