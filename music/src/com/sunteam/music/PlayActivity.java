@@ -28,6 +28,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -167,6 +168,14 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		tvFileName.setSelected(true);   // 设置焦点才能滚动
 		
 		tvPlayNum.setTextColor(mTools.getFontColor());;
+		
+		
+		//Tools mTools = new Tools(this);
+		int fontSize = mTools.getFontSize();
+		tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		tvTitle.setHeight(mTools.convertSpToPixel(fontSize));
+		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
+		tvTitle.setTextColor(mTools.getFontColor()); //  设置字体颜色
 		
 //		tvPlayedTime.setTextSize(mTools.getFontSize());
 //		tvTotalTime.setTextSize(mTools.getFontSize());
@@ -763,8 +772,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 								public void onComplete() {
 									// TODO 自动生成的方法存根
 								//	Key_back();
-									mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_BACK);
-									
+									mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_BACK);	
 								}
 							});
 	            		}
@@ -1018,14 +1026,10 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			mWakeLock = null;
 		}
 	}
-	
-	
-	
 	// 获取当前路径
 	private String getCurPath(){
 		return gPlayListPaths.get(currentIndex);
 	}
-	
 	
 	// tf卡插拔消息 注册
 	private void registerTFcardPlugReceiver() {   

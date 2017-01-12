@@ -55,8 +55,8 @@
     <string name="error_unknown">无法识别的错误</string>
     <string name="error_file">文件损坏，无法播放</string>
     <string name="error_app_internal">内部应用程序错误</string>
-    <string name="file_end">文件到结尾</string>
-    <string name="file_start">文件到开头</string>
+    <string name="file_end">已经到结尾</string>
+    <string name="file_start">已经到开头</string>
     <string name="no_file">无文件</string>
     <string name="bat_lv0">电池电量低，无法播放</string>
     
