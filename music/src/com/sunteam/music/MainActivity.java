@@ -32,6 +32,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -325,9 +326,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 			if(getSelectItem()  == Global.MAIN_DIR_ID){  // 选中第一项 
 				SharedPrefUtils.setSharedPrefInt(this,Global.MUSIC_CONFIG_FILE, Context.MODE_WORLD_READABLE, Global.MUSIC_SELECT, getSelectItem() );
 				intface_flag = DIRECTORY_INTFACE;    // 进入目录浏览界面
-				//lobal.debug("[0]getSelectItemContent() ==="+ getSelectItemContent());
-				
-			//	Global.debug("[1]getSelectItemContent() ==="+ getSelectItemContent());
+
 				setTitle(getSelectItemContent());
 				
 				gFileName.clear();
@@ -355,7 +354,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 					mMenuView.setSelectItem(2);
 					Global.debug("\r\n [1] setSelectItem(2)===" );
 				}
-				super.onResume();
+				mHandler.sendEmptyMessage(Global.MSG_RESUME);
 			}
 			else if (getSelectItem()  == Global.MAIN_SAVE_ID) { // 选中第二项  我的最爱界面 显示列表
 				SharedPrefUtils.setSharedPrefInt(this,Global.MUSIC_CONFIG_FILE, Context.MODE_WORLD_READABLE, Global.MUSIC_SELECT, getSelectItem() );
@@ -369,8 +368,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 						
 						@Override
 						public void onComplete() {
-							// TODO 自动生成的方法存根
-							onResume();
+							mHandler.sendEmptyMessage(Global.MSG_RESUME);
 						}
 					});
 				}		
@@ -388,7 +386,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 						@Override
 						public void onComplete() {
 							// TODO 自动生成的方法存根
-							onResume();
+							mHandler.sendEmptyMessage(Global.MSG_RESUME);
 						}
 					});
 				}
@@ -412,7 +410,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 				showList(Global.ROOT_PATH, getSelectItemContent());
 				
 				intface_flag = DIRECTORY_1_INTFACE;    // 进入目录浏览界面	
-				onResume();
+				mHandler.sendEmptyMessage(Global.MSG_RESUME);
 			}
 			else if (getSelectItem() == Global.MAIN_TF_ID) { // 选中第二项  存储卡
 				if(true == getExtSDUSBPathHave(Global.USER_PATH))  // 存储卡存在
@@ -424,8 +422,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 					
 					showList(Global.USER_PATH, getSelectItemContent());
 					intface_flag = DIRECTORY_1_INTFACE;
-					onResume();
-					
+					mHandler.sendEmptyMessage(Global.MSG_RESUME);
 				}
 				else{   //tf卡不存在
 					//TtsUtils.getInstance().speak(getResources().getString(R.string.error_no_sdcard));
@@ -435,8 +432,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 						
 						@Override
 						public void onComplete() {
-							// TODO 自动生成的方法存根
-							onResume();
+							mHandler.sendEmptyMessage(Global.MSG_RESUME);
 						}
 					});
 				}
@@ -462,8 +458,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 						
 						@Override
 						public void onComplete() {
-							// TODO 自动生成的方法存根
-							onResume();
+							mHandler.sendEmptyMessage(Global.MSG_RESUME);
 						}
 					});
 				}
@@ -473,7 +468,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 		{
 			Global.debug("[@@@]    gFilePaths.size() ===="+ gFilePaths.size());
 			//File mFile = new File(gFilePaths.get(getSelectItem())); // 获取路径内容
-			File mFile = new File(gFilePaths.get(getSelectItem())+"/"+gFileName.get(getSelectItem())); // 获取路径内容
+			Global.debug("\r\n[MainActivity] gFilePaths.get(getSelectItem()) ==1= " + gFilePaths.get(getSelectItem()));
+			Global.debug("\r\n [MainActivity] gFilePaths.get(getSelectItem()) =2== " + gFilePaths.get(getSelectItem())+"/"+gFileName.get(getSelectItem()));
+			File mFile = new File(gFilePaths.get(getSelectItem()) /*+"/"+gFileName.get(getSelectItem())*/); // 获取路径内容
 			//Global.debug("[@@@]    gFilePaths.size() ===="+ gFilePaths.size());
 			if(mFile.isDirectory()){  // 是文件夹
 				// 保存反显 返回时 需要
@@ -750,7 +747,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 						gId = 0;
 					}
 					mMenuView.setSelectItem(gId);
-					onResume();
+					mHandler.sendEmptyMessage(Global.MSG_RESUME);
 				}
 			}
 		
@@ -770,7 +767,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 						gId = 0;
 					}
 					mMenuView.setSelectItem(gId);
-					onResume();
+					mHandler.sendEmptyMessage(Global.MSG_RESUME);
 				}
 			}
 		}	
@@ -924,7 +921,6 @@ public class MainActivity extends MenuActivity implements ShowView {
 			//Toast.makeText(MainActivity.this, getResources().getString(R.string.limits), Toast.LENGTH_SHORT).show();
 			//Global.getTts().speak(getResources().getString(R.string.limits));
 		}
-		//super.onResume();
 	}
 	
 	
@@ -966,11 +962,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 			if(mFile.exists()){
 				gFileName.add(musicinfo.filename);
 				gFilePaths.add(musicinfo.path);
-				//Global.debug("[**]gFileName.get(i)  == "+ gFileName.get(i));
-				//Global.debug("[**]gFilePaths.get(i)  == "+ gFilePaths.get(i));
-				//Global.debug(" showDbList ====1112222= Global.FristString ==" + Global.FristString);
+
 				if((Global.FristString != null) && (Global.FristString.contains(musicinfo.getPath()))){
-				//	selectId = allId;
+	
 					mSelectName = musicinfo.filename;
 				}
 				//allId ++;
@@ -994,8 +988,8 @@ public class MainActivity extends MenuActivity implements ShowView {
 		else if(flag == Global.SAVE_LIST_ID){
 			setTitle(getResources().getString(R.string.my_save));
 		}
-		//Global.debug("[**]gFilePaths.size()  =ww= "+ gFilePaths.size());
-		super.onResume();
+
+		mHandler.sendEmptyMessage(Global.MSG_RESUME);
 		return true;
 	}
 	
@@ -1170,8 +1164,6 @@ public class MainActivity extends MenuActivity implements ShowView {
 		else {
 			// 没有读写权限时
 			Global.debug("can not read === filePath =" + filePath);
-			//Toast.makeText(MainActivity.this, getResources().getString(R.string.limits), Toast.LENGTH_SHORT).show();
-			//Global.getTts().speak(getResources().getString(R.string.limits));
 		}
 		//super.onResume();
 	}
@@ -1261,7 +1253,6 @@ public class MainActivity extends MenuActivity implements ShowView {
 	private void testrawplay() {
 		// TODO 自动生成的方法存根
 		Handler mHandler = null;
-		MediaPlayer myPlayer = new MediaPlayer();//MyPlayer.getInstance(this,mHandler);
 		//((MyPlayer) myPlayer).setOnStateChangedListener((OnStateChangedListener) this);
 		
 		Global.debug("\r\nKeyEvent.KEYCODE_0  ============ ");
@@ -1277,7 +1268,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 		
 		Global.debug("\r\n[4444] gFilename =====fileDescriptor.getFileDescriptor()==" + fd.getFileDescriptor());
 
-		try {
+	/*	try {
 			myPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			myPlayer.setDataSource(fd.getFileDescriptor());
 			myPlayer.prepare();
@@ -1291,7 +1282,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
-		}
+		}*/
 		Global.debug("\r\n startPlay2   ==========666==");
 		
 		//((MyPlayer) myPlayer).startPlayback2(((MyPlayer) myPlayer).playProgress(), fd.getFileDescriptor(), true);
@@ -1473,4 +1464,15 @@ public class MainActivity extends MenuActivity implements ShowView {
 		String name ; // // 菜单名称
 		String path ; // // 图片
 	}
+	
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_RESUME){
+				onResume();
+			}
+			
+			super.handleMessage(msg);
+		}	
+	};
 }

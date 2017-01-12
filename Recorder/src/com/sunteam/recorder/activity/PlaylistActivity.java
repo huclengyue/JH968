@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -97,7 +99,8 @@ public class PlaylistActivity extends MenuActivity {
 	@SuppressWarnings("unchecked")
 	private void enterPlayActivity() {
 		if (receiver.getLevel() < 10) {
-			Global.showToast(PlaylistActivity.this, R.string.cannot_play, null, -1);
+			Global.showToast(PlaylistActivity.this, R.string.cannot_play, mHandler, Global.MSG_ONRESUM);
+			
 		} else {
 			Intent intent = new Intent(PlaylistActivity.this, PlayActivity.class);
 			String selectedText = getSelectItemContent();
@@ -162,22 +165,9 @@ public class PlaylistActivity extends MenuActivity {
 			}
 			listView.setSelectionFromTop(getSelectItem(), itemHeight
 					* (getSelectItem() % (visibleItemCount == 0 ? 1 : visibleItemCount)));
-			// listView.setSelection(playListAdapter.getSelectItem());
-			// Global.getTts().stop();
-			// Global.getTts().speak(
-			// mMenuList.get(playListAdapter.getSelectItem()),
-			// TextToSpeech.QUEUE_FLUSH, null);
 		} else {
 			mMenuView.down();
-			// Global.showToast(PlaylistActivity.this,
-			// R.string.turn2start,mHandler,0);
-			// playListAdapter.setSelectItem(0, 1);
-			// listView.setSelection(playListAdapter.getSelectItem());
-			// Global.getTts().speak(
-			// mMenuList.get(playListAdapter.getSelectItem()),
-			// TextToSpeech.QUEUE_ADD, null);
 		}
-
 	}
 
 	@Override
@@ -243,5 +233,15 @@ public class PlaylistActivity extends MenuActivity {
 		}
 		getSelectItemContent(0);
 	}
-
+	// ´¦Àíµ¯¿ò
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			
+			if(msg.what == Global.MSG_ONRESUM){
+				onResume();
+			}
+			super.handleMessage(msg);
+		}
+	};
 }

@@ -14,6 +14,8 @@ import com.sunteam.music.utils.Global;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 
 public class MenuPalyMenuActivity extends MenuActivity {
@@ -71,13 +73,14 @@ public class MenuPalyMenuActivity extends MenuActivity {
 					
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
+					/*	// TODO 自动生成的方法存根
 						Intent intent = new Intent();
 						Bundle bundle = new Bundle();	//新建 bundl
 						bundle.putInt("selectItem", getSelectItem());
 						intent.putExtras(bundle); // 参数传递
 						setResult(Global.PLAY_MENU_PLAY_FLAG, intent);
-						finish();
+						finish();*/
+						mHandler.sendEmptyMessage(Global.MSG_MENU_BACK);
 					}
 				});
 			}
@@ -94,14 +97,7 @@ public class MenuPalyMenuActivity extends MenuActivity {
 					
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
-						Global.debug("---222---" + getResources().getString(R.string.set_ok));
-						Intent intent = new Intent();
-						Bundle bundle = new Bundle();	//新建 bundl
-						bundle.putInt("selectItem", getSelectItem());
-						intent.putExtras(bundle); // 参数传递
-						setResult(Global.PLAY_MENU_PLAY_FLAG, intent);
-						finish();
+						mHandler.sendEmptyMessage(Global.MSG_MENU_BACK);
 					}
 				});
 				Global.debug("---qqq---" + getResources().getString(R.string.set_ok));
@@ -164,4 +160,28 @@ public class MenuPalyMenuActivity extends MenuActivity {
     	return true;
 	}
 	
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_MENU_BACK){   // 音乐播放结束消息
+				goBack();
+			}
+			else if(msg.what == Global.MSG_RESUME){
+				onResume();
+			}
+			
+			super.handleMessage(msg);
+		}
+	};
+	
+	private void goBack() {
+
+		Global.debug("---222---" + getResources().getString(R.string.set_ok));
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();	//新建 bundl
+		bundle.putInt("selectItem", getSelectItem());
+		intent.putExtras(bundle); // 参数传递
+		setResult(Global.PLAY_MENU_PLAY_FLAG, intent);
+		finish();
+	}	
 }

@@ -46,7 +46,7 @@
 	<string name="no_file">无文件</string>	
 	<string name="invalid_file">无效录音文件，不保存</string>	
 	<string name="low_battery">电池电量低，请及时充电</string>
-	<string name="cannot_play">电池电量低，无法播放音频</string>
+	<string name="cannot_play">电池电量低，无法播放</string>
 	<string name="stop_record">电池电量低，停止录音</string>
 	<string name="cannot_record">电池电量低，无法录音</string>
 	<string name="not_enough_space_stop_record">剩余空间不足，停止录音</string>

@@ -46,7 +46,7 @@
 	<string name="no_file">無文件</string>	
 	<string name="invalid_file">無效錄音文件，不保存</string>	
 	<string name="low_battery">電池電量低，請及時充電</string>
-	<string name="cannot_play">電池電量低，無法播放音頻</string>
+	<string name="cannot_play">電池電量低，無法播放</string>
 	<string name="stop_record">電池電量低，停止錄音</string>
 	<string name="cannot_record">電池電量低，無法錄音</string>
 	<string name="not_enough_space_stop_record">剩餘空間不足，停止錄音</string>

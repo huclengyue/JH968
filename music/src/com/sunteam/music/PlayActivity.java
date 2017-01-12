@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
+import android.nfc.cardemulation.OffHostApduService;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -226,10 +227,6 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		String FilePath = gPlayListPaths.get(currentIndex);
 //		Global.debug("onCreate =====33344444=== FilePath ="+FilePath);
 	
-		//Global.debug("\r\n[22222222] gFilename =======");
-		//AssetManager assetManager = Context.getAssets();
-		//AssetFileDescriptor fileDescriptor;
-	
 		myPlayer.startPlayback(myPlayer.playProgress(), FilePath ,true);		
 		play_st.setBackgroundResource(R.drawable.play);
 		//Global.debug("onCreate =====344444===");
@@ -294,12 +291,10 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			@Override
 			public void onComplete() {
 				// TODO 自动生成的方法存根
-				if(gPlay_Mode != Global.MENU_PLAY_MODE_SINGLE && (gPlayListName.size() != 1)){
-					next();
-				}
+				mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_ERROR);
+				
 			}
-		});
-		
+		});	
 	}
 	@Override  
     protected void onResume() {  
@@ -308,7 +303,12 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
         receiver=new BatteryBroadcastReciver();  
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);  
         registerReceiver(receiver, intentFilter);
-        acquireWakeLock(this);
+        if(myPlayer.state() == MyPlayer.PLAYING_PAUSED_STATE){
+			releaseWakeLock();   // 暂停时 可以休眠
+		}
+        else{
+        	acquireWakeLock(this);
+        }
     }  
 	
 	protected void onDestroy() {
@@ -366,17 +366,13 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		
 		if(keyCode == KeyEvent.KEYCODE_BACK){  // 退出
 			
-		/*	myPlayer.stopPlayback();
-			Intent intent = new Intent();
-			intent.putExtra("filename", gPlayListName.get(currentIndex));
-			setResult(Global.PLAY_FLAG, intent);
-			finish(); */
 			if(gAB_flag == true){
 				gAB_flag = false;
+				playABMode.setVisibility(View.INVISIBLE);
+				
 				gAB_A = 0;
 				gAB_B = 0;
 				setPalyst(false);
-				playABMode.setVisibility(View.INVISIBLE);  // 不显示
 				PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.mode_off));
 				mDialog.show();
 				
@@ -384,8 +380,8 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 					
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
-						setPalyst(true);
+						mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_AB_CANEL);
+						
 					}
 				});	
 			}
@@ -442,6 +438,9 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			return true;
 		}
 		else if(keyCode == KeyEvent.KEYCODE_1){   // 数字 0  A
+			if(myPlayer.state() == MyPlayer.IDLE_STATE||myPlayer.state()==MyPlayer.PLAYING_PAUSED_STATE){
+				return true;
+			}
 			Global.debug("0000000000000000000000000000000000000000");
 			setPalyst(false);
 			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.mode_A));
@@ -450,17 +449,16 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 				
 				@Override
 				public void onComplete() {
-					// TODO 自动生成的方法存根
-					gAB_A = myPlayer.progress();
-					playABMode.setVisibility(View.VISIBLE);
-					playABMode.setBackgroundResource(R.drawable.loop_a);
-					setPalyst(true);
+					mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_A);
 				}
 			});
 			return true;
 		}
 		else if(keyCode == KeyEvent.KEYCODE_3){   // 数字3 B
 			Global.debug("3333333333333333333333333333333333333333333");
+			if(myPlayer.state() == MyPlayer.IDLE_STATE||myPlayer.state()==MyPlayer.PLAYING_PAUSED_STATE){
+				return true;
+			}
 			setPalyst(false);
 			PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.mode_AB));
 			mDialog.show();
@@ -468,13 +466,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 				
 				@Override
 				public void onComplete() {
-					// TODO 自动生成的方法存根
-					gAB_flag = true;
-					gAB_B = myPlayer.progress();
-					myPlayer.SeekToTime(gAB_A);
-					playABMode.setVisibility(View.VISIBLE);
-					playABMode.setBackgroundResource(R.drawable.loop_ab);
-					setPalyst(true);
+					mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_B);
 				}
 			});		
 			return true;
@@ -496,11 +488,10 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 					
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
-						setPalyst(true);
+						mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_AB_CANEL);
+						
 					}
 				});	
-				
 			}
 			return true;
 		}
@@ -558,15 +549,11 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			play_st.setBackgroundResource(R.drawable.pause);
 		}
 	}
-
 	
 	public static final long INTERVAL = 2000L; //?ж?????keydown???????
 	private static long lastDownTime = 0L; //?????down?????
 	 
-	 /**
-	  * ?ж?????????????,???true?????false
-	  * @return
-	  */
+
 	 public static boolean filter(){
 		 Log.e("time", (System.currentTimeMillis() - lastDownTime)+"");
 		 long interval = System.currentTimeMillis() - lastDownTime;
@@ -599,7 +586,6 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
     			currentIndex--;   
     		}else{  
     			currentIndex = gPlayListName.size()-1;
-        	//Global.showToast(PlayActivity.this, R.string.turn2end,null,-1);
     		}
     	}
         else if(gPlay_Mode == Global.MENU_PLAY_MODE_RAND){
@@ -621,7 +607,6 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
     	else if(gPlay_Mode == Global.MENU_PLAY_MODE_RAND){
     		currentIndex = new Random().nextInt(gPlayListName.size());
     	}
-    	 
         switchAudio();
     }
     
@@ -660,7 +645,8 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 					
 					@Override
 					public void onComplete() {
-						next();  // 下一首
+						//next();  // 下一首
+						mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_NEXT);
 					}
 				});
 				//Global.showToast(this, R.string.speed2end, null,-1);
@@ -676,8 +662,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			}					
 		}else{
 			myPlayer.speed();
-		}			
-	
+		}
     }
 
     // 快退 10S
@@ -696,8 +681,8 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 					
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
-						switchAudio();;  // 下一首
+						//switchAudio();;  // 下一首
+						mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_SWITCH);
 					}
 				});
 				//Global.showToast(this, R.string.speed2end, null,-1);
@@ -705,25 +690,16 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 				mHandler.removeCallbacks(switchClose);		//
 				mHandler.postDelayed(switchClose, 2000);	//
 				
-				
 				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.file_start));
 				mPromptDialog.show();
 				mPromptDialog.setPromptListener(new PromptListener() {
 					
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
-						switchAudio();;  // 下一首
+						//switchAudio();;  // 下一首
+						mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_SWITCH);
 					}
 				});
-/*				
-				if(!filter()){ //
-					isClose = true;
-				}else{	//
-					//Global.showToast(this, R.string.speed2end, null,-1);
-					isClose = false;
-				}
-				*/
 			}
     	}
     	else{
@@ -769,9 +745,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if(intent.getAction().equals(Intent.ACTION_BATTERY_CHANGED)){
-	            	//
 		           int level=intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-//		            //
 //		            int totalCapacity=intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
 		           int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 		           boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
@@ -779,8 +753,8 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		           if(level<10){
 	            		if(myPlayer.state() == MyPlayer.PLAYING_STATE){
 	            			//Global.showToast(PlayActivity.this, R.string.cannot_play,mHandler,0);
-	            			myPlayer.pausePlayback();
-	            			
+	            		//	myPlayer.pausePlayback();
+	            			myPlayer.stopPlayback();
 	            			PromptDialog mpDialog = new PromptDialog(PlayActivity.this, getResources().getString(R.string.bat_lv0));
 	            			mpDialog.show();
 	            			mpDialog.setPromptListener(new PromptListener() {
@@ -788,12 +762,11 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 								@Override
 								public void onComplete() {
 									// TODO 自动生成的方法存根
-									Key_back();
+								//	Key_back();
+									mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_BACK);
 									
 								}
 							});
-	            			
-	            			
 	            		}
 	            }else if(level<20&&!isCharging){
 	            	//Global.showToast(PlayActivity.this, R.string.low_battery,null,-1);
@@ -1107,4 +1080,54 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
         }            
     };
 	
+	private Handler mHandler_Promt = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_PLAY_A){   // 音乐播放结束消息
+				showAPromptDialog();
+			}else if(msg.what == Global.MSG_PLAY_B){
+				showBPromptDialog();		
+			}else if(msg.what == Global.MSG_PLAY_AB_CANEL){
+				showABCanelPromptDialog();
+			}else if(msg.what == Global.MSG_RESUME){
+				onResume();
+			}else if(msg.what == Global.MSG_PLAY_SWITCH){
+				switchAudio();
+			}else if(msg.what == Global.MSG_PLAY_NEXT){
+				next();
+			}else if(msg.what == Global.MSG_PLAY_ERROR){
+				if(gPlay_Mode != Global.MENU_PLAY_MODE_SINGLE && (gPlayListName.size() != 1)){
+					next();
+				}
+			}
+			else if(msg.what == Global.MSG_PLAY_BACK){
+				Key_back();
+			}
+			
+			
+			super.handleMessage(msg);
+		}
+	};
+	
+	private void showABCanelPromptDialog() {
+		
+		setPalyst(true);
+	}
+	
+	private void showBPromptDialog() {
+		gAB_flag = true;
+		gAB_B = myPlayer.progress();
+		myPlayer.SeekToTime(gAB_A);
+		playABMode.setVisibility(View.VISIBLE);
+		playABMode.setBackgroundResource(R.drawable.loop_ab);
+		setPalyst(true);
+		
+	}
+
+	private void showAPromptDialog() {
+		gAB_A = myPlayer.progress();
+		playABMode.setVisibility(View.VISIBLE);
+		playABMode.setBackgroundResource(R.drawable.loop_a);
+		setPalyst(true);
+	}	
 }

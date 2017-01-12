@@ -194,8 +194,12 @@ Runnable finishActivityDelayed = new Runnable() {
         //创建一个过滤器  
         IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);  
         registerReceiver(receiver, intentFilter);  
-        
-        Global.acquireWakeLock(this);   // 禁止休眠
+        if(myPlayer.state() == MyPlayer.PLAYING_PAUSED_STATE){
+			Global.releaseWakeLock();   // 暂停时 可以休眠
+		}
+        else{
+        	Global.acquireWakeLock(this);   // 禁止休眠
+        }
     }  
       
     @Override  

@@ -60,6 +60,18 @@ public class Global {
 	public static final int MSG_DELALL_OK = 3;   // 文件 已清空
 	public static final int MSG_RESUME = 4;   // 刷新
 	
+	public static final int MSG_PLAY_A = 5;   // 刷新 A点选定
+	public static final int MSG_PLAY_B = 6;   // 刷新 B点选定
+	public static final int MSG_PLAY_AB_CANEL = 7;   // 刷新 B点选定
+	
+	public static final int MSG_PLAY_SWITCH = 8;   // 文件播放错误  MSG_PLAY_NEXT
+	public static final int MSG_PLAY_NEXT = 9;
+	public static final int MSG_PLAY_ERROR = 10;
+	public static final int MSG_PLAY_BACK = 11;
+	
+	
+	public static final int MSG_MENU_BACK = 12;  // 返回界面
+	
 	public static int MAX_RANK = 128;// 最大级数
 	
 	public static final String MUSIC_CONFIG_FILE = "music_cfg.xml";   // 保存播放模式

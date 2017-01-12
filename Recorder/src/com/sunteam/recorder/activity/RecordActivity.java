@@ -109,8 +109,7 @@ public class RecordActivity extends BaseActivity {
 		@Override
 		public void handleMessage(Message msg) {
 			if (msg.what == 0) {
-				Global.showToast(RecordActivity.this, R.string.saveAndexit,
-						RecordHandler, 0);
+				Global.showToast(RecordActivity.this, R.string.saveAndexit,	RecordHandler, 0);
 			}
 			super.handleMessage(msg);
 		}
@@ -225,8 +224,7 @@ public class RecordActivity extends BaseActivity {
 					TtsUtils.getInstance().stop();
 					mState = state_no_record;
 					// goback(); // houding@20160902 统一在RecordHandler中处理
-					Global.showToast(RecordActivity.this, R.string.invalid_file,
-							RecordHandler, 2);
+					Global.showToast(RecordActivity.this, R.string.invalid_file, RecordHandler, 2);
 				}
 			}
 		});
@@ -245,11 +243,9 @@ public class RecordActivity extends BaseActivity {
 
 		batteryReceiver = new BatteryBroadcastReciver();
 		// 创建一个过滤器
-		IntentFilter intentFilter = new IntentFilter(
-				Intent.ACTION_BATTERY_CHANGED);
+		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+		
 		registerReceiver(batteryReceiver, intentFilter);
-		
-		
 	}
 
 	@Override
@@ -269,8 +265,7 @@ public class RecordActivity extends BaseActivity {
 				&& action == KeyEvent.ACTION_UP) {
 			if (mState == state_no_record) {
 				if (batteryReceiver.getLevel() < 10) {// 电量低情况
-					Global.showToast(RecordActivity.this,
-							R.string.cannot_record, null, -1);
+					Global.showToast(RecordActivity.this, R.string.cannot_record, mHandler, Global.MSG_ONRESUM);
 				} else if (leftSpace <= 0) { // 空间不足情况
 					speakNotRecord();
 				} else {
@@ -280,7 +275,6 @@ public class RecordActivity extends BaseActivity {
 
 					TtsUtils.getInstance().setCompletedListener(
 							new TtsCompletedListener() {
-
 								@Override
 								public void onCompleted(String arg0) {
 									RecordHandler.sendEmptyMessage(1);
@@ -384,8 +378,7 @@ public class RecordActivity extends BaseActivity {
 	private void speakNotRecord() {
 		TtsUtils.getInstance().stop();
 		if (!isFinishing()) {
-			Global.showToast(RecordActivity.this,
-					R.string.not_enough_space_cannot_record, RecordHandler, 0);
+			Global.showToast(RecordActivity.this,R.string.not_enough_space_cannot_record, RecordHandler, 0);
 		}
 	}
 
@@ -647,9 +640,7 @@ public class RecordActivity extends BaseActivity {
 			tvTime.setText(timeStr);
 			uiHandler.postDelayed(mUpdateTimer, 1000);
 			if (lefttime <= 0) {
-				Global.showToast(RecordActivity.this,
-						R.string.not_enough_space_stop_record, batteryHandler,
-						0);
+				Global.showToast(RecordActivity.this, R.string.not_enough_space_stop_record, batteryHandler, 0);
 				stop();
 				// goback(); // houding@20160902 统一在RecordHandler中处理
 			}
@@ -673,15 +664,13 @@ public class RecordActivity extends BaseActivity {
 				// 取得系统总电量
 				// int total=intent.getIntExtra(BatteryManager.EXTRA_SCALE,
 				// 100);
-				int status = intent
-						.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+				int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 				boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
 						|| status == BatteryManager.BATTERY_STATUS_FULL;
 
 				if (level < 10) {
 					if (mState == 0) {
-						Global.showToast(RecordActivity.this,
-								R.string.stop_record, batteryHandler, 0);
+						Global.showToast(RecordActivity.this, R.string.stop_record, batteryHandler, 0);
 						stop();
 						goback();
 					}

@@ -54,6 +54,7 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 				if(gSelectID == Global.MENU_DEL_ALL){
 					ask = getResources().getString(R.string.del_all_ask);
 				}
+				Global.debug("\r\n[onKeyUp] ===== gSelectID =" + gSelectID);
 				ConfirmDialog mcm = new ConfirmDialog(this, ask, 
 						getResources().getString(R.string.yes), getResources().getString(R.string.no));
 				mcm.show();
@@ -88,7 +89,7 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 
 	@Override
 	public void doConfirm() {
-
+		Global.debug("\r\n[doConfirm] ===== gSelectID =" + gSelectID);
 		if(gSelectID == Global.MENU_DEL_FILE){
 			MusicDelPlayList(gPath, gFileName);
 			mHandler.sendEmptyMessage(Global.MSG_DEL_OK);
@@ -99,18 +100,10 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 		}
 	}
 
-
 	@Override
 	public void onComplete() {
-		// TODO 自动生成的方法存根
-		Intent intent = new Intent();
-		Bundle bundle = new Bundle();	//新建 bundl
-		bundle.putInt("selectItem", gSelectID);
-		intent.putExtras(bundle); // 参数传递
-		setResult(Global.PLAY_MENU_FLAG, intent);
-		finish();
+		mHandler.sendEmptyMessage(Global.MSG_MENU_BACK);
 	}
-	
 	
 	// 删除最近浏览 列表文件
 	public boolean MusicDelPlayList(String path, String fileName)
@@ -163,8 +156,8 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 		GetDbInfo dbMusicInfo = new GetDbInfo( this ); // 打开数据库
 		
     	dbMusicInfo.detele(Global.PLAY_LIST_ID);
-    	PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del_all));
-		mDialog.show();				
+//    	PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.file_del_all));
+//		mDialog.show();				
 	}
 	// 增加我的收藏 列表文件
 	public Boolean MusicAddSaveList()
@@ -225,23 +218,39 @@ public class PlayMenuActivity extends MenuActivity implements PromptListener , C
 		@Override
 		public void handleMessage(Message msg) {
 			if(msg.what == Global.MSG_NO_FILE){   // 音乐播放结束消息
+				Global.debug("\r\n [mHandler] ====== Global.MSG_DELALL_OK ="+ Global.MSG_NO_FILE);
 				showNoFilePromptDialog();
 			}else if(msg.what == Global.MSG_DEL_OK){
 				showDelOkPromptDialog();		
 			}else if(msg.what == Global.MSG_DELALL_OK){
+				Global.debug("\r\n [mHandler] ====== Global.MSG_DELALL_OK ="+ Global.MSG_DELALL_OK);
 				showDelAllPromptDialog();
 			}else if(msg.what == Global.MSG_RESUME){
 				onResume();
 			}
+			else if(msg.what == Global.MSG_MENU_BACK){
+				goBack();
+			}
 			
 			super.handleMessage(msg);
-		}	
+		}
 	};
+	
+	private void goBack() {
+		
+		Global.debug("\r\n [onComplete] ==== 1111===== ");
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();	//新建 bundl
+		bundle.putInt("selectItem", gSelectID);
+		intent.putExtras(bundle); // 参数传递
+		setResult(Global.PLAY_MENU_FLAG, intent);
+		finish();
+	}	
 	// 显示无文件
 	private void showNoFilePromptDialog() {
-		PromptDialog mDialog1 = new PromptDialog(PlayMenuActivity.this, getResources().getString(R.string.no_file));
+		PromptDialog mDialog1 = new PromptDialog(this, getResources().getString(R.string.no_file));
 		mDialog1.show();
-		mDialog1.setPromptListener(PlayMenuActivity.this);
+		mDialog1.setPromptListener(this);
 	}
 	// 文件删除提示
 	private void showDelOkPromptDialog() {
