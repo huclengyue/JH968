@@ -371,7 +371,7 @@ public class MainActivity extends BaseActivity {
 				getLunarMon(gyear, gmonth, gday)+
 				getLunarDay(gyear, gmonth, gday);
 			}
-			else if(select_id == SELECT_MONTH_ID)
+			else if(select_id == SELECT_MONTH_ID || select_id == SELECT_DAY_ID)
 			{
 			//	str = getResources().getString(R.string.solarcalendar);
 			//	str = str + ",";

@@ -12,6 +12,8 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -130,9 +132,7 @@ public class Alarm_CountDownSetActivity extends BaseActivity {
 					
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
-						//onResume();
-						showInfo();
+						mHandler.sendEmptyMessage(Global.MSG_COUNTDOWN_ERROR);
 					}
 				});
 			}
@@ -279,5 +279,21 @@ public class Alarm_CountDownSetActivity extends BaseActivity {
 		else{
 			tv3.setBackgroundColor(mTools.getBackgroundColor());
 		}
+	}
+	
+    private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_COUNTDOWN_ERROR){   // 音乐播放结束消息
+				showCountDownErrorPromptDialog();
+			}
+			
+			super.handleMessage(msg);
+		}
+	};
+	
+	
+	private void showCountDownErrorPromptDialog() {
+		showInfo();
 	}
 }

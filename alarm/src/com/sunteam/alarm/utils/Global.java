@@ -41,6 +41,8 @@ public class Global {
 	public static int COUNT_DOWN_ID3 = 3;
 	public static int COUNT_DOWN_ID4 = 4;
 	
+	public static int MSG_COUNTDOWN_ERROR = 1;
+	
 	public static int TIME_LEN0 = 30*60;
 	public static int TIME_LEN1 = 60*60;
 	public static int TIME_LEN2 = 90*60;
