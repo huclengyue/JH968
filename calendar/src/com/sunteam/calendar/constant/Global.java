@@ -38,12 +38,30 @@ public class Global {
 	public static final int MSG_DEL_ALL = 1;  // 关delall_Remind 提示
 	public static final int MSG_NO_REMIND = 2;  // 无提醒 _Remind 提示
 	public static final int MSG_NO_REMIND_TOMAIN = 3;  // 无提醒 _Remind返回主菜单 提示
+	public static final int MSG_TOMAIN = 15;  //返回主菜单 提示
 	public static final int MSG_DEL = 4;  // 删除提醒
 	public static final int MSG_ONRESUM = 5;  // 刷新界面
 	
 	public static final int MSG_TO_MAIN = 6;  // 刷新界面
 	
 	public static final int MSG_SETOK = 7;  // 设置成功
+	
+	public static final int MSG_START_RECORD = 8;  // 开始录音
+	public static final int MSG_START_RECORD_NO = 9;  // 取消录音
+	public static final int MSG_SAVE_EXIT = 10;  // 保存退出
+	
+	public static final int MSG_TIME_AFTER_YES = 11;  // 保存退出
+	public static final int MSG_TIME_AFTER_NO = 12;  // 保存退出
+	
+	public static final int MSG_SAVE_UPDATE_YES = 13;  // 保存退出
+	public static final int MSG_SAVE_UPDATE_NO = 14;  // 保存退出
+	
+	public static final int MSG_FINISH = 16;  // 刷新界面
+	public static final int MSG_TIME_AFTER = 17;  // 保存退出
+	
+	public static final int MSG_DEL_OK = 18;  // 保存退出
+	
+	public static final int MSG_MSG_NO_REMIND_TOMAIN_OK = 19;  // 保存退出
 	
 	public static void debug(String s) {
 		Log.d(TAG, s);

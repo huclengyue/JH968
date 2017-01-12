@@ -12,11 +12,13 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
-
+// 时间设置界面
 public class Alarm_SettingActivity extends BaseActivity {
 	
 	private int gInterfaceFlag = 0;   // 界面标志
@@ -49,14 +51,14 @@ public class Alarm_SettingActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.alarm_setting);
 		
-		Global.debug("AlarmSettingActivity ======111===\r\n");
-		
+		//Global.debug("AlarmSettingActivity ======111===\r\n");
+		Global.debug("[AlarmSettingActivity] ==     onCreate == \r\n");
 
 		Intent intent=getIntent();	//获取Intent
 		Bundle bundle=intent.getExtras();	//获取 Bundle
 		
 		gSelectID = bundle.getInt("ID");  // 获取 反显位置
-		Global.debug("\r\n[^^^^^www^^^^^] gSelectID ===== " + gSelectID);
+	//	Global.debug("\r\n[^^^^^www^^^^^] gSelectID ===== " + gSelectID);
 		gInterfaceFlag = bundle.getInt("FLAG"); // 获取界面标志
 		Global.debug("gSelectID=="+ gSelectID + " gInterfaceFlag == "+ gInterfaceFlag);
 		
@@ -78,7 +80,6 @@ public class Alarm_SettingActivity extends BaseActivity {
 	
 	// 初始化相关
 	private void Init() {
-		// TODO 自动生成的方法存根
 		Tools mTools = new Tools(this);
 		
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(mTools.getBackgroundColor()));
@@ -128,10 +129,8 @@ public class Alarm_SettingActivity extends BaseActivity {
 				title = getResources().getString(R.string.time_title);
 				
 			}			
-			//tv1.setTextColor(new Tools(this).getFontColor()); // 设置颜色反显	
+			
 			tv1.setBackgroundColor(new Tools(this).getHighlightColor());
-			
-			
 		}
 		else if(gInterfaceFlag == Global.ANNIVERSARY_INFO_INTERFACE){    // 纪念日
 			title = getResources().getString(R.string.time_title);
@@ -144,9 +143,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 			}
 			
 			gFlag = FLAG1;	
-			//tv1.setTextColor(new Tools(this).getFontColor()); // 设置颜色反显
 			tv1.setBackgroundColor(new Tools(this).getHighlightColor());
-			//showInfo();
 		}
 		else if(gInterfaceFlag == Global.COUNTDOWN_INFO_INTERFACE){
 			
@@ -162,7 +159,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 		
 		// 确认键
 		if(keyCode == KeyEvent.KEYCODE_ENTER ||
-				keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
+				keyCode == KeyEvent.KEYCODE_DPAD_CENTER)  // 确认键
 		{			
 			PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.set_ok));
 			mPromptDialog.show();
@@ -170,43 +167,13 @@ public class Alarm_SettingActivity extends BaseActivity {
 				
 				@Override
 				public void onComplete() {
-					
-					Intent intent = new Intent();	//新建 INtent
-					Bundle bundle = new Bundle();	//新建 bundle
-					
-					Global.debug("onKeyDown gmonth === " + gMonth);
-					Global.debug("onKeyDown gday === " + gDay);
-					
-					Global.debug("onKeyDown gMin === " + gMin);
-					Global.debug("onKeyDown gHour === " + gHour);
-					
-					if(gInterfaceFlag == Global.ALARM_INFO_INTERFACE)  // 闹钟
-					{
-						bundle.putInt("HOUR", gHour);
-						bundle.putInt("MIN", gMin);
-
-					}
-					else if(gInterfaceFlag == Global.ANNIVERSARY_INFO_INTERFACE){	// 纪念日
-						bundle.putInt("MONTH", gMonth);
-						bundle.putInt("DAY", gDay);
-						
-						bundle.putInt("HOUR", gHour);
-						bundle.putInt("MIN", gMin);
-					}
-					bundle.putInt("FLAG", gInterfaceFlag);
-					bundle.putInt("SELECTID", gSelectID);
-					
-					Global.debug("\r\n[^^^^^^^^^^] gSelectID ===== " + gSelectID);
-					intent.putExtras(bundle); // 参数传递
-					setResult(Global.FLAG_CODE,intent);	//返回界面
-					
-					finish();
+					mHandler.sendEmptyMessage(Global.MSG_SETTING_BACK);
 				}
 			});
 					
 			return true;
 		}
-		else if(keyCode == KeyEvent.KEYCODE_DPAD_UP){
+		else if(keyCode == KeyEvent.KEYCODE_DPAD_UP){  // 上键
 
 //			Global.debug("KEYCODE_DPAD_UP === 1111");
 			if(gSelectID == 0 && (gInterfaceFlag == Global.ALARM_INFO_INTERFACE)){  // 闹钟
@@ -265,9 +232,7 @@ public class Alarm_SettingActivity extends BaseActivity {
 			}
 			showInfo(false);
 		}
-		else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
-			
-//			Global.debug("KEYCODE_DPAD_UP === 1111");
+		else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){  // 下键
 			if(gSelectID == 0 && (gInterfaceFlag == Global.ALARM_INFO_INTERFACE)){
 				if(gFlag == FLAG1){  // 小时
 					if(gHour < 23){
@@ -325,18 +290,16 @@ public class Alarm_SettingActivity extends BaseActivity {
 			showInfo(false);
 		}
 		else if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
-	//		Global.debug("LEFT RIHKT  gFlag == " + gFlag);
 			if(gFlag == FLAG1){
 				gFlag = FLAG2;
 			}
 			else if(gFlag == FLAG2){
 				gFlag = FLAG1;
 			}
-	//		Global.debug("LEFT RIHKT  gFlag =11== " + gFlag);
 			showInfo(false);
 		}
 		else if(keyCode == KeyEvent.KEYCODE_BACK){ // 返回
-			Global.debug("{}        gInterfaceFlag === "+ gInterfaceFlag);
+//			Global.debug("{}        gInterfaceFlag === "+ gInterfaceFlag);
 			if(gInterfaceFlag == Global.ALARM_INFO_INTERFACE)  // 闹钟
 			{
 				if((gHour != gHour_bk || gMin != gMin_bk) && (Global.ALARM_SET_TIME == gSelectID))  // 有改变
@@ -349,30 +312,17 @@ public class Alarm_SettingActivity extends BaseActivity {
 						
 						@Override
 						public void doConfirm() {  // 保存数据
-							
-							Intent intent = new Intent();	//新建 INtent
-							Bundle bundle = new Bundle();	//新建 bundle
-							Global.debug("onKeyDown gMin === " + gMin);
-							Global.debug("onKeyDown gHour === " + gHour);
-							
-							bundle.putInt("HOUR", gHour);
-							bundle.putInt("MIN", gMin);	
-							bundle.putInt("FLAG", gInterfaceFlag);
-							bundle.putInt("SELECTID", gSelectID);
-							intent.putExtras(bundle); // 参数传递
-							setResult(Global.FLAG_CODE,intent);	//返回界面
-							finish();
+							mHandler.sendEmptyMessage(Global.MSG_SETTING_ASK_TIMEBACK);
 						}
 						
 						@Override
 						public void doCancel() {   // 直接退出
-							// TODO 自动生成的方法存根
-							finish();
+							mHandler.sendEmptyMessage(Global.MSG_SETTING_FINISH);
 						}
 					});
 				}
 				else {
-					finish();
+					mHandler.sendEmptyMessage(Global.MSG_SETTING_FINISH);
 				}
 			}
 			else if(gInterfaceFlag == Global.ANNIVERSARY_INFO_INTERFACE){	// 纪念日
@@ -384,33 +334,12 @@ public class Alarm_SettingActivity extends BaseActivity {
 						
 						@Override
 						public void doConfirm() {
-
-							Intent intent = new Intent();	//新建 INtent
-							Bundle bundle = new Bundle();	//新建 bundle
-							
-							Global.debug("onKeyDown gmonth === " + gMonth);
-							Global.debug("onKeyDown gday === " + gDay);
-							
-							Global.debug("onKeyDown gMin === " + gMin);
-							Global.debug("onKeyDown gHour === " + gHour);
-							
-							bundle.putInt("MONTH", gMonth);
-							bundle.putInt("DAY", gDay);
-							
-							bundle.putInt("HOUR", gHour);
-							bundle.putInt("MIN", gMin);
-							
-							bundle.putInt("FLAG", gInterfaceFlag);
-							bundle.putInt("SELECTID", gSelectID);
-							intent.putExtras(bundle); // 参数传递
-							setResult(Global.FLAG_CODE,intent);	//返回界面
-							finish();
+							mHandler.sendEmptyMessage(Global.MSG_SETTING_ASK_DATEBACK);	
 						}
 						
 						@Override
 						public void doCancel() {
-							// TODO 自动生成的方法存根
-							finish();
+							mHandler.sendEmptyMessage(Global.MSG_SETTING_FINISH);
 						}
 					});
 					
@@ -422,36 +351,17 @@ public class Alarm_SettingActivity extends BaseActivity {
 						
 						@Override
 						public void doConfirm() {
-							Intent intent = new Intent();	//新建 INtent
-							Bundle bundle = new Bundle();	//新建 bundle
-							
-							Global.debug("onKeyDown gmonth === " + gMonth);
-							Global.debug("onKeyDown gday === " + gDay);
-							
-							Global.debug("onKeyDown gMin === " + gMin);
-							Global.debug("onKeyDown gHour === " + gHour);
-							
-							bundle.putInt("MONTH", gMonth);
-							bundle.putInt("DAY", gDay);
-							
-							bundle.putInt("HOUR", gHour);
-							bundle.putInt("MIN", gMin);
-					
-							bundle.putInt("FLAG", gInterfaceFlag);
-							bundle.putInt("SELECTID", gSelectID);
-							intent.putExtras(bundle); // 参数传递
-							setResult(Global.FLAG_CODE,intent);	//返回界面
-							finish();
+							mHandler.sendEmptyMessage(Global.MSG_SETTING_ASK_DATEBACK);
 						}
 						
 						@Override
 						public void doCancel() {
-							finish();
+							mHandler.sendEmptyMessage(Global.MSG_SETTING_FINISH);
 						}
 					});
 				}
 				else {
-					finish();
+					mHandler.sendEmptyMessage(Global.MSG_SETTING_FINISH);
 				}
 			}
 			return true;
@@ -580,4 +490,98 @@ public class Alarm_SettingActivity extends BaseActivity {
 			}
 		}
 	}
+	
+	 private Handler mHandler = new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				Global.debug("\r\n[Alarm_SettingActivity] handleMessage == msg.what = " + msg.what);
+				if(msg.what == Global.MSG_SETTING_BACK){   // 音乐播放结束消息
+					goBack();
+				}
+				else if(msg.what == Global.MSG_SETTING_ASK_DATEBACK){
+					goBackAskDate();
+				}
+				else if(msg.what == Global.MSG_SETTING_FINISH){
+					finish();
+				}
+				else if (msg.what == Global.MSG_SETTING_ASK_TIMEBACK){
+					goBackAskTime();
+				}
+				
+				super.handleMessage(msg);
+			}
+		};
+		
+		private void goBackAskTime() {
+
+			Intent intent = new Intent();	//新建 INtent
+			Bundle bundle = new Bundle();	//新建 bundle
+			Global.debug("onKeyDown gMin === " + gMin);
+			Global.debug("onKeyDown gHour === " + gHour);
+			
+			bundle.putInt("HOUR", gHour);
+			bundle.putInt("MIN", gMin);	
+			bundle.putInt("FLAG", gInterfaceFlag);
+			bundle.putInt("SELECTID", gSelectID);
+			intent.putExtras(bundle); // 参数传递
+			setResult(Global.FLAG_CODE,intent);	//返回界面
+			finish();
+		}
+		
+		private void goBackAskDate() {
+			Intent intent = new Intent();	//新建 INtent
+			Bundle bundle = new Bundle();	//新建 bundle
+			
+			Global.debug("onKeyDown gmonth === " + gMonth);
+			Global.debug("onKeyDown gday === " + gDay);
+			
+			Global.debug("onKeyDown gMin === " + gMin);
+			Global.debug("onKeyDown gHour === " + gHour);
+			
+			bundle.putInt("MONTH", gMonth);
+			bundle.putInt("DAY", gDay);
+			
+			bundle.putInt("HOUR", gHour);
+			bundle.putInt("MIN", gMin);
+	
+			bundle.putInt("FLAG", gInterfaceFlag);
+			bundle.putInt("SELECTID", gSelectID);
+			intent.putExtras(bundle); // 参数传递
+			setResult(Global.FLAG_CODE,intent);	//返回界面
+			finish();	
+		}
+		
+		// 返回上一界面
+		private void goBack() {
+			
+			Intent intent = new Intent();	//新建 INtent
+			Bundle bundle = new Bundle();	//新建 bundle
+			
+			Global.debug("onKeyDown gmonth === " + gMonth);
+			Global.debug("onKeyDown gday === " + gDay);
+			
+			Global.debug("onKeyDown gMin === " + gMin);
+			Global.debug("onKeyDown gHour === " + gHour);
+			
+			if(gInterfaceFlag == Global.ALARM_INFO_INTERFACE)  // 闹钟
+			{
+				bundle.putInt("HOUR", gHour);
+				bundle.putInt("MIN", gMin);
+			}
+			else if(gInterfaceFlag == Global.ANNIVERSARY_INFO_INTERFACE){	// 纪念日
+				bundle.putInt("MONTH", gMonth);
+				bundle.putInt("DAY", gDay);
+				
+				bundle.putInt("HOUR", gHour);
+				bundle.putInt("MIN", gMin);
+			}
+			bundle.putInt("FLAG", gInterfaceFlag);
+			bundle.putInt("SELECTID", gSelectID);
+			
+			//Global.debug("\r\n[^^^^^^^^^^] gSelectID ===== " + gSelectID);
+			intent.putExtras(bundle); // 参数传递
+			setResult(Global.FLAG_CODE,intent);	//返回界面
+			
+			finish();
+		}
 }

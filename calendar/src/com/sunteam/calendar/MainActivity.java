@@ -13,8 +13,6 @@ import com.sunteam.calendar.calendar.LunarCalendar;
 import com.sunteam.calendar.calendar.SpecialCalendar;
 import com.sunteam.calendar.constant.Global;
 import com.sunteam.common.menu.BaseActivity;
-import com.sunteam.common.menu.MenuGlobal;
-import com.sunteam.common.tts.TtsListener;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 

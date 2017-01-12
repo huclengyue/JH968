@@ -237,14 +237,12 @@ public class TimeSetActivity extends BaseActivity {
 					
 					@Override
 					public void doConfirm() {
-						// TODO 自动生成的方法存根
 						KeyBack_doConfirm();
 					}
 					
 					@Override
 					public void doCancel() {
-						// TODO 自动生成的方法存根
-						finish();
+						mHandler.sendEmptyMessage(Global.MSG_FINISH);
 					}
 				});
 			}
@@ -328,11 +326,11 @@ public class TimeSetActivity extends BaseActivity {
 		tempcalendar.set(Calendar.HOUR_OF_DAY, ghour);
 		tempcalendar.set(Calendar.MINUTE, gminute);
 		
-		Global.debug("saveDataRemind ==== gyear ="+ gyear);
-		Global.debug("saveDataRemind ==== gmonth ="+ gmonth);
-		Global.debug("saveDataRemind ==== gday ="+ gday);
-		Global.debug("saveDataRemind ==== ghour ="+ ghour);
-		Global.debug("saveDataRemind ==== gminute ="+ gminute);
+//		Global.debug("saveDataRemind ==== gyear ="+ gyear);
+//		Global.debug("saveDataRemind ==== gmonth ="+ gmonth);
+//		Global.debug("saveDataRemind ==== gday ="+ gday);
+//		Global.debug("saveDataRemind ==== ghour ="+ ghour);
+//		Global.debug("saveDataRemind ==== gminute ="+ gminute);
 		
 		int time_len = (int) (tempcalendar.getTimeInMillis() - calendar.getTimeInMillis());
 		Global.debug("saveDataRemind ==== time_len ="+ time_len);
@@ -346,8 +344,7 @@ public class TimeSetActivity extends BaseActivity {
 				
 				@Override
 				public void onComplete() {
-					
-					showTextView(ghour, gminute);
+					mHandler.sendEmptyMessage(Global.MSG_TIME_AFTER);
 				}
 			});
 		}
@@ -374,10 +371,9 @@ public class TimeSetActivity extends BaseActivity {
 					setResult(Global.FLAG_TIME_ID,intent);	//返回界面
 					
 					// Ok键 
-					finish();						
+					mHandler.sendEmptyMessage(Global.MSG_FINISH);						
 				}
-			});
-			
+			});	
 		}
 	}
 	
@@ -389,11 +385,11 @@ public class TimeSetActivity extends BaseActivity {
 				showSetOkPromptDialog();
 			}else if(msg.what == Global.MSG_NO_REMIND){
 			
-			}else if(msg.what == Global.MSG_DEL){
-			
+			}else if(msg.what == Global.MSG_TIME_AFTER){
+				showTextView(ghour, gminute);
 			}
-			else if(msg.what == Global.MSG_NO_REMIND_TOMAIN){
-				
+			else if(msg.what == Global.MSG_FINISH){
+				finish();
 			}
 			else if(msg.what == Global.MSG_ONRESUM){
 				onResume();
@@ -423,7 +419,7 @@ public class TimeSetActivity extends BaseActivity {
 				setResult(Global.FLAG_TIME_ID,intent);	//返回界面
 				
 				// Ok键 
-				finish();
+				mHandler.sendEmptyMessage(Global.MSG_FINISH);
 			}
 		});
 		

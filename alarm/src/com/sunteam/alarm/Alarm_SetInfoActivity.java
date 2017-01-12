@@ -15,6 +15,8 @@ import com.sunteam.receiver.Alarmpublic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 
@@ -34,8 +36,7 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
-		Global.debug("Alarm_SetInfoActivity ==== \r\n");
-		
+		Global.debug("[Alarm_SetInfoActivity] ==     onCreate == \r\n");
 		
 		Intent intent=getIntent();	//获取Intent
 		Bundle bundle=intent.getExtras();	//获取 Bundle
@@ -43,8 +44,8 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 		gSelectID = bundle.getInt("ID");  // 获取 反显位置
 		gInterfaceFlag = bundle.getInt("FLAG"); // 获取界面标志
 		
-		Global.debug("Alarm_SetInfoActivity ==== gSelectID = " + gSelectID);
-		Global.debug("Alarm_SetInfoActivity ==== gInterfaceFlag = " + gInterfaceFlag);
+//		Global.debug("Alarm_SetInfoActivity ==== gSelectID = " + gSelectID);
+//		Global.debug("Alarm_SetInfoActivity ==== gInterfaceFlag = " + gInterfaceFlag);
 		
 		if(gInterfaceFlag == Global.ALARM_INFO_INTERFACE)  // 闹钟 详情界面
 		{
@@ -167,35 +168,7 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 				
 				@Override
 				public void onComplete() {
-					Intent intent = new Intent();	//新建 INtent
-					Bundle bundle = new Bundle();	//新建 bundle
-					
-					if(gInterfaceFlag == Global.ALARM_INFO_INTERFACE)  // 闹钟
-					{
-						if(gSelectID == Global.ALARM_SET_MUSIC){
-							bundle.putString("FILENAME", mTemp.get(getSelectItem()));  // 进界面时的界面
-						}
-						else if(gSelectID == Global.ALARM_SET_TYPE || gSelectID == Global.ALARM_SET_ONOFF){
-							bundle.putInt("ID", getSelectItem());
-						}
-					}
-					else if(gInterfaceFlag == Global.ANNIVERSARY_INFO_INTERFACE){	// 纪念日
-						if(gSelectID == Global.ANNIVERSARY_SET_MUSIC){
-							bundle.putString("FILENAME", mTemp.get(getSelectItem()));  // 进界面时的界面
-						}
-						else if(gSelectID == Global.ANNIVERSARY_SET_ONOFF){
-							bundle.putInt("ID", getSelectItem());
-						}
-					}
-					Global.debug("\r\n [onKeyUp] ==== entern \r\n");
-					Global.debug("\r\n [onKeyUp] ==gInterfaceFlag == " + gInterfaceFlag);
-					Global.debug("\r\n [onKeyUp] ==gSelectID == " + gSelectID);
-					bundle.putInt("FLAG", gInterfaceFlag);  // 进界面时的界面
-					bundle.putInt("SELECTID", gSelectID);   // 进界面时的修改项
-					intent.putExtras(bundle); // 参数传递
-					setResult(Global.FLAG_CODE_SET_LIST,intent);	//返回界面
-
-					finish();
+					mHandler.sendEmptyMessage(Global.MSG_SETTING_BACK);
 				}
 			});
 			return true;
@@ -371,5 +344,55 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 			return	false;
 		}
 	}
-    
+	
+	
+	 private Handler mHandler = new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				Global.debug("\r\n[Alarm_SettingActivity] handleMessage == msg.what = " + msg.what);
+				if(msg.what == Global.MSG_SETTING_BACK){   // 音乐播放结束消息
+					goBack();
+				}
+				else if(msg.what == Global.MSG_SETTING_FINISH){
+					finish();
+				}
+				
+				
+				super.handleMessage(msg);
+			}
+		};
+		
+		// 返回上一界面
+		private void goBack() {
+			
+			Intent intent = new Intent();	//新建 INtent
+			Bundle bundle = new Bundle();	//新建 bundle
+			
+			if(gInterfaceFlag == Global.ALARM_INFO_INTERFACE)  // 闹钟
+			{
+				if(gSelectID == Global.ALARM_SET_MUSIC){
+					bundle.putString("FILENAME", mTemp.get(getSelectItem()));  // 进界面时的界面
+				}
+				else if(gSelectID == Global.ALARM_SET_TYPE || gSelectID == Global.ALARM_SET_ONOFF){
+					bundle.putInt("ID", getSelectItem());
+				}
+			}
+			else if(gInterfaceFlag == Global.ANNIVERSARY_INFO_INTERFACE){	// 纪念日
+				if(gSelectID == Global.ANNIVERSARY_SET_MUSIC){
+					bundle.putString("FILENAME", mTemp.get(getSelectItem()));  // 进界面时的界面
+				}
+				else if(gSelectID == Global.ANNIVERSARY_SET_ONOFF){
+					bundle.putInt("ID", getSelectItem());
+				}
+			}
+			Global.debug("\r\n [onKeyUp] ==== entern \r\n");
+			Global.debug("\r\n [onKeyUp] ==gInterfaceFlag == " + gInterfaceFlag);
+			Global.debug("\r\n [onKeyUp] ==gSelectID == " + gSelectID);
+			bundle.putInt("FLAG", gInterfaceFlag);  // 进界面时的界面
+			bundle.putInt("SELECTID", gSelectID);   // 进界面时的修改项
+			intent.putExtras(bundle); // 参数传递
+			setResult(Global.FLAG_CODE_SET_LIST,intent);	//返回界面
+
+			finish();
+		}
 }

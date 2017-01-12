@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.sunteam.alarm.R.string;
 import com.sunteam.alarm.utils.Global;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.tts.TtsUtils;
@@ -88,7 +87,7 @@ public class Alarm_MainActivity extends MenuActivity {
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		Global.debug("\r\n onKeyUp ===========");
+		Global.debug("\r\n[Alarm_MainActivity] onKeyUp ===========");
 		if(keyCode == KeyEvent.KEYCODE_ENTER ||
 				keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
 		{
@@ -154,12 +153,8 @@ public class Alarm_MainActivity extends MenuActivity {
 				
 					bundle.putInt("TIMELEN", time_len); // 修改项
 										
-					// intent.setClass(MainActivity.this, MenuActivity.class);
 					intent.putExtras(bundle); // 传入参数
-	//				intent.setAction("set_action");// 启动设置界面
 					intent.setClass(this, Alarm_countdownActivity.class);
-					 
-					
 					startActivity(intent);
 				}
 				else{  // 自定义
@@ -168,17 +163,11 @@ public class Alarm_MainActivity extends MenuActivity {
 					
 					bundle.putInt("ID", getSelectItem()); // 修改项
 					
-					
-					// intent.setClass(MainActivity.this, MenuActivity.class);
 					intent.putExtras(bundle); // 传入参数
 	//				intent.setAction("set_action");// 启动设置界面
 					intent.setClass(this, Alarm_CountDownSetActivity.class);
-					 
-					
 					startActivity(intent);
-				}
-				//startActivityForResult(intent, FLAG_CODE); // 设置标志
-								
+				}					
 			}
 			else if(gInterfaceFlag == Global.ALARM_INFO_INTERFACE){  // 闹钟详情 界面
 				if(Global.ALARM_SET_TIME == getSelectItem()){
@@ -254,23 +243,14 @@ public class Alarm_MainActivity extends MenuActivity {
 				super.onResume();
 			}
 			else if(gInterfaceFlag == Global.COUNTDOWN_INFO_INTERFACE){
-				
-				/*ArrayList<String> temp= ArrayUtils.strArray2List(getResources().getStringArray(R.array.main_list));
-				setTitle(temp.get(1));
-				mMenuList = getAnniversaryData();
-				setListData(mMenuList);
-				mMenuView.setSelectItem(0); // 默认0
-				gInterfaceFlag = ANNIVERSARY_INTERFACE;*/
 				super.onResume();
 			}
-			
-			
 			return true;
 		}
-		else if(keyCode == KeyEvent.KEYCODE_0){
-		
-			testrawplay();
-		}
+//		else if(keyCode == KeyEvent.KEYCODE_0){
+//		
+//			testrawplay();
+//		}
 		return super.onKeyUp(keyCode, event);
 		
 	}
@@ -783,11 +763,9 @@ public class Alarm_MainActivity extends MenuActivity {
 		
 		//GetDbInfo dbAlarmInfo = new GetDbInfo( this ); // 打开数据库
 		GetDbInfo dbAlarmInfo = new GetDbInfo( Alarm_MainActivity.this ); // 打开数据库
-		Global.debug("UpdateAlarmData alarminfo.type ="+ alarminfo.type);
-		Global.debug("UpdateAlarmData alarminfo.onoff ="+ alarminfo.onoff);
-		Global.debug("UpdateAlarmData alarminfo.filename ="+ alarminfo.filename);
-
-		
+//		Global.debug("UpdateAlarmData alarminfo.type ="+ alarminfo.type);
+//		Global.debug("UpdateAlarmData alarminfo.onoff ="+ alarminfo.onoff);
+//		Global.debug("UpdateAlarmData alarminfo.filename ="+ alarminfo.filename);	
     	dbAlarmInfo.update(alarminfo, Alarmpublic.ALARM_TABLE);
 		dbAlarmInfo.closeDb();
 	

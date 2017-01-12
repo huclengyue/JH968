@@ -68,8 +68,9 @@ public class FunctionMenuActivity extends MenuActivity implements ConfirmListene
 	@Override
 	public void doCancel() {
 		//gDialog.dismiss(); // 閿�姣�
-		gConfirmDialog.dismiss();
-		super.onResume();
+	//	gConfirmDialog.dismiss();
+		mHandler.sendEmptyMessage(Global.MSG_RESUME);
+	//	super.onResume();
 	}
 
 	// 清空数据
@@ -322,6 +323,9 @@ public class FunctionMenuActivity extends MenuActivity implements ConfirmListene
 				showImprotrPromptDialog();		
 			}else if(msg.what == Global.MSG_EXPORT){
 				showExprotPromptDialog();
+			}
+			else if(msg.what == Global.MSG_RESUME){
+				onResume();
 			}
 			
 			super.handleMessage(msg);

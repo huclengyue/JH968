@@ -43,6 +43,14 @@ public class Global {
 	public static int COUNT_DOWN_ID4 = 4;
 	
 	public static int MSG_COUNTDOWN_ERROR = 1;
+	public static int MSG_COUNTDOWN_END = 2;
+	
+	public static int MSG_SETTING_BACK = 3;   // 设置后返回
+	public static int MSG_SETTING_ASK_TIMEBACK = 4;   // 设置后返回
+	public static int MSG_SETTING_FINISH = 5;   // 设置后返回
+	
+	public static int MSG_SETTING_ASK_DATEBACK = 4;   // 设置后返回
+	
 	
 	public static int TIME_LEN0 = 30*60;
 	public static int TIME_LEN1 = 60*60;

@@ -15,6 +15,8 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,7 +41,6 @@ public class Alarm_countdownActivity extends BaseActivity {
 	
 	private int gCountDown_falg = 0;  // 选择是哪个
 
-		
 	Timer timer = new Timer();  
 	
 	@Override
@@ -108,17 +109,6 @@ public class Alarm_countdownActivity extends BaseActivity {
     	
     	TtsUtils.getInstance().speak(getResources().getString(R.string.countdown_start));
     	gCountDown_falg = START_COUNTDOWN;
-/*    
-    	PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.countdown_start));
-    	mDialog.show();
-    	mDialog.setPromptListener(new PromptListener() {
-			
-			@Override
-			public void onComplete() {
-				// TODO 自动生成的方法存根
-				gCountDown_falg = START_COUNTDOWN;
-			}
-		});*/
 	}
 	
 	protected void onResume(){
@@ -168,16 +158,8 @@ public class Alarm_countdownActivity extends BaseActivity {
 	                	
 	                	if(gtime_len <= 0){
 	                		timer.cancel();
-	                		putMsg();
+	                		mHandler.sendEmptyMessage(Global.MSG_COUNTDOWN_END);
 	                		Global.debug("gtime_len =========================="+ gtime_len);
-	                		//PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.countdown_end));
-	                		//PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.countdown_start));
-	 /*               		PromptDialog mPromptDialog = new PromptDialog(getApplicationContext(), getResources().getString(R.string.countdown_end));
-	                		mPromptDialog.show();
-	                		mPromptDialog.setPromptListener(promptListener);
-	                		//TtsUtils.getInstance().speak(getResources().getString(R.string.countdown_end));	
-	                		 */
-	                		 
 	                	}
                 	}
                 }  
@@ -228,14 +210,12 @@ public class Alarm_countdownActivity extends BaseActivity {
 			String str_canel = getResources().getString(R.string.canel);
 			String str_title = getResources().getString(R.string.countdown_starting);
 			
-			//ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.countdown_starting,
 			ConfirmDialog mConfirmDialog = new ConfirmDialog(this, str_title, str_ok, str_canel);
 			mConfirmDialog.show();
 			mConfirmDialog.setConfirmListener(new ConfirmListener() {
 				
 				@Override
 				public void doConfirm() {
-					// TODO 自动生成的方法存根
 					timer.cancel();
 					gCountDown_falg = STOP_COUNTDOWN;
 					finish();
@@ -243,7 +223,6 @@ public class Alarm_countdownActivity extends BaseActivity {
 				
 				@Override
 				public void doCancel() {
-					// TODO 自动生成的方法存根
 					Global.debug("\r\n  否========================");
 				}
 				
@@ -271,4 +250,15 @@ public class Alarm_countdownActivity extends BaseActivity {
 		mPromptDialog.setPromptListener(promptListener);
 		//TtsUtils.getInstance().speak(getResources().getString(R.string.countdown_end));
 	}
+	
+	  private Handler mHandler = new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				if(msg.what == Global.MSG_COUNTDOWN_END){   // 音乐播放结束消息
+					putMsg();
+				}
+				
+				super.handleMessage(msg);
+			}
+		};
 }
