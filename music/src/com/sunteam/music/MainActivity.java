@@ -1264,9 +1264,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 		mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(mIntent);	*/
 		
-		AssetFileDescriptor fd = getResources().openRawResourceFd(R.raw.alarm);
+//		AssetFileDescriptor fd = getResources().openRawResourceFd(R.raw.alarm);
 		
-		Global.debug("\r\n[4444] gFilename =====fileDescriptor.getFileDescriptor()==" + fd.getFileDescriptor());
+//		Global.debug("\r\n[4444] gFilename =====fileDescriptor.getFileDescriptor()==" + fd.getFileDescriptor());
 
 	/*	try {
 			myPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
