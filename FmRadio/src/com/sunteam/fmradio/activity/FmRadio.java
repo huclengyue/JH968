@@ -261,7 +261,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
         else{  // 耳机没有插入
         	speakerFlag = false; 
         	mMenuList = null;
-        	mTitle = getResources().getString(R.string.hearphone_notin);  // 耳机没有插入
+        	mTitle = getResources().getString(R.string.title_nohearphone);  // 耳机没有插入
         }
         
         Global.debug("onCreate=============111 " + mTitle);
@@ -926,7 +926,8 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 
         
         if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || 
-        	keyCode == KeyEvent.KEYCODE_DPAD_LEFT){
+        	keyCode == KeyEvent.KEYCODE_DPAD_LEFT || 
+        	keyCode == KeyEvent.KEYCODE_MENU){
            if(gheadin == false){
         	  // TtsUtils.getInstance().speak(getResources().getString(R.string.hearphone_notin));
         	   PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.hearphone_notin));
@@ -1831,6 +1832,9 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
                         + ", rdsProgramTypeName =" + rdsProgramTypeName + ", isMute = " + isMute + ")");
             
 
+           if(gheadin  == false){  // 耳机拔出
+        	   updateMuted(true);
+           }
             if (mPowerOffRadio && !radioIsOn) {
                 finish();
             }
