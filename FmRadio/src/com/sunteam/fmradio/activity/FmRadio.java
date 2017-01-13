@@ -79,6 +79,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.widget.Toast;
+import junit.framework.Test;
 
 import com.broadcom.fm.fmreceiver.FmProxy;
 import com.broadcom.fm.fmreceiver.IFmProxyCallback;
@@ -190,6 +191,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
     
     private BatteryBroadcastReciver batterReceiver;  // 电池电量获取
     
+    private Boolean Test = false;
     /** Called when the activity is first created. */
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -271,9 +273,8 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
       //  mMenuView.setSelectItem(0);
         
         if (mAudioManager.isMusicActive()) {    // 获取 是否在播放音乐
-            Toast.makeText(getApplicationContext(), "Stop audio from other app and relaunch",
-                    Toast.LENGTH_LONG).show();
-            TtsUtils.getInstance().speak(getResources().getString(R.string.music_is_playing));
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.stop_backplay),  Toast.LENGTH_LONG).show();
+            //TtsUtils.getInstance().speak(getResources().getString(R.string.music_is_playing));
             finish();
         }  
    
@@ -700,6 +701,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	    	
 		   	if(mPendingMute == true){  //
 		   		
+		   		acquireWakeLock(this);
 		   		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.play_start));
 			   	mPromptDialog.show();
 			   	mPromptDialog.setPromptListener(new PromptListener() {
@@ -714,6 +716,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		   	}
 		   	else{
 		   		updateMuted(!mPendingMute);
+		   		releaseWakeLock();
 		   		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.play_pause));
 			   	mPromptDialog.show();
 			   	mPromptDialog.setPromptListener(new PromptListener() {
@@ -744,6 +747,10 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
        	 if(true == mSearchFlag){
        		 return true;
        	 }
+	   }
+	   else if(keyCode == KeyEvent.KEYCODE_0){
+		   Global.debug("\r\n[onKeyUp]   Test == " + Test);
+		   Test = !Test;
 	   }
 	   
         return super.onKeyUp(keyCode, event);
@@ -881,7 +888,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			onResume();
 		}
 		else if(selectItem == Global.DELALL_CHANEL_ID){
-			chanel_str.clear();
+/*			chanel_str.clear();
 			radioFreqList.clear();
 			
         	mRadioFreq = Global.DEFAULT_FREQUENCY;
@@ -903,7 +910,8 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	     	SharedPrefUtils.setSharedPrefInt(this,Global.FM_CONFIG_FILE, Context.MODE_WORLD_READABLE, Global.FM_SELECT, freq );
 	     	updateFrequency(freq);
 
-			onResume();
+			onResume();*/
+			updateshow(true);
 		}
 		else if (selectItem == Global.RECORD_CHANEL_ID) {  // 内录
 			startRecord();
@@ -1114,7 +1122,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
      */
     private void updateFrequency(int freq) {
 
-        Global.debug("\r\n [updateFrequency]   freq == "+ freq);
+//        Global.debug("\r\n [updateFrequency]   freq == "+ freq);
         /* Extract pending data and request these settings. */
         mPendingFrequency = freq;
          
@@ -1664,8 +1672,8 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		@Override
 		public void onEstimateNoiseFloorLevelEvent(int nfl) {
           
-                Global.debug( "onEstimateNoiseFloorLevelEvent(" + nfl + ")");
-            
+			Global.debug( "onEstimateNoiseFloorLevelEvent(" + nfl + ")");
+	            
             /* Local cache only! Not currently used directly. */
  //           mNfl = nfl;
             /* Update GUI display variables. */
@@ -1681,7 +1689,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
         @Override
 		public void onLiveAudioQualityEvent(int rssi, int snr) {
            
-                Global.debug( "onLiveAudioQualityEvent(" + rssi + ", " + snr + " )");
+        	Global.debug( "onLiveAudioQualityEvent(" + rssi + ", " + snr + " )");
             
             /* Update signal strength icon. */
             displayNewSignalStrength(rssi);
@@ -1771,8 +1779,8 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	    	           
 	    	            chanel_num++;  // 搜到的电台数
 	    	            
-	    	            Global.debug("\r\nchanel_num == " + chanel_num);
-	    	            Global.debug("\r\n freq == " + freq);
+	    	            Global.debug("\r\n mMenuList===== == " + mMenuList);
+	    	          //  Global.debug("\r\n freq == " + freq);
 	    	            addChanel(freq);
 	    	            
 	    	            Message msg = Message.obtain();
@@ -1784,7 +1792,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
                 	}
     	           
             }
-            Global.debug("[onSeekCompleteEvent] 111  ==#############");
+        //    Global.debug("[onSeekCompleteEvent] 111  ==#############");
             /* Update frequency display. */
             displayNewFrequency(freq, 1);
             /* Update signal strength icon. */
@@ -1809,7 +1817,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
             msg.what = Global.SIGNAL_CHECK_PENDING_EVENTS;
             viewUpdateHandler.sendMessage(msg);
             
-            Global.debug("[onSeekCompleteEvent] == GUI_GET_NEXT_CHANEL ==8==");
+//            Global.debug("[onSeekCompleteEvent] == GUI_GET_NEXT_CHANEL ==8==");
             // 接着搜索下一个电台
 //            Message msg1 = Message.obtain();
 //            msg1.what = GUI_GET_NEXT_CHANEL;
@@ -1870,7 +1878,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	    	          //  mMenuView.setSelectItem(chanel_num);
 	    	            
 	    	            chanel_num++;  // 搜到的电台数
-	    	            
+	    	            addChanel(freq);
 	    	          //  chanel_frist = freq;
                 	}
     	           // onResume();
@@ -1878,7 +1886,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
             /* Update frequency display. */
             if(freq < mMinFreq)
             {
-            	Global.debug("\r\n[onStatusEvent] ===freq == "+freq + " mMinFreq ==" + mMinFreq);
+//            	Global.debug("\r\n[onStatusEvent] ===freq == "+freq + " mMinFreq ==" + mMinFreq);
             	//freq = Global.DEFAULT_FREQUENCY;
             	playThisRadio();
             	return ;
@@ -1905,7 +1913,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
         @Override
 		public void onWorldRegionEvent(int worldRegion) {
            
-                Global.debug( "onWorldRegionEvent(" + worldRegion + ")");
+       //         Global.debug( "onWorldRegionEvent(" + worldRegion + ")");
            
 
             /* Local cache. */
@@ -1919,7 +1927,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
         @Override
 		public void onVolumeEvent(int status, int volume) {
            
-                Global.debug( "onVolumeEvent(" + status + ", " + volume + ")");
+         //       Global.debug( "onVolumeEvent(" + status + ", " + volume + ")");
            
 
             /* Check if any pending functions can be run now. */
@@ -2151,6 +2159,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			ArrayList<FmInfo> fmAlldata = new ArrayList<FmInfo>();
 			
 			fmAlldata = dbFmInfo.GetAllData(Global.FM_LIST);
+			Global.debug("\r\n [FmRadio] -->[addChanel]  fmAlldata.size() =="+ fmAlldata.size() );
 			for(int i = 0; i < fmAlldata.size(); i++)
 			{
 				mFmInfo = fmAlldata.get(i);
@@ -2414,6 +2423,10 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	           int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 	           boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                        status == BatteryManager.BATTERY_STATUS_FULL;
+	           Global.debug("\r\n[BatteryBroadcastReciver]   Test == " + Test);
+	           if(Test == true){
+	        //	   level = 5;
+	           }
 	           if(level<10){
             	
         			PromptDialog mpDialog = new PromptDialog(FmRadio.this, getResources().getString(R.string.bat_lv0));

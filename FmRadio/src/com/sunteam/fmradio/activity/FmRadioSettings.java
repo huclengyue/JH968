@@ -235,7 +235,7 @@ public class FmRadioSettings extends MenuActivity {
 	}
 	// 删除所有数据
 	private void delChanelAllData() {
-	// TODO 自动生成的方法存根
+		Global.debug("\r\n [FmRadioSettings]--> [delChanelAllData]  =====" );
 		GetDbInfo dbFmInfo = new GetDbInfo( this ); // 打开数据库
 		//FmInfo musicinfo = new FmInfo();   //创建 结构体
 		dbFmInfo.detele(Global.FM_LIST);
@@ -248,6 +248,7 @@ public class FmRadioSettings extends MenuActivity {
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
+			Global.debug("\r\n [FmRadioSettings]--> [mHandler]  msg.what="+ msg.what );
 			if(msg.what == Global.MSG_DEL_CHANEL){   // 音乐播放结束消息
 				showDelChanelPromptDialog();
 			}else if(msg.what == Global.MSG_DELALL_CHANEL){

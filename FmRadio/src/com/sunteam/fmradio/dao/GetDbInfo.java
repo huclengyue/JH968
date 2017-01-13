@@ -31,7 +31,7 @@ public class GetDbInfo {
 	 * @param FmInfo
 	 */
 	public void add(FmInfo fmInfo, String tableType) {	
-		Global.debug("add ============fmInfo.chanel " + fmInfo.chanel);
+		Global.debug("\r\n [GetDbInfo] --> [add] ===fmInfo.chanel " + fmInfo.chanel);
 		db = helper.getWritableDatabase();
 		
 		// 增加数据命令

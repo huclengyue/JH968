@@ -120,6 +120,7 @@
 <string name="play_start">"开始播放"</string>
 
 <string name="bat_lv0">电池电量低，无法播放</string>
+<string name="stop_backplay">系统忙，请稍后在试</string>
  
 <string-array name="fm_setting_list">
 	<item>自动搜台</item>
