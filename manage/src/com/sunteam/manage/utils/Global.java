@@ -60,6 +60,8 @@ public class Global {
 	public static final int MSG_PAST_CHECK = 3; // 粘贴路径不对
 	public static final int MSG_STRAT_PAST = 4; // 开始粘贴
 	
+	public static final int MSG_MAIN = 5; // 开始粘贴
+	
 	public static void debug(String s) {
 		Log.d(TAG, s);
 	}

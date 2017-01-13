@@ -16,6 +16,8 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -494,14 +496,7 @@ public class MainActivity extends MenuActivity implements ShowView{
 				
 				@Override
 				public void onComplete() {
-					// TODO 自动生成的方法存根
-					gSelecyId[Global.gPathNum] = 0;
-					Global.gPathNum--;
-					Global.gName.remove(Global.gPathNum);
-					Global.gPath.remove(Global.gPathNum);
-					
-					Global.debug("\r\n[*******] Global.gPathNum ====== " + Global.gPathNum);
-					onResume();
+					mHandler.sendEmptyMessage(Global.MSG_MAIN);
 				}
 			});
 			return false;
@@ -821,5 +816,28 @@ public class MainActivity extends MenuActivity implements ShowView{
 	private class FileInfo {
 		String name ; // // 菜单名称
 		String path ; // // 图片
+	}
+	
+	
+    private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_MAIN){   // 音乐播放结束消息
+				goMain();
+			}
+			
+			super.handleMessage(msg);
+		}
+	};
+	
+	private void goMain() {
+		gSelecyId[Global.gPathNum] = 0;
+		Global.gPathNum--;
+		Global.gName.remove(Global.gPathNum);
+		Global.gPath.remove(Global.gPathNum);
+		
+		Global.debug("\r\n[*******] Global.gPathNum ====== " + Global.gPathNum);
+		onResume();
+		
 	}
 }
