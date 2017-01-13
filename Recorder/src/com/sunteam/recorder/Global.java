@@ -127,7 +127,7 @@ public class Global {
 			
 			@Override
 			public void onComplete() {
-				// TODO 自动生成的方法存根
+				Global.debug("\r\n [showToast] === handler==" + handler + " what ==" + what);
 				if (handler != null) {
 					handler.sendEmptyMessage(what);
 					TtsUtils.getInstance().setCompletedListener(null);

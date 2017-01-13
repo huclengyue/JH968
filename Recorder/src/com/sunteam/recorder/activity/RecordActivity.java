@@ -741,13 +741,14 @@ public class RecordActivity extends BaseActivity {
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
+			Global.debug("\r\n [RecordActivity]   ==Handler=  msg.what =="+ msg.what);
 			if(msg.what == Global.MSG_GOBACK){   // 音乐播放结束消息
 				Record_goBack();
 			}else if(msg.what == Global.MSG_GOBACK_SAVE){
 				Record_goBackSave();		
 			}
 			else if(msg.what == Global.MSG_ONRESUM){
-				onResume();
+				speakTimeLeft();
 			}
 			super.handleMessage(msg);
 		}
