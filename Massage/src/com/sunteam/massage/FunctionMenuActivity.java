@@ -199,9 +199,10 @@ public class FunctionMenuActivity extends MenuActivity implements ConfirmListene
 
 		if ( false == getSDPath()) // 判断TF卡是否存在
 		{
-			PromptDialog mDialog =new PromptDialog(this, getResources().getString(R.string.data_to_me_tfnotexit));
-			mDialog.show();
-			mDialog.setPromptListener(this);
+//			PromptDialog mDialog =new PromptDialog(this, getResources().getString(R.string.data_to_me_tfnotexit));
+//			mDialog.show();
+//			mDialog.setPromptListener(this);
+			mHandler.sendEmptyMessage(Global.MSG_TF_ONEXIT_IM);
 			return false;
 		} 
 		else   // tf卡存在
@@ -256,10 +257,7 @@ public class FunctionMenuActivity extends MenuActivity implements ConfirmListene
 
 		if (false == getSDPath()) // 鏃燭F鍗�
 		{
-			PromptDialog mDialog =new PromptDialog(this, getResources().getString(R.string.data_to_tf_tfnotexit));
-			mDialog.show();
-			mDialog.setPromptListener(this);
-			
+			mHandler.sendEmptyMessage(Global.MSG_TF_ONEXIT_EX);
 			return false;
 		} else if (userId >= MAX_USER_NUM) { 
 			userinfo tempinfo = new userinfo();
@@ -330,11 +328,29 @@ public class FunctionMenuActivity extends MenuActivity implements ConfirmListene
 			else if(msg.what == Global.MSG_FINISH){
 				finish();
 			}
+			else if(msg.what == Global.MSG_TF_ONEXIT_EX){
+				showTfNoexitEx();
+			}
+			else if(msg.what == Global.MSG_TF_ONEXIT_IM){
+				showTfNoexitIm();
+			}
 			
 			super.handleMessage(msg);
-		}		
+		}
+	
 	};
 
+	private void showTfNoexitIm() {
+		PromptDialog mDialog =new PromptDialog(this, getResources().getString(R.string.data_to_me_tfnotexit));
+		mDialog.show();
+		mDialog.setPromptListener(this);
+	}
+	
+	private void showTfNoexitEx() {
+		PromptDialog mDialog =new PromptDialog(this, getResources().getString(R.string.data_to_tf_tfnotexit));
+		mDialog.show();
+		mDialog.setPromptListener(this);
+	}	
 	
 	private void showClearPromptDialog(){
 		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.clear_data_Ok));
@@ -343,12 +359,14 @@ public class FunctionMenuActivity extends MenuActivity implements ConfirmListene
 	}
 	
 	private void showImprotrPromptDialog(){
+		Global.debug("\r\n [FunctionMenuActivity]  === showImprotrPromptDialog === " + getResources().getString(R.string.data_to_me_ok));
 		PromptDialog mDialog =new PromptDialog(this, getResources().getString(R.string.data_to_me_ok));
 		mDialog.setPromptListener(this);
 		mDialog.show();
 	}
 	
 	private void showExprotPromptDialog(){
+		Global.debug("\r\n [FunctionMenuActivity]  === showExprotPromptDialog === " + getResources().getString(R.string.data_to_me_ok));
 		PromptDialog mDialog =new PromptDialog(this, getResources().getString(R.string.data_to_TF_OK));
 		mDialog.setPromptListener(this);
 		mDialog.show();

@@ -35,6 +35,9 @@ public class Global {
 	public static final int MSG_BACK = 5;  //  导出
 	public static final int MSG_FINISH = 6;  //  导出
 	
+	public static final int MSG_TF_ONEXIT_EX = 7;  //  TF 卡不存在
+	public static final int MSG_TF_ONEXIT_IM = 8;  //  TF 卡不存在
+	
 	public static void debug(String s) {
 		Log.d(TAG, s);
 	}
