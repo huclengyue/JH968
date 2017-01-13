@@ -259,22 +259,24 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	        selectItem = 0;
         }
         else{  // 耳机没有插入
+        	ArrayList<String> mTmpList = new ArrayList<String>();
         	speakerFlag = false; 
-        	mMenuList = null;
+        	mTmpList.clear();
+        	mMenuList = mTmpList;
         	mTitle = getResources().getString(R.string.title_nohearphone);  // 耳机没有插入
         }
         
         Global.debug("onCreate=============111 " + mTitle);
         super.onCreate(savedInstanceState);
       //  mMenuView.setSelectItem(0);
- /*       
+        
         if (mAudioManager.isMusicActive()) {    // 获取 是否在播放音乐
             Toast.makeText(getApplicationContext(), "Stop audio from other app and relaunch",
                     Toast.LENGTH_LONG).show();
             TtsUtils.getInstance().speak(getResources().getString(R.string.music_is_playing));
             finish();
         }  
- */  
+   
  /* 
         // 获取设备模式 在 飞行模式是 不可以打开收音机
         if (Settings.System.getInt(getApplicationContext().getContentResolver(), 
@@ -311,7 +313,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
     	   updateFrequency(freq);
        }*/
        
- 
+      // doSoundEffect(false);
 	}
 		// 获取数据 频道
 	
@@ -321,6 +323,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		super.onResume();
 		Global.debug("\r\n onResume ==========");
 		acquireWakeLock(this);
+		//doSoundEffect(false);
 	}
 	
 	@Override
@@ -336,7 +339,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
            ContentResolver res;
            int ret;
     
-           res = mContext.getContentResolver();
+           res = this.getContentResolver();//mContext.getContentResolver();
            Uri uri = android.provider.Settings.System.getUriFor(Settings.System.SOUND_EFFECTS_ENABLED);  
            ret =  Settings.System.getInt(res, Settings.System.SOUND_EFFECTS_ENABLED, 0);
 //               Global.debug( " ---------====== Settings.System.SOUND_EFFECTS_ENABLED: " + ret);
@@ -687,7 +690,10 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	   }
 	   else if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER||
 	    		keyCode == KeyEvent.KEYCODE_ENTER){  // 上键处理  搜索上一台
-		   if((mSearchFlag == true) || (mMenuList.size() <= 0) || (gheadin == false))  // 正在搜台时禁止按键
+		   Global.debug("\r\n[FmRadio]-->[onKeyUp]--->gheadin == "+ gheadin );
+		   Global.debug("\r\n[FmRadio]-->[onKeyUp]--->mSearchFlag == "+ mSearchFlag );
+		   Global.debug("\r\n[FmRadio]-->[onKeyUp]--->mMenuList.size() == "+ mMenuList.size() );
+		   if((mSearchFlag == true) || (gheadin == false) || (mMenuList.size() <= 0))  // 正在搜台时禁止按键
 		   {
 			   return true;	
 	        }
@@ -729,8 +735,15 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 				
 			   int i_freq = radioFreqList.get(getSelectItem());//Integer.valueOf(chanel_di.get(getSelectItem()));
 				
-			   updateFrequency(i_freq); 
+			   updateFrequency(i_freq);
+			   return true;
 		   }
+	   }
+	   else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+       	//super.onKeyDown(keyCode, event);
+       	 if(true == mSearchFlag){
+       		 return true;
+       	 }
 	   }
 	   
         return super.onKeyUp(keyCode, event);
@@ -943,6 +956,9 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	    }
         else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
         	//super.onKeyDown(keyCode, event);
+        	 if(true == mSearchFlag){
+        		 return true;
+        	 }
         	mcur_vol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         	if(mcur_vol > 0){
         		mcur_vol --;
@@ -979,7 +995,11 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
    	    }
 	   	else if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER||
 	    		keyCode == KeyEvent.KEYCODE_ENTER){
-	   		
+	   	
+	   		Global.debug("\r\n[FmRadio]-->[onKeyDown]--->gheadin == "+ gheadin );
+	   		Global.debug("\r\n[FmRadio]-->[onKeyDown]--->mSearchFlag == "+ mSearchFlag );
+	   		Global.debug("\r\n[FmRadio]-->[onKeyDown]--->mMenuList.size() == "+ mMenuList.size() );
+		   
 	   		if(gheadin == false){
 	        //   TtsUtils.getInstance().speak(getResources().getString(R.string.hearphone_notin));
 	           PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.hearphone_notin));
@@ -1035,10 +1055,11 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
     private void updateFMVolume(int volume) {
         // CK - Send the command only of the Service is not busy
     	int vol_bk = volume;
-    	Global.debug("\r\n vol_bk === " + vol_bk);
-    	vol_bk = volume* (255/mMax_vol);  // 收音机最大音量是 255 系统最大音量是 mMax_vol
-    	Global.debug("\r\n vol_bk === " + vol_bk);
-        Global.debug( "updateFMVolume()");
+    	Global.debug("\r\n[FmRadio]-->[updateFMVolume] vol_bk === " + vol_bk);
+    	vol_bk = volume* (Global.VOL_MAX_FM/mMax_vol);  // 收音机最大音量是 255 系统最大音量是 mMax_vol
+    	//Global.debug("\r\n vol_bk === " + vol_bk);
+    	Global.debug("\r\n[FmRadio]-->[updateFMVolume] vol_bk === " + vol_bk);
+      //  Global.debug( "updateFMVolume()");
         if (null != mFmReceiver) {
             fmVolumeUpdatepending = (FmProxy.STATUS_OK != mFmReceiver.setFMVolume(vol_bk));
         }
@@ -1115,7 +1136,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
      */
     private void updateMuted(boolean muted) {
        
-            Global.debug( "updateMuted() :" + muted);
+            Global.debug( "\r\n [FmRadio]       updateMuted() = " + muted);
        
         /* Extract pending data and request these settings. */
         mPendingMute = muted;
@@ -2327,7 +2348,9 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
         	//speakerFlag = false; 
         	releaseWakeLock();
         	setWiredDeviceConnectionState(true);
+        	chanel_str.clear();
         	mMenuList = chanel_str;
+        	Global.debug("\r\n 【updateshow()】 ==== chanel_str.size() ==" + chanel_str.size());
         	mTitle = getResources().getString(R.string.title_nohearphone);  // 耳机没有插入
         	setTitle(mTitle);
         	setListData(mMenuList);

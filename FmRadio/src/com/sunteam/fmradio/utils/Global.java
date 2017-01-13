@@ -21,6 +21,8 @@ public class Global {
 	public static final int GUI_GET_NEXT_CHANEL = 8;
 	public static final int GUI_UPDTAE_CHANEL = 9;
 	public static final int GUI_UPDTAE_LIST = 10;
+	
+	public static final int VOL_MAX_FM = 255;
     
     
 	public static final int SIGNAL_CHECK_PENDING_EVENTS = 20;
