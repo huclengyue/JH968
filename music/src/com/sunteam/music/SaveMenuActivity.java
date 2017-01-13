@@ -96,14 +96,7 @@ public class SaveMenuActivity extends MenuActivity implements ConfirmListener, P
 
 	@Override
 	public void onComplete() {
-		// TODO 自动生成的方法存根
-		Intent intent = new Intent();
-		Bundle bundle = new Bundle();	//新建 bundl
-		bundle.putInt("selectItem", getSelectItem());
-		intent.putExtras(bundle); // 参数传递
-		
-		setResult(Global.MENU_FLAG, intent);
-		finish();
+		mHandler.sendEmptyMessage(Global.MSG_MENU_BACK);	
 	}
 		
 	// 删除我的收藏 列表文件
@@ -171,10 +164,25 @@ public class SaveMenuActivity extends MenuActivity implements ConfirmListener, P
 			else if(msg.what == Global.MSG_RESUME){
 				onResume();
 			}
+			else if(msg.what == Global.MSG_MENU_BACK){
+				goBack();
+			}
 			
 			super.handleMessage(msg);
 		}	
 	};
+	
+	private void goBack() {
+
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();	//新建 bundl
+		bundle.putInt("selectItem", getSelectItem());
+		intent.putExtras(bundle); // 参数传递
+		
+		setResult(Global.MENU_FLAG, intent);
+		finish();
+		
+	}
 	// 显示无文件
 	private void showNoFilePromptDialog() {
 		PromptDialog mDialog1 = new PromptDialog(this, getResources().getString(R.string.no_file));

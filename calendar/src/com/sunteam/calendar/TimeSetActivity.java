@@ -358,20 +358,7 @@ public class TimeSetActivity extends BaseActivity {
 				
 				@Override
 				public void onComplete() {
-					Intent intent = new Intent();			
-					Bundle bundle = new Bundle();//
-
-					bundle.putInt("HOUR", ghour); // 传入参数 年			
-					bundle.putInt("MINUTE", gminute); // 传入参数 年
-					Global.debug("\r\n ghour ====="+ghour);
-					Global.debug("\r\n gminute ====="+gminute);
-					//intent.setClass(MainActivity.this, MenuActivity.class);
-					intent.putExtras(bundle); // 传入参数
-					intent.setAction("remind_action");// 启动界面
-					setResult(Global.FLAG_TIME_ID,intent);	//返回界面
-					
-					// Ok键 
-					mHandler.sendEmptyMessage(Global.MSG_FINISH);						
+					mHandler.sendEmptyMessage(Global.MSG_BACK);
 				}
 			});	
 		}
@@ -394,10 +381,30 @@ public class TimeSetActivity extends BaseActivity {
 			else if(msg.what == Global.MSG_ONRESUM){
 				onResume();
 			}
+			else if(msg.what == Global.MSG_BACK){
+				goBack();
+			}
 			
 			super.handleMessage(msg);
 		}
 	};
+	private void goBack() {
+		Intent intent = new Intent();			
+		Bundle bundle = new Bundle();//
+
+		bundle.putInt("HOUR", ghour); // 传入参数 年			
+		bundle.putInt("MINUTE", gminute); // 传入参数 年
+		Global.debug("\r\n ghour ====="+ghour);
+		Global.debug("\r\n gminute ====="+gminute);
+		//intent.setClass(MainActivity.this, MenuActivity.class);
+		intent.putExtras(bundle); // 传入参数
+		intent.setAction("remind_action");// 启动界面
+		setResult(Global.FLAG_TIME_ID,intent);	//返回界面
+		
+		// Ok键 
+		mHandler.sendEmptyMessage(Global.MSG_FINISH);	
+		
+	}
 	// 显示设置成功
 	private void showSetOkPromptDialog() {
 		PromptDialog mDialog = new PromptDialog(this, getResources().getString(R.string.set_ok));

@@ -32,6 +32,8 @@ public class Global {
 	public static final int MSG_IMPORT = 2;  // 导入
 	public static final int MSG_EXPORT = 3;  //  导出
 	public static final int MSG_RESUME = 4;  //  导出
+	public static final int MSG_BACK = 5;  //  导出
+	public static final int MSG_FINISH = 6;  //  导出
 	
 	public static void debug(String s) {
 		Log.d(TAG, s);

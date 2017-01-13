@@ -12,9 +12,13 @@ import com.sunteam.common.utils.Tools;
 public abstract class BaseActivity extends com.sunteam.common.menu.BaseActivity implements OnGestureListener{
 	private final int swipe_min_distance = 120;
 	private GestureDetector detector;
+		@Override
 		public abstract void leftSlip();
+		@Override
 		public abstract void rightSlip();
+		@Override
 		public abstract void upSlip();
+		@Override
 		public abstract void downSlip();
 	
 	@SuppressWarnings("deprecation")

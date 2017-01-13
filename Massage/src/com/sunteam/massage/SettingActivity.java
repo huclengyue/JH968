@@ -14,6 +14,8 @@ import com.sunteam.massage.utils.Global;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -265,10 +267,7 @@ public class SettingActivity extends BaseActivity {
 	// 键按下
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		
-		//Global.debug("[onKeyDown ] ID= "+ gId + " year + "+ gyear+ " month ="+ gmonth+" day = "+ gday);
-		//Global.debug("[onKeyDown ] forwork= "+ gForTime + " overwork + "+ gOverTime + " money ="+ gMoney);
-		
+	
 		switch (keyCode) {   
 		case KeyEvent.KEYCODE_DPAD_CENTER:
 		case KeyEvent.KEYCODE_ENTER:
@@ -279,42 +278,18 @@ public class SettingActivity extends BaseActivity {
 				
 				@Override
 				public void onComplete() {
-					// TODO 自动生成的方法存根
-					Intent intent = new Intent();	//新建 INtent
-					Bundle bundle = new Bundle();	//新建 bundle
-					
-					Global.debug("onKeyDown gyear === " + gyear);
-					Global.debug("onKeyDown gmonth === " + gmonth);
-					Global.debug("onKeyDown gday === " + gday);
-					
-					bundle.putLong("SELECID", gId);
-						
-					if(gId == DATE_SET)  // 修改日期
-					{
-						bundle.putInt("YEAR", gyear);
-						bundle.putInt("MONTH", gmonth);
-						bundle.putInt("DAY", gday);
-					}
-					else{
-						SettingUpDataDB();
-					}
-					intent.putExtras(bundle); // 参数传递
-					setResult(Global.FLAG_CODE,intent);	//返回界面
-
-					finish();
+					mHandler.sendEmptyMessage(Global.MSG_BACK);
 				}
 			});			
 			return true;
 			
 		case KeyEvent.KEYCODE_DPAD_UP:  // 上键处理
-			//TtsUtils.getInstance().stop();
 			gNumberFlag = true;  // 数字输入标志
 			gNumBitflag = 0;
 			setUpKey(); // 上键处理
 			return true;
 			
 		case KeyEvent.KEYCODE_DPAD_DOWN: //下键处理
-			//TtsUtils.getInstance().stop();
 			gNumberFlag = true;  //  数字输入标志
 			gNumBitflag = 0;
 			setDownKey();
@@ -372,8 +347,8 @@ public class SettingActivity extends BaseActivity {
 					
 					@Override
 					public void doConfirm() {   // 是 保存
-						// TODO 自动生成的方法存根
-						Intent intent = new Intent();	//新建 INtent
+						
+						/*Intent intent = new Intent();	//新建 INtent
 						Bundle bundle = new Bundle();	//新建 bundle
 						
 						Global.debug("onKeyDown gyear === " + gyear);
@@ -394,13 +369,14 @@ public class SettingActivity extends BaseActivity {
 						intent.putExtras(bundle); // 参数传递
 						setResult(Global.FLAG_CODE,intent);	//返回界面
 
-						finish();	
+						finish();	*/
+						mHandler.sendEmptyMessage(Global.MSG_BACK);
 					}
 					
 					@Override
 					public void doCancel() { // 是 否
-						// TODO 自动生成的方法存根
-						finish();	
+						//finish();
+						mHandler.sendEmptyMessage(Global.MSG_FINISH);
 					}
 				});
 			}
@@ -522,8 +498,6 @@ public class SettingActivity extends BaseActivity {
 				Global.debug(" gyear =="+  gyear + "  gNumBitflag == " + gNumBitflag);
 				if(gyear > Global.MAX_YEAR)
 				{
-					//TTS_speak(0, getResources().getString(R.string.input_date_check));
-					//SpeakContentend(getResources().getString(R.string.input_date_check));
 					gyear = Global.MAX_YEAR;
 					gflag = Global.AT_MONTH;
 					gNumBitflag = 0;
@@ -538,8 +512,6 @@ public class SettingActivity extends BaseActivity {
 				}
 				else if(gyear < Global.MIN_YEAR && (gNumBitflag >2) )
 				{
-					//TTS_speak(0, getResources().getString(R.string.input_date_check));
-					//SpeakContentend(getResources().getString(R.string.input_date_check));
 					gyear = Global.MIN_YEAR;
 					gflag = Global.AT_MONTH;
 					gNumBitflag = 0;
@@ -550,13 +522,7 @@ public class SettingActivity extends BaseActivity {
 					PromptDialog mPromptDialog= new PromptDialog( this, speak_str);
 					mPromptDialog.show();
 				}
-/*				
-				else{
-					String speak_str= null;
-					speak_str = Integer.toString(gyear) + getResources().getString(R.string.year);
-					TTS_speak(1, speak_str);
-				}
-				*/
+
 				Global.debug("[setNumberKey]gyear =" + gyear);
 			}
 			else if(Global.AT_MONTH == gflag)
@@ -583,8 +549,6 @@ public class SettingActivity extends BaseActivity {
 				Global.debug("gmonth =2222222222=== " + gmonth);
 				if(gmonth > Global.MAX_MONTH)
 				{
-					//TTS_speak(0, getResources().getString(R.string.input_date_check));
-					//SpeakContentend(getResources().getString(R.string.input_date_check));
 					gmonth = Global.MAX_MONTH;
 					gflag = Global.AT_DAY;
 					gNumBitflag = 0;
@@ -599,8 +563,6 @@ public class SettingActivity extends BaseActivity {
 				}
 				else if(gmonth < Global.MIN_MONTH)
 				{
-					//TTS_speak(0, getResources().getString(R.string.input_date_check));
-					//SpeakContentend(getResources().getString(R.string.input_date_check));
 					gmonth = Global.MIN_MONTH;
 					gflag = Global.AT_DAY;
 					gNumBitflag = 0;
@@ -612,13 +574,8 @@ public class SettingActivity extends BaseActivity {
 					
 					PromptDialog mPromptDialog= new PromptDialog( this, speak_str);
 					mPromptDialog.show();
-				}/*
-				else{
-					String speak_str= null;
-					String[] mon = getResources().getStringArray(R.array.month);
-					speak_str = mon[gmonth];
-					TTS_speak(1, speak_str);
-				}*/
+				}
+				
 				if((gmonth == 2)&&(gday == (month_day[gmonth -1]+1))) // 判断2月份 闰年
 				{
 					if(gyear % 4 == 0 && gyear % 100 != 0 || gyear % 400 == 0){
@@ -672,38 +629,27 @@ public class SettingActivity extends BaseActivity {
 				
 				if(gday > max_day)
 				{
-					//TTS_speak(0, getResources().getString(R.string.input_date_check));
-					//SpeakContentend(getResources().getString(R.string.input_date_check));
 					gday = max_day;
 					gflag = Global.AT_YEAR;
 					gNumBitflag = 0;
 					
 					String speak_str= null;
 					speak_str = getResources().getString(R.string.input_date_check) + Integer.toString(gday);
-					//SpeakContentend(getResources().getString(R.string.input_date_check) + speak_str);
 					
 					PromptDialog mPromptDialog= new PromptDialog( this, speak_str);
 					mPromptDialog.show();
 				}
 				else if(gday < 1)
 				{
-					//TTS_speak(0, getResources().getString(R.string.input_date_check));
-					//SpeakContentend(getResources().getString(R.string.input_date_check));
 					gday = 1;
 					gflag = Global.AT_YEAR;
 					gNumBitflag = 0;
 					
 					String speak_str= null;
 					speak_str = getResources().getString(R.string.input_date_check) + Integer.toString(gday);
-					//SpeakContentend(getResources().getString(R.string.input_date_check) + speak_str);
 					PromptDialog mPromptDialog= new PromptDialog( this, speak_str);
 					mPromptDialog.show();
-				}/*
-				else{
-					String speak_str= null;
-					speak_str = Integer.toString(gday);
-					TTS_speak(1, speak_str);
-				}*/
+				}
 				Global.debug("[setNumberKey]gday =" + gday);
 			}
 		}
@@ -716,8 +662,6 @@ public class SettingActivity extends BaseActivity {
 				d_temp = (int)d_temp + (double)(tempNum/10);
 				if(d_temp > 23.9)
 				{
-					//TTS_speak(0, getResources().getString(R.string.input_date_check));
-					//SpeakContentend(getResources().getString(R.string.input_date_check));
 					PromptDialog mPromptDialog= new PromptDialog( this, getResources().getString(R.string.input_date_check));
 					mPromptDialog.show();
 					
@@ -730,8 +674,6 @@ public class SettingActivity extends BaseActivity {
 				d_temp = d_temp*10 + tempNum;
 				if(d_temp > 24)
 				{
-					//TTS_speak(0, getResources().getString(R.string.input_date_check));
-				//	SpeakContentend(getResources().getString(R.string.input_date_check));
 					PromptDialog mPromptDialog= new PromptDialog( this, getResources().getString(R.string.input_date_check));
 					mPromptDialog.show();
 					d_temp = 24;
@@ -747,8 +689,6 @@ public class SettingActivity extends BaseActivity {
 			d_temp = d_temp*10 + tempNum;
 			if(d_temp > Global.MAX_MONEY)
 			{
-				//TTS_speak(0, getResources().getString(R.string.input_date_check));
-			//	SpeakContentend(getResources().getString(R.string.input_date_check));
 				PromptDialog mPromptDialog= new PromptDialog( this, getResources().getString(R.string.input_date_check));
 				mPromptDialog.show();
 				d_temp = Global.MAX_MONEY;
@@ -800,9 +740,6 @@ public class SettingActivity extends BaseActivity {
 						gForTime =Double.parseDouble(temp);
 						
 						Global.debug("OVERWORK_time === "+tempinfo.getoverwork());
-						//SpeakContentend(getResources().getString(R.string.input_date_check));
-//						PromptDialog mPromptDialog= new PromptDialog( this, getResources().getString(R.string.input_date_check));
-//						mPromptDialog.show();
 					}
 					tempinfo.setforwork(gForTime);
 				}
@@ -817,9 +754,6 @@ public class SettingActivity extends BaseActivity {
 						gOverTime =Double.parseDouble(temp);
 						
 						Global.debug("FORWORK_time === "+tempinfo.getforwork());
-						//SpeakContentend(getResources().getString(R.string.input_date_check));
-//						PromptDialog mPromptDialog= new PromptDialog( this, getResources().getString(R.string.input_date_check));
-//						mPromptDialog.show();
 					}
 					tempinfo.setoverwork(gOverTime);
 				}
@@ -827,17 +761,6 @@ public class SettingActivity extends BaseActivity {
 				{
 					tempinfo.setMoney(gMoney);
 				}
-/*				
-				tempinfo.setid(tempId);
-				
-				tempinfo.setDay(gday);
-				tempinfo.setMonth(gmonth);
-				tempinfo.setYear(gyear);
-				
-				tempinfo.setMoney(gMoney);
-				tempinfo.setforwork(gForTime);
-				tempinfo.setoverwork(gOverTime);
-				*/
 				dbInfo.update(tempinfo, gUserId);   // 更新数据
 			}
 			else{  // 没找到数据
@@ -1157,49 +1080,6 @@ public class SettingActivity extends BaseActivity {
 					cNum = Integer.toString(d_temp + 1);
 				}
 			}
-						
-/*			if(cNum.charAt(cNum.length() -1) == '9')
-			{
-				if(gPointFlag == true)  // 有小数点
-				{
-					double d_temp = Double.valueOf(cNum);
-					
-					cNum = Double.toString((d_temp + 0.1)-1);
-				}
-				else // û����ʾ��
-				{
-					int d_temp = Integer.valueOf(cNum);
-					cNum = Integer.toString((d_temp + 1)-10);
-				}
-			}
-			else{
-				if(gPointFlag == true)  // 是小数
-				{
-					Global.debug("【down】cNum [2]== "+cNum);
-					double d_temp = Double.valueOf(cNum);
-					Global.debug("【down】d_temp [3]== "+d_temp);
-					if((d_temp + 0.1) > 24)
-					{
-						d_temp = 24;
-					}
-					else{
-						d_temp = d_temp + 0.1;
-					}
-					cNum = Double.toString(d_temp);
-				}
-				else // û����ʾ��
-				{
-					int d_temp = Integer.valueOf(cNum);
-					if((d_temp + 1) > 24)
-					{
-						d_temp = 20;
-					}
-					else{
-						d_temp = d_temp + 1;
-					}
-					cNum = Integer.toString(d_temp);
-				}
-			}*/
 			Global.debug("【down】cNum [2]== "+cNum);
 		}
 
@@ -1212,16 +1092,6 @@ public class SettingActivity extends BaseActivity {
 			else{
 				cNum = Integer.toString(d_temp + 1);				
 			}	
-			
-/*			if(cNum.charAt(cNum.length() -1) == '9')
-			{
-				int d_temp = Integer.valueOf(cNum);
-				cNum = Integer.toString((d_temp + 1)-10);				
-			}
-			else{
-				int d_temp = Integer.valueOf(cNum);
-				cNum = Integer.toString(d_temp + 1);				
-			}	*/	
 		}
 		//Global.debug("setDownKey cNum ========= " + cNum.toString());
 		showview(false);
@@ -1359,68 +1229,7 @@ public class SettingActivity extends BaseActivity {
 					}
 				}
 				cNum = Integer.toString(d_temp);
-			}	
-			
-			// 老规格 
-/*			if(cNum.charAt(cNum.length() -1) == '0') // 末尾 是0
-			{
-				if(gPointFlag == true)  // 是小数
-				{
-					double d_temp = Double.valueOf(cNum);
-					Global.debug("[@@] d_temp == "+d_temp);
-					Global.debug("[@@] (d_temp + 1) == "+(d_temp + 1));
-					Global.debug("[@@] (d_temp + 1)-0.1 == "+((d_temp + 1) -0.1));
-					if(((d_temp + 1)-0.1 ) > 24)
-					{
-						d_temp = 24;
-					}
-					else{
-						d_temp = (d_temp + 1)-0.1;
-					}
-					cNum = Double.toString(d_temp);					
-				}
-				else // 是整数
-				{
-					int d_temp = Integer.valueOf(cNum);
-					if(((d_temp + 10)-1) > 24)
-					{
-						d_temp = 24;
-					}
-					else{
-						d_temp = (d_temp + 10)-1;
-					}
-					cNum = Integer.toString(d_temp);
-				}
-			}
-			else{ //末尾 不是0
-				if(gPointFlag == true)  // 是小数
-				{
-					double d_temp = Double.valueOf(cNum);
-					
-					if(((d_temp + 1)-0.1 ) > 24)
-					{
-						d_temp = 24;
-					}
-					else{
-						d_temp = (d_temp + 1)-0.1;
-					}
-					
-					cNum = Double.toString(d_temp - 0.1);
-				}
-				else // 整数
-				{
-					int d_temp = Integer.valueOf(cNum);
-					if((d_temp -1) > 24)
-					{
-						d_temp = 24;
-					}
-					else{
-						d_temp = d_temp -1;
-					}
-					cNum = Integer.toString(d_temp );
-				}
-			}*/
-			
+			}				
 			Global.debug("[@@] cNum == "+cNum);
 		}
 		else if(gId == MONEY_SET)
@@ -1432,16 +1241,6 @@ public class SettingActivity extends BaseActivity {
 			else{
 				cNum = Integer.toString(d_temp - 1);
 			}	
-			
-/*			if(cNum.charAt(cNum.length() -1) == '0')
-			{
-				int d_temp = Integer.valueOf(cNum);
-				cNum = Integer.toString((d_temp + 10)-1);	
-			}
-			else{
-				int d_temp = Integer.valueOf(cNum);
-				cNum = Integer.toString(d_temp - 1);
-			}*/
 		}
 		showview(false);
 		
@@ -1454,12 +1253,10 @@ public class SettingActivity extends BaseActivity {
 		{
 			if(gflag == Global.AT_YEAR)
 			{
-				speak_str = Integer.toString(gyear) + getResources().getString(R.string.year);
-				
+				speak_str = Integer.toString(gyear) + getResources().getString(R.string.year);				
 				tYear.setBackgroundColor(mTools.getHighlightColor()); // 改变字体颜色
 			}
 			else{
-				
 				tYear.setBackgroundColor(mTools.getBackgroundColor()); // 改变字体颜色	
 			}
 			
@@ -1586,19 +1383,12 @@ public class SettingActivity extends BaseActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	
 	/// ＴＴＳ发音
 	public void TTS_speak(Boolean speakWay, String text) {
-		//HashMap<String, String> map = new HashMap<String, String>();
-		//map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, Constant.TTS_UTTERAANCEID);
-//		TtsUtils.getInstance().speak(text, TextToSpeech.QUEUE_FLUSH);
-		
 		if (speakWay == false) {
-			//TtsUtils.getInstance().stop();
 			TtsUtils.getInstance().speak(text, TextToSpeech.QUEUE_FLUSH);
 		} else {
 			TtsUtils.getInstance().speak(text, TextToSpeech.QUEUE_ADD);
-
 		}
 
 		Global.debug("TTS_speak === "+ text);
@@ -1620,5 +1410,48 @@ public class SettingActivity extends BaseActivity {
 		}
 		catch(Exception e)
 		{}
+	}
+	
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_BACK){   // 音乐播放结束消息
+				goBack();
+			}
+			else if(msg.what == Global.MSG_FINISH){
+				finish();
+			}
+			else if(msg.what == Global.MSG_RESUME){
+				onResume();
+			}
+			
+			super.handleMessage(msg);
+		}		
+	};
+
+	private void goBack() {
+		
+		Intent intent = new Intent();	//新建 INtent
+		Bundle bundle = new Bundle();	//新建 bundle
+		
+		Global.debug("onKeyDown gyear === " + gyear);
+		Global.debug("onKeyDown gmonth === " + gmonth);
+		Global.debug("onKeyDown gday === " + gday);
+		
+		bundle.putLong("SELECID", gId);
+			
+		if(gId == DATE_SET)  // 修改日期
+		{
+			bundle.putInt("YEAR", gyear);
+			bundle.putInt("MONTH", gmonth);
+			bundle.putInt("DAY", gday);
+		}
+		else{
+			SettingUpDataDB();
+		}
+		intent.putExtras(bundle); // 参数传递
+		setResult(Global.FLAG_CODE,intent);	//返回界面
+
+		finish();
 	}
 }

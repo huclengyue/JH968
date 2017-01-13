@@ -137,6 +137,7 @@ public class AudioRecorder {
 	}
 
 	class AudioRecordThread implements Runnable {
+		@Override
 		public void run() {
 			writeDateTOFile();// 往文件中写入裸数据
 			addHeader(NewAudioName);// 给裸数据加上头文件

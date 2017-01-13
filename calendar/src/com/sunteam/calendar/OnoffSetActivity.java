@@ -11,6 +11,8 @@ import com.sunteam.receiver.Alarmpublic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 
 public class OnoffSetActivity extends MenuActivity {
@@ -74,24 +76,7 @@ public class OnoffSetActivity extends MenuActivity {
 				
 				@Override
 				public void onComplete() {
-					// TODO 自动生成的方法存根
-					Global.debug("**************************************");
-					Intent intent = new Intent();	//新建 INtent
-					Bundle bundle = new Bundle();	//新建 bundle
-					gonoff = getSelectItem();
-					if(gonoff == Global.ALARM_OFF){  // 此处需要注意， 逻辑翻转
-						gonoff = Alarmpublic.ALARM_OFF; 
-					}
-					else {
-						gonoff = Alarmpublic.ALARM_ON;
-					}
-					//saveDataRemind();
-					bundle.putInt("ONOFF", gonoff /*getSelectItem()*/);
-					Global.debug("********************gonoff *==" + gonoff);
-					
-					intent.putExtras(bundle); // 参数传递
-					setResult(Global.FLAG_ONOFF_ID,intent);	//返回界面
-					finish();
+					mHandler.sendEmptyMessage(Global.MSG_BACK);
 				}
 			});
 			
@@ -156,5 +141,36 @@ public class OnoffSetActivity extends MenuActivity {
 			dbInfo.closeDb();
 		}
 		Alarmpublic.UpateAlarm(this);
+	}
+	
+	// 处理弹框
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			Global.debug("\r\n [calendarMenuActivity] == Handler  msg.what == " + msg.what);
+			if(msg.what == Global.MSG_BACK){   // 音乐播放结束消息
+				goBack();
+			}
+		}
+	};
+
+	private void goBack() {
+		Global.debug("**************************************");
+		Intent intent = new Intent();	//新建 INtent
+		Bundle bundle = new Bundle();	//新建 bundle
+		gonoff = getSelectItem();
+		if(gonoff == Global.ALARM_OFF){  // 此处需要注意， 逻辑翻转
+			gonoff = Alarmpublic.ALARM_OFF; 
+		}
+		else {
+			gonoff = Alarmpublic.ALARM_ON;
+		}
+		//saveDataRemind();
+		bundle.putInt("ONOFF", gonoff /*getSelectItem()*/);
+		Global.debug("********************gonoff *==" + gonoff);
+		
+		intent.putExtras(bundle); // 参数传递
+		setResult(Global.FLAG_ONOFF_ID,intent);	//返回界面
+		finish();
 	}
 }

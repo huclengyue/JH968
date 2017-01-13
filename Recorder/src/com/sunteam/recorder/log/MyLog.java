@@ -1,9 +1,6 @@
 package com.sunteam.recorder.log;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,7 +8,6 @@ import java.util.Date;
 import com.sunteam.recorder.Global;
 
 import android.annotation.SuppressLint;
-import android.os.Environment;
 import android.util.Log;
 
 /**

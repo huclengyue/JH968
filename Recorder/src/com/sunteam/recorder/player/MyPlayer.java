@@ -3,14 +3,12 @@ package com.sunteam.recorder.player;
 import java.io.IOException;
 
 import android.content.Context;
-import android.gesture.GestureStore;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.os.Handler;
 
-import com.iflytek.thridparty.r;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.recorder.Global;
@@ -101,7 +99,7 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 	public int progress() {
 		if (mState == PLAYING_STATE || mState == PLAYING_PAUSED_STATE) {
             if (mPlayer != null) {
-                return (int) (mPlayer.getCurrentPosition() / 1000);
+                return mPlayer.getCurrentPosition() / 1000;
             }
         }
         return 0;
@@ -200,12 +198,14 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
         signalStateChanged(mState);
     }
 	
+	@Override
 	public boolean onError(MediaPlayer mp, int what, int extra) {
 		stopPlayback();
 		setError(STORAGE_ACCESS_ERROR);
         return true;
 	}
 
+	@Override
 	public void onCompletion(MediaPlayer mp) {
 		stopPlayback();
 		goBackPlaylist();

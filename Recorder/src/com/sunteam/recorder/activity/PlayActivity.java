@@ -68,12 +68,22 @@ public class PlayActivity extends RecordBaseActivity implements MyPlayer.OnState
 			}else if(msg.what == 3){
 				mHandler.postDelayed(finishActivityDelayed, 2000);
 			}
+			else if(msg.what ==Global.MSG_BACK){
+				goBack();
+			}
 			super.handleMessage(msg);
-		}
-		
+		}		
 	};
 	
-Runnable finishActivityDelayed = new Runnable() {
+	private void goBack() {
+		myPlayer.stopPlayback();
+		Intent intent = new Intent();
+		intent.putExtra("currentIndex", currentIndex);
+		PlayActivity.this.setResult(RESULT_OK, intent);
+		finish();	
+	}
+	
+	Runnable finishActivityDelayed = new Runnable() {
 		
 		@Override
 		public void run() {
@@ -101,7 +111,8 @@ Runnable finishActivityDelayed = new Runnable() {
 	
 	
 	Runnable mUpdateTimer = new Runnable() {
-        public void run() { 
+        @Override
+		public void run() { 
         	updateTimerView(); 
         }
     };
@@ -141,7 +152,7 @@ Runnable finishActivityDelayed = new Runnable() {
 		Intent intent = getIntent();
 		mSampleFile = (String) intent.getExtras().get("filename");
 		tvFileName.setText(mSampleFile);
-		fileList = (List<String>)intent.getStringArrayListExtra("filelist");
+		fileList = intent.getStringArrayListExtra("filelist");
 		currentIndex = getCurrentIndex(mSampleFile);
 		
 		mPlaySeekBar = (SeekBar) findViewById(R.id.play_seek_bar);
@@ -447,12 +458,7 @@ Runnable finishActivityDelayed = new Runnable() {
 								
 								@Override
 								public void onComplete() {
-									// TODO 自动生成的方法存根
-									myPlayer.stopPlayback();
-			        				Intent intent = new Intent();
-			        				intent.putExtra("currentIndex", currentIndex);
-			        				PlayActivity.this.setResult(RESULT_OK, intent);
-			        				finish();
+									mHandler.sendEmptyMessage(Global.MSG_BACK);
 								}
 							});
 	            			
@@ -489,4 +495,5 @@ Runnable finishActivityDelayed = new Runnable() {
 		switchAudio();
 		
 	}
+	
 }

@@ -128,6 +128,7 @@ public class PlaylistActivity extends MenuActivity {
 			}
 		}
 		Collections.sort(fileList, new Comparator<String>() {
+			@Override
 			public int compare(String arg0, String arg1) {
 				return arg1.compareTo(arg0);
 			}
@@ -153,7 +154,7 @@ public class PlaylistActivity extends MenuActivity {
 
 	@Override
 	public void leftSlip() {
-		itemHeight = ((View) listView.getChildAt(0)).getHeight();
+		itemHeight = listView.getChildAt(0).getHeight();
 		visibleItemCount = listView.getLastVisiblePosition() - listView.getFirstVisiblePosition();
 
 		int temp = getSelectItem() + visibleItemCount;
@@ -172,7 +173,7 @@ public class PlaylistActivity extends MenuActivity {
 
 	@Override
 	public void rightSlip() {
-		itemHeight = ((View) listView.getChildAt(0)).getHeight();
+		itemHeight = listView.getChildAt(0).getHeight();
 		visibleItemCount = listView.getLastVisiblePosition() - listView.getFirstVisiblePosition();
 
 		int temp = getSelectItem() - visibleItemCount;
@@ -205,7 +206,7 @@ public class PlaylistActivity extends MenuActivity {
 	@Override
 	public void upSlip() {
 		Log.e("zyw", "upSlip");
-		itemHeight = ((View) listView.getChildAt(0)).getHeight();
+		itemHeight = listView.getChildAt(0).getHeight();
 		visibleItemCount = listView.getLastVisiblePosition() - listView.getFirstVisiblePosition();
 		// playListAdapter.down();
 		if (getSelectItem() != 0) {
@@ -222,7 +223,7 @@ public class PlaylistActivity extends MenuActivity {
 		if(listView == null){
 			return;
 		}
-		itemHeight = ((View) listView.getChildAt(0)).getHeight();
+		itemHeight = listView.getChildAt(0).getHeight();
 		visibleItemCount = listView.getLastVisiblePosition() - listView.getFirstVisiblePosition();
 		// playListAdapter.up();
 		if (getSelectItem() != getListData().size() - 1) {

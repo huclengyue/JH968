@@ -9,9 +9,13 @@ import android.view.MotionEvent;
 public abstract class RecordBaseActivity extends BaseActivity implements OnGestureListener{
 	private final int swipe_min_distance = 120;
 	private GestureDetector detector;
+		@Override
 		public abstract void leftSlip();
+		@Override
 		public abstract void rightSlip();
+		@Override
 		public abstract void upSlip();
+		@Override
 		public abstract void downSlip();
 	
 	@SuppressWarnings("deprecation")

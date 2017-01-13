@@ -8,6 +8,7 @@ import com.sunteam.common.utils.Tools;
 
 public class SunteamApplication extends Application implements TtsListener {
 	
+	@Override
 	public void onCreate() {
 		super.onCreate();
 		TtsUtils.getInstance(this, this);
@@ -21,6 +22,7 @@ public class SunteamApplication extends Application implements TtsListener {
 		this.setTheme(R.style.BlueWhiteTheme);
 	}
 
+	@Override
 	public void onInit(int status) {
 		//if (status == TextToSpeech.SUCCESS) {
 			//Toast.makeText(this, "Text-To-Speech engine is initialized", Toast.LENGTH_LONG).show();

@@ -2,7 +2,6 @@ package com.sunteam.recorder;
 
 import java.util.HashMap;
 
-import com.sunteam.common.tts.TtsCompletedListener;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.dialog.PromptListener;
@@ -31,6 +30,7 @@ public class Global {
 	public static int MSG_GOBACK = 1;  // 界面返回
 	public static int MSG_GOBACK_SAVE = 2;  // 界面返回
 	public static int MSG_ONRESUM = 3;
+	public static int MSG_BACK = 4;   // back
 	public static WakeLock mWakeLock; // 禁止休眠
 	
 	@SuppressWarnings("deprecation")

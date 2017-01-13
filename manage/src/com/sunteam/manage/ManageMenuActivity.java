@@ -247,13 +247,15 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 						
 						//Global.gPastName();
 						DeleteFile(Global.gPastName);
-						Intent intent = new Intent();
+						
+						/*Intent intent = new Intent();
 						Bundle bundle = new Bundle();	//新建 bundl
 						bundle.putInt("selectItem", getSelectItem());
 						intent.putExtras(bundle); // 参数传递
 						
 						setResult(Global.MENU_INTERFACE_FLAG, intent);
-						finish();
+						finish();*/
+						mHandler.sendEmptyMessage(Global.MSG_BACK);
 					}
 					
 					@Override
@@ -620,26 +622,28 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		if(true == gPastFlag){
 			return;
 		}
-		// TODO 自动生成的方法存根
+		/*// TODO 自动生成的方法存根
 		Intent intent = new Intent();
 		Bundle bundle = new Bundle();	//新建 bundl
 		bundle.putInt("selectItem", getSelectItem());
 		intent.putExtras(bundle); // 参数传递
 		
 		setResult(Global.MENU_INTERFACE_FLAG, intent);
-		finish();
+		finish();*/
+		mHandler.sendEmptyMessage(Global.MSG_BACK);
 	}
 
 	@Override
 	public void doCancel() {
-		// TODO 自动生成的方法存根
+		/*// TODO 自动生成的方法存根
 		Intent intent = new Intent();
 		Bundle bundle = new Bundle();	//新建 bundl
 		bundle.putInt("selectItem", getSelectItem());
 		intent.putExtras(bundle); // 参数传递
 		
 		setResult(Global.MENU_INTERFACE_FLAG, intent);
-		finish();
+		finish();*/
+		mHandler.sendEmptyMessage(Global.MSG_BACK);
 	}
 
 	@Override
@@ -687,10 +691,7 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 	
 	private void go_back(){
 		
-		if(gPastFlag == true){
-			gPastFlag = false;
-			DeleteFile(Global.gPastName);
-		}
+		
 		//Global.gPastName();
 		
 		Intent intent = new Intent();
@@ -735,10 +736,18 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
             	if(mPath.contains(mData)){  // 包含
 	            	if(mData.contains(Global.MENU_PATH_EXTSD) ){  // 存储卡
 	            		Global.debug("\r\n tf卡 列表更新============== ");
+	            		if(gPastFlag == true){
+	            			gPastFlag = false;
+	            			DeleteFile(Global.gPastName);
+	            		}
 	            		go_back();
 	            	}
 	            	else if(mData.contains(Global.MENU_PATH_UDISK) ){  // U盘
 	            		Global.debug("\r\n U盘 列表更新============== ");
+	            		if(gPastFlag == true){
+	            			gPastFlag = false;
+	            			DeleteFile(Global.gPastName);
+	            		}
 	            		go_back();
 	            	}
             	}
@@ -762,6 +771,9 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 			else if(msg.what == Global.MSG_STRAT_PAST)
 			{
 				startPast();
+			}
+			else if(msg.what == Global.MSG_BACK){
+			//	go_back();
 			}
 			super.handleMessage(msg);
 		}

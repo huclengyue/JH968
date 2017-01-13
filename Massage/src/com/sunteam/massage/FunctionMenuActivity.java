@@ -311,7 +311,7 @@ public class FunctionMenuActivity extends MenuActivity implements ConfirmListene
 	@Override
 	public void onComplete() {   // 弹出框 显示完处理
 
-		finish();
+		mHandler.sendEmptyMessage(Global.MSG_FINISH);
 	}
 	
 	private Handler mHandler = new Handler(){
@@ -326,6 +326,9 @@ public class FunctionMenuActivity extends MenuActivity implements ConfirmListene
 			}
 			else if(msg.what == Global.MSG_RESUME){
 				onResume();
+			}
+			else if(msg.what == Global.MSG_FINISH){
+				finish();
 			}
 			
 			super.handleMessage(msg);

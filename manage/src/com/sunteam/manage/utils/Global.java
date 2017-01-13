@@ -62,6 +62,8 @@ public class Global {
 	
 	public static final int MSG_MAIN = 5; // 开始粘贴
 	
+	public static final int MSG_BACK = 6; // 开始粘贴
+	
 	public static void debug(String s) {
 		Log.d(TAG, s);
 	}

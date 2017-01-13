@@ -117,6 +117,7 @@ public class RecordActivity extends BaseActivity {
 
 	private UIHandler uiHandler = new UIHandler();
 	Runnable mUpdateTimer = new Runnable() {
+		@Override
 		public void run() {
 			updateTimerView();
 		}
@@ -189,6 +190,7 @@ public class RecordActivity extends BaseActivity {
 
 		tvReady.setOnClickListener(new OnClickListener() {
 
+			@Override
 			public void onClick(View v) {
 				if (mState == state_no_record) {
 					if (batteryReceiver.getLevel() < 10) { // 电量低情况
@@ -601,6 +603,7 @@ public class RecordActivity extends BaseActivity {
 		public UIHandler() {
 		}
 
+		@Override
 		@SuppressWarnings("unused")
 		public void handleMessage(Message msg) {
 			Log.d("MyHandler", "handleMessage......");
