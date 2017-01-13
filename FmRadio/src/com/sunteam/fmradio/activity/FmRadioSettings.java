@@ -99,13 +99,14 @@ public class FmRadioSettings extends MenuActivity {
 					
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
+						/*// TODO 自动生成的方法存根
 						Intent intent = new Intent();
 						Bundle bundle = new Bundle();	//新建 bundl
 						bundle.putInt("selectItem", getSelectItem());
 						intent.putExtras(bundle); // 参数传递
 						setResult(Global.MENU_FLAG, intent);
-						finish();
+						finish();*/
+						mHandler.sendEmptyMessage(Global.MSG_DOCOMPLETES);
 					}
 				});
 				return true;
@@ -124,13 +125,14 @@ public class FmRadioSettings extends MenuActivity {
 					
 					@Override
 					public void doCancel() {
-						// TODO 自动生成的方法存根
+					/*	// TODO 自动生成的方法存根
 						Intent intent = new Intent();
 						Bundle bundle = new Bundle();	//新建 bundl
 						bundle.putInt("selectItem", getSelectItem());
 						intent.putExtras(bundle); // 参数传递
 						setResult(Global.MENU_FLAG, intent);
-						finish();
+						finish();*/
+						mHandler.sendEmptyMessage(Global.MSG_DOCOMPLETES);
 					}
 				});
 				
@@ -152,13 +154,14 @@ public class FmRadioSettings extends MenuActivity {
 					
 					@Override
 					public void doCancel() {
-						// TODO 自动生成的方法存根
+						/*// TODO 自动生成的方法存根
 						Intent intent = new Intent();
 						Bundle bundle = new Bundle();	//新建 bundl
 						bundle.putInt("selectItem", getSelectItem());
 						intent.putExtras(bundle); // 参数传递
 						setResult(Global.MENU_FLAG, intent);
-						finish();
+						finish();*/
+						mHandler.sendEmptyMessage(Global.MSG_DOCOMPLETES);
 					}
 				});
 				
@@ -253,11 +256,22 @@ public class FmRadioSettings extends MenuActivity {
 			else if(msg.what == Global.MSG_ONRESUM){
 				onResume();
 			}
+			else if(msg.what == Global.MSG_DOCOMPLETES){
+				goBack();
+			}
 			
 			super.handleMessage(msg);
 		}
-
 	};
+	
+	private void goBack() {
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();	//新建 bundl
+		bundle.putInt("selectItem", getSelectItem());
+		intent.putExtras(bundle); // 参数传递
+		setResult(Global.MENU_FLAG, intent);
+		finish();	
+	}
 	
 	// 删除电台
 	private void showDelChanelPromptDialog() {
@@ -278,13 +292,7 @@ public class FmRadioSettings extends MenuActivity {
 			
 			@Override
 			public void onComplete() {
-				// TODO 自动生成的方法存根
-				Intent intent = new Intent();
-				Bundle bundle = new Bundle();	//新建 bundl
-				bundle.putInt("selectItem", getSelectItem());
-				intent.putExtras(bundle); // 参数传递
-				setResult(Global.MENU_FLAG, intent);
-				finish();
+				mHandler.sendEmptyMessage(Global.MSG_DOCOMPLETES);
 			}
 		});		
 	}
@@ -296,14 +304,16 @@ public class FmRadioSettings extends MenuActivity {
 			
 			@Override
 			public void onComplete() {
-				// TODO 自动生成的方法存根
+				/*// TODO 自动生成的方法存根
 				Intent intent = new Intent();
 				Bundle bundle = new Bundle();	//新建 bundl
 				bundle.putInt("selectItem", getSelectItem());
 				intent.putExtras(bundle); // 参数传递
 				setResult(Global.MENU_FLAG, intent);
-				finish();
+				finish();*/
+				mHandler.sendEmptyMessage(Global.MSG_DOCOMPLETES);
 			}
 		});		
 	}
+		
 }

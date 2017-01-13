@@ -59,6 +59,8 @@ public class Global {
 	public static final int MSG_DELALL_CHANEL = 2;  // 清空电台
 	public static final int MSG_ONRESUM = 3;
 	
+	public static final int MSG_DOCOMPLETES = 4;    // 结束
+	
 	//public static final String MHZ = "Mhz";   // 最近播放
 
 	public static Context getContext() {
