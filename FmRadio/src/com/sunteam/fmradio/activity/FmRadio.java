@@ -67,6 +67,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -103,8 +104,6 @@ import com.sunteam.fmradio.utils.Global;
 @SuppressWarnings({"unused", "deprecation"})
 public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandler, IFmProxyCallback {
 
-    //private static final String TAG = "FmRxRadio";
-   // private static final boolean V = true;
     public static final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
 
     private WakeLock mWakeLock; // 禁止休眠
@@ -115,15 +114,9 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
      private ArrayList<Integer> radioFreqList = new ArrayList<Integer>(); // 存放电台频率
     private int mRadioFreq = Global.DEFAULT_FREQUENCY;   // 默认电台
 
-    /* VARIABLE BLOCK */
-
-    /* Object instant references. */
-    //private FmReceiveView mView;
     private FmReceiverEventHandler mFmReceiverEventHandler;
     private FmProxy mFmReceiver;
-//    private SharedPreferences mSharedPrefs;
-   // private final static int NUM_OF_CHANNELS = 10;  // 记录通道数
-  //  private int mChannels[] = new int[NUM_OF_CHANNELS];
+
     private final static String freqPreferenceKey = "channel";
     private final static String lastFreqPreferenceKey = "last";
 
@@ -133,7 +126,6 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
     private int mFrequency = Global.DEFAULT_FREQUENCY;   // 当前频道
     private int mFrequencyStep = 10; // Step in increments of 100 Hz  // 每次增加 100hz
     private int mMinFreq, mMaxFreq; // updated with mPendingRegion
-//    private int mNfl;
 
     private boolean mSeekInProgress = false;
     boolean mPowerOffRadio = false;
@@ -146,8 +138,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
     private int mPendingFrequency = Global.DEFAULT_FREQUENCY;   // 当前频道
     private boolean mPendingMute = false;
     private int mPendingScanStep = FmProxy.FREQ_STEP_100KHZ; // Step in
-                                                             // increments of
-                                                             // 100 Hz
+
     private int mPendingScanMethod = FmProxy.SCAN_MODE_FAST;
     private int mPendingRdsMode = FmProxy.RDS_MODE_OFF;
     private int mPendingRdsType = FmProxy.RDS_COND_NONE;
@@ -159,7 +150,6 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
     private int mPendingLivePollinterval = 2000; // 2 second polling of rssi
 
     /* Pending updates. */
-    // sprivate boolean enabledUpdatePending = false;
     private boolean shutdownPending = false;
    // private boolean worldRegionUpdatePending = false;
     private boolean audioModeUpdatePending = false;
@@ -175,9 +165,6 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
     private boolean fmSetSnrThresholdPending = false;
     private boolean mFinish = false;
     private boolean bFinishCalled = false;
-    //private boolean mRadioIsOn = false;
-
-    /* Array of RDS program type names (English). */
     String mRdsProgramTypes[];
 
   //  NotificationManager mNotificationManager;
@@ -201,16 +188,12 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
     private int mMax_vol = 0;    // 最大音量
     private int mcur_vol = 0;    // 当前音量
     
+    private BatteryBroadcastReciver batterReceiver;  // 电池电量获取
+    
     /** Called when the activity is first created. */
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-
         Global.debug("\r\n [onCreate} =============111");
-        // 初始化tts
-//        TtsUtils.getInstance(this, mTtsListener);
-//        TtsUtils.getInstance().speak(getResources().getString(R.string.app_name));
-        
-       //doSoundEffect(false);      //adding
         
         int freq = 0; 
         freq = SharedPrefUtils.getSharedPrefInt(this, Global.FM_CONFIG_FILE, Context.MODE_WORLD_READABLE, Global.FM_SELECT, freq);
@@ -222,36 +205,25 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
         }
         Global.debug("\r\n[onCreate]  +=  mRadioFreq ====="+ mRadioFreq);
         chanel_str = new ArrayList<String>();
-        //chanel_di = new ArrayList<String>();
-        //radioFreqList
         chanel_str.clear();   // 清空
-        //chanel_di.clear();
         
         chanel_num = 0;
         mSearchFlag = false;
         
         if (mFmReceiver == null && !bFinishCalled) { // Avoid calling getProxy
-
         	Global.debug("\r\n[onCreate   ]Getting FmProxy proxy...");
-			
 			FmProxy.getProxy(this, this);
 		}
         Global.debug("\r\n [onCreate]   mFmReceiver==" + mFmReceiver);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);     // 音频 服务
-        //updateFMVolume();
+        
         mMax_vol = mAudioManager.getStreamMaxVolume( AudioManager.STREAM_MUSIC );  // 音乐最大音量
         mcur_vol = mAudioManager.getStreamVolume( AudioManager.STREAM_MUSIC ); // 当前音乐音量
         //Global.debug("vol  max == "+max+" current ===" + current);
         updateFMVolume(mcur_vol); // 同步收音机音量
-        
-     //   mAudioManager.getStreamVolume(streamType)
-//        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        mSharedPrefs.registerOnSharedPreferenceChangeListener(this);        
-       
+               
         // 获取 收音机制式
         updateMinMaxFrequencies();
-      //  mView.setFrequencyStep(mFrequencyStep);
-        
         
         if(false ){  // 耳机插入
         	speakerFlag = true;
@@ -265,8 +237,6 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		        mTitle =  s + "MHz";
 		        chanel_str.add(mTitle);
 		        chanel_num++;
-		
-		        //chanel_di.add(s);
 		        
 		        Global.debug("==222====="+mMenuList);
 		        //mMenuList.addAll(chanel_str);
@@ -278,8 +248,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	        	for(int i = 0; i < mTmpList.size(); i++){
 	        		String s = String.format("%.1f", Integer.valueOf(mTmpList.get(i)) / Global.fmScale);
 	        		chanel_str.add(s + getResources().getString(R.string.mhz));
-	        		//chanel_di.add(mTmpList.get(i)); 
-	    	      //radioFreqList.add(mRadioFreq)
+
 	        		radioFreqList.add(Integer.valueOf(mTmpList.get(i)));
 	        		chanel_num++;
 	        	}
@@ -319,6 +288,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
         registerReceiver(mMediaStateReceiver, new IntentFilter(PLAYSTATE_CHANGED));
         registerReceiver(mAirplaneModeReceiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));  // 飞行模式 改变
         registerHeadsetPlugReceiver();   // 注册耳机消息
+        registerBatReceiver();
         // 定时器
         mytimer = new Timer();
         TimerTask mytask  = new TimerTask(){  
@@ -427,10 +397,6 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			TtsUtils.getInstance().destroy();
 		}
         updateMuted(true);
-/*        Global.debug("\r\n onDestroy   speakerFlag ==== " + speakerFlag);
-        if(speakerFlag == true){  // 外放 要改成耳机
-			setWiredDeviceConnectionState(false);
-		}*/
 		 
     	Global.debug("Calling onDestroy()");
         Global.debug("FmRadio --------------ondestroy- go to set linein- disable---");
@@ -438,6 +404,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
         unregisterReceiver(mMediaStateReceiver);
         unregisterReceiver(mAirplaneModeReceiver);
         unregisterReceiver(headsetPlugReceiver);
+        unregisterReceiver(batterReceiver);
         if (mFmReceiver != null) {
         	Global.debug("Finishing FmProxy proxy...");
             mFmReceiver.unregisterEventHandler();
@@ -2408,5 +2375,50 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
             } 
         } 
     }; 
-	
+    
+    // 电池电量 获取
+	public class BatteryBroadcastReciver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if(intent.getAction().equals(Intent.ACTION_BATTERY_CHANGED)){
+	           int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+
+	           int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+	           boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                       status == BatteryManager.BATTERY_STATUS_FULL;
+	           if(level<10){
+            	
+        			PromptDialog mpDialog = new PromptDialog(FmRadio.this, getResources().getString(R.string.bat_lv0));
+        			mpDialog.show();
+        			mpDialog.setPromptListener(new PromptListener() {
+						
+						@Override
+						public void onComplete() {
+							mHandler.sendEmptyMessage(Global.MSG_BACK);	
+						}
+					});
+				}else if(level<20&&!isCharging){
+					//Global.showToast(PlayActivity.this, R.string.low_battery,null,-1);
+				} 
+			}
+		}
+	}
+	// 电池电量获取消息 注册
+	private void registerBatReceiver() {           
+        batterReceiver =new BatteryBroadcastReciver();  
+        IntentFilter intentFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);  
+        registerReceiver(batterReceiver, intentFilter);
+    }
+		
+	private Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if(msg.what == Global.MSG_BACK){   // 音乐播放结束消息
+				finish();
+			}
+			
+			super.handleMessage(msg);
+		}
+	};	
 }

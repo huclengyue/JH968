@@ -61,6 +61,8 @@ public class Global {
 	
 	public static final int MSG_DOCOMPLETES = 4;    // 结束
 	
+	public static final int MSG_BACK = 5;    // 结束
+	
 	//public static final String MHZ = "Mhz";   // 最近播放
 
 	public static Context getContext() {
