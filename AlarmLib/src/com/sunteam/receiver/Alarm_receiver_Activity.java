@@ -291,9 +291,9 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	protected void onDestroy() {
 		// TODO 自动生成的方法存根
 		super.onDestroy();
-		if (!CommonUtils.isAppOnForeground(this)) { // 如果是自己启动自己，则不必销毁TtsUtils实例!
-			TtsUtils.getInstance().destroy();
-		}
+//		if (!CommonUtils.isAppOnForeground(this)) { // 如果是自己启动自己，则不必销毁TtsUtils实例!
+//			TtsUtils.getInstance().destroy();
+//		}
 	}
 	@Override
 	protected void onResume() {
