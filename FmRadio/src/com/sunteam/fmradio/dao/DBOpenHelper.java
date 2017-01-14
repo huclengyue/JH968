@@ -24,7 +24,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db){// 首先建立每个数据的数据表
 	
 		try {
-			Global.debug("   ====DBOpenHelper onCreate     ==== creat===");
+			//Global.debug("   ====DBOpenHelper onCreate     ==== creat===");
 			String cmd = "create table "+ Global.FM_LIST + table_cmd; // 创建 最近播放表
 			db.execSQL(cmd); // 创建 表	
 		}catch (SQLException e) {

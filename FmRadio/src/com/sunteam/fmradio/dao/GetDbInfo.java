@@ -275,7 +275,7 @@ public class GetDbInfo {
 	public int closeDb() {
 		db = helper.getWritableDatabase();
 		db.close();
-		Global.debug("closeDb ++++++++++++++++++++");
+	//	Global.debug("closeDb ++++++++++++++++++++");
 		return 0;//关闭数据库
 	}
 }
