@@ -43,11 +43,9 @@ public class Alarm_MainActivity extends MenuActivity {
 	private int gOnoff = 0;   // 闹钟开关
 	private int gMonth = 0;   // 月
 	private int gDay = 0;   // 日
-	
 	private int gSQLData_ID = 0;   // 数据库 条数
-	
 	private int gInfo_ID = 0;   // 数据库 条数
-		
+				
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		gInterfaceFlag = MAIN_INTERFACE;
@@ -679,7 +677,8 @@ public class Alarm_MainActivity extends MenuActivity {
 					gFileName = bundle.getString("FILENAME");
 					Global.debug("id ====[1] ===gFileName= "+ gFileName);	
 	    			alarminfo.filename = gFileName;
-	    			alarminfo.path = Alarmpublic.ALARM_PATH + gFileName;	
+	    			String alarm_folder = Alarmpublic.ALARM_PATH+getResources().getString(R.string.folder);
+	    			alarminfo.path = alarm_folder+ "/" + gFileName;	
 				}
 				else if(selectId == Global.ALARM_SET_TYPE){  // 
 					
@@ -726,7 +725,9 @@ public class Alarm_MainActivity extends MenuActivity {
 					gFileName = bundle.getString("FILENAME");
 					Global.debug("id ====[1] ===gFileName= "+ gFileName);
 	    			alarminfo.filename = gFileName;
-	    			alarminfo.path = Alarmpublic.ALARM_PATH + gFileName;	
+	    			String alarm_folder = Alarmpublic.ALARM_PATH+getResources().getString(R.string.folder);
+	    			alarminfo.path = alarm_folder+ "/" + gFileName;	
+	    			//alarminfo.path = Alarmpublic.ALARM_PATH + gFileName;	
 				}
 				else if(selectId == Global.ANNIVERSARY_SET_ONOFF)// 开关
 				{
@@ -772,23 +773,9 @@ public class Alarm_MainActivity extends MenuActivity {
 		Alarmpublic.UpateAlarm(Alarm_MainActivity.this);
 	}
 	
-	// 切换发音
-		private void setHearToSpeak(Boolean flag) {
-			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-			if(true == flag){  //切换到外放
-				audioManager.setMode(AudioManager.MODE_NORMAL);
-				audioManager.setSpeakerphoneOn(true);
-				Toast.makeText(this, "   切换外放  ", 0).show();
-					
-			}
-			else{  // 切换到 耳机
-				//audioManager.setMode(AudioManager.ROUTE_HEADSET);
-				audioManager.setSpeakerphoneOn(false);
-				Toast.makeText(this, "   切换耳机  ", 0).show();;
-			}
-		}
+
 		
-		private void testrawplay() {
+/*		private void testrawplay() {
 			// TODO 自动生成的方法存根
 			boolean D = false;
 			Handler mHandler = null;
@@ -836,7 +823,7 @@ public class Alarm_MainActivity extends MenuActivity {
 			Global.debug("\r\n startPlay2   ==========666==");
             }
 			//((MyPlayer) myPlayer).startPlayback2(((MyPlayer) myPlayer).playProgress(), fd.getFileDescriptor(), true);
-		}	
+		}*/	
 		
 		public static boolean makeDirs(String filePath) {
 	        

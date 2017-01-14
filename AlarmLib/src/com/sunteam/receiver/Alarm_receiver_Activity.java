@@ -135,6 +135,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		myPlayer.setOnStateChangedListener(this);
 		gFilename = alarminfo.path;   // 获取文件名
 		File mFile = new File(gFilename);
+		Alarmpublic.debug("\r\n[Alarm_receiver_Activity] -->[onCreat] gFilename ======="+ gFilename);
 		if(mFile.exists()){   // 文件不存在
 			Alarmpublic.debug("\r\n[11111111111] gFilename ======="+ gFilename);
 			myPlayer.startPlayback(myPlayer.playProgress(), gFilename, true);	
