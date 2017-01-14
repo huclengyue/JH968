@@ -384,6 +384,17 @@ public class MainActivity extends BaseActivity {
 				str1 = str1 + ",";
 				str1 += getLunarMon(gyear, gmonth, gday)+ getLunarDay(gyear, gmonth, gday);
 			}
+			else if(select_id == SELECT_DAY_ID){
+				str = null;
+				str1 = null;
+				str = 	gday + getResources().getString(R.string.day) +
+						"," +
+						gWeekSpeakId[getWeakOfDay(gyear, gmonth, gday)];
+				
+				str1 = getResources().getString(R.string.lunarlendar);
+				str1 = str1 + ",";
+				str1 += getLunarMon(gyear, gmonth, gday)+ getLunarDay(gyear, gmonth, gday);
+			}
 			else{
 				str = null;
 				str1 = null;
