@@ -72,6 +72,8 @@ public class Global {
 	
 	public static final int MSG_MENU_BACK = 12;  // 返回界面
 	
+	public static final int MSG_SHOW_MAIN = 13;  // 显示主界面
+	
 	public static int MAX_RANK = 128;// 最大级数
 	
 	public static final String MUSIC_CONFIG_FILE = "music_cfg.xml";   // 保存播放模式

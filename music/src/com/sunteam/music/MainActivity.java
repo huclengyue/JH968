@@ -378,7 +378,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 						
 						@Override
 						public void onComplete() {
-							mHandler.sendEmptyMessage(Global.MSG_RESUME);
+							mHandler.sendEmptyMessage(Global.MSG_SHOW_MAIN);
 						}
 					});
 				}		
@@ -396,7 +396,8 @@ public class MainActivity extends MenuActivity implements ShowView {
 						@Override
 						public void onComplete() {
 							// TODO 自动生成的方法存根
-							mHandler.sendEmptyMessage(Global.MSG_RESUME);
+							//mHandler.sendEmptyMessage(Global.MSG_RESUME);
+							mHandler.sendEmptyMessage(Global.MSG_SHOW_MAIN);
 						}
 					});
 				}
@@ -980,6 +981,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 				//allId ++;
 			}
 		}
+		if(gFileName.size() <= 0){
+			return false;
+		}
 		//Global.debug("[**]gFilePaths.size()  == "+ gFilePaths.size());
 		
 		setListData(gFileName);
@@ -1480,6 +1484,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 		public void handleMessage(Message msg) {
 			if(msg.what == Global.MSG_RESUME){
 				onResume();
+			}
+			else if(msg.what == Global.MSG_SHOW_MAIN){
+				updateShowList();
 			}
 			
 			super.handleMessage(msg);
