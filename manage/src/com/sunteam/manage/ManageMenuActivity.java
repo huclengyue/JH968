@@ -703,6 +703,18 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		setResult(Global.MENU_INTERFACE_FLAG, intent);
 		finish();
 	}
+	
+	private void go_back_per(){
+		//Global.gPastName();
+		
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();	//新建 bundl
+		bundle.putInt("selectItem", getSelectItem());
+		intent.putExtras(bundle); // 参数传递
+		
+		setResult(Global.MENU_INTERFACE_FLAG, intent);
+		finish();
+	}
 	// tf卡插拔消息 注册
 	private void registerTFcardPlugReceiver() {   
         IntentFilter intentFilter = new IntentFilter();   
@@ -773,7 +785,7 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 				startPast();
 			}
 			else if(msg.what == Global.MSG_BACK){
-			//	go_back();
+				go_back_per();
 			}
 			super.handleMessage(msg);
 		}
