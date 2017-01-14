@@ -171,15 +171,25 @@ public class MainActivity extends MenuActivity implements ShowView {
 					
 			if(intface_flag == FAVORITE_INTFACE){  // 在我的最爱界面
 				gId = getSelectItem();
+				if(gId < 0){
+					return true;
+				}
 				//startMenu(0, gFilePaths.get(getSelectItem()), gFileName.get(getSelectItem()));
 				startMenu(0, gFilePaths.get(getSelectItem()), gFileName.get(getSelectItem()));
 			}
 			else if(intface_flag == DIRECTORY_1_INTFACE){  // 可以添加
+				gId = getSelectItem();
+				if(gId < 0){
+					return true;
+				}
 				MusicAddSaveList();
 			}
 			else if (intface_flag == RECENTPLAY_INTFACE)
 			{
 				gId = getSelectItem();
+				if(gId < 0){
+					return true;
+				}
 				//startPlayMenu(0, gFilePaths.get(getSelectItem()), gFileName.get(getSelectItem()));
 				startPlayMenu(0, gFilePaths.get(getSelectItem()), gFileName.get(getSelectItem()));
 			}
@@ -867,7 +877,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 								mFileInfo.name = mCurrentFile.getName();
 								mFileInfo.path = mCurrentFile.getPath();
 								
-								mFileFolder.add(mFileInfo);
+								mFileFile.add(mFileInfo);
 								
 								if((Global.FristString != null) && (Global.FristString.contains(mCurrentFile.getPath()))){
 									selectId = allId;
