@@ -57,7 +57,11 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 		Global.debug("\r\n[startPlayback] path===== "+ path);
 		if (state() == PLAYING_PAUSED_STATE) {
 			if(keyType){
-				mPlayer.seekTo((int) (percentage * mPlayer.getDuration()));
+				int start_len = (int) (percentage * mPlayer.getDuration());
+				if( start_len < 1){
+					start_len = 1;
+				}
+				mPlayer.seekTo(start_len);
 				mPlayer.start();
 				setState(PLAYING_STATE);
 			}else{

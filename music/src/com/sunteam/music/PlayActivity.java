@@ -123,7 +123,6 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			Log.e("switchClose", "isClose");
 			isClose = true;
 		}
-		
 	};
 	
 	
@@ -350,6 +349,9 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 				Global.debug("\r\n current ====" + current );
 			}
 			if((gAB_flag == true) && (current >= gAB_B)){
+				if(gAB_A < 1){  // mp2格式的文件不能从0 开始
+					gAB_A = 1;
+				}
 				myPlayer.SeekToTime(gAB_A);
 			}
 			else{
@@ -464,7 +466,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		}
 		else if(keyCode == KeyEvent.KEYCODE_3){   // 数字3 B
 			Global.debug("3333333333333333333333333333333333333333333");
-			if(myPlayer.state() == MyPlayer.IDLE_STATE||myPlayer.state()==MyPlayer.PLAYING_PAUSED_STATE){
+			if((gAB_A < 1) || (myPlayer.state() == MyPlayer.IDLE_STATE) || (myPlayer.state()==MyPlayer.PLAYING_PAUSED_STATE)){
 				return true;
 			}
 			setPalyst(false);
@@ -1116,7 +1118,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		
 		setPalyst(true);
 	}
-	
+	// AB复读
 	private void showBPromptDialog() {
 		gAB_flag = true;
 		gAB_B = myPlayer.progress();
@@ -1126,9 +1128,12 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		setPalyst(true);
 		
 	}
-
+	// A点选中
 	private void showAPromptDialog() {
 		gAB_A = myPlayer.progress();
+		if(gAB_A < 1){
+			gAB_A = 1;
+		}
 		playABMode.setVisibility(View.VISIBLE);
 		playABMode.setBackgroundResource(R.drawable.loop_a);
 		setPalyst(true);
