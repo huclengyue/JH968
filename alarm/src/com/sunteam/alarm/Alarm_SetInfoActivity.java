@@ -93,6 +93,7 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 					gonFileFlag = true;
 				}
 				else{
+					Collections.sort(mTemp, new UsernameComparator());
 					gSetID = mTemp.indexOf(gfileName);
 					if(gSetID < 0){
 						gSetID = 0;
