@@ -2,7 +2,6 @@ package com.sunteam.music;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,11 +24,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -168,28 +164,33 @@ public class MainActivity extends MenuActivity implements ShowView {
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (KeyEvent.KEYCODE_MENU == keyCode) {  // 按键 menu	
-					
+			Global.debug("\r\n【MainActivity】 ----> onKeyUp ========KEYCODE_MENU ");		
 			if(intface_flag == FAVORITE_INTFACE){  // 在我的最爱界面
-				gId = getSelectItem();
-				if(gId < 0){
+				if(mMenuList.size() <= 0){
 					return true;
 				}
+				gId = getSelectItem();
+				
 				//startMenu(0, gFilePaths.get(getSelectItem()), gFileName.get(getSelectItem()));
 				startMenu(0, gFilePaths.get(getSelectItem()), gFileName.get(getSelectItem()));
 			}
 			else if(intface_flag == DIRECTORY_1_INTFACE){  // 可以添加
-				gId = getSelectItem();
-				if(gId < 0){
+				Global.debug("\r\n 【MainActivity】 ----> onKeyUp ========KEYCODE_MENU mMenuList.size() == "+ mMenuList.size());
+				if(mMenuList.size() <= 0){
 					return true;
 				}
+				gId = getSelectItem();
+				
+				Global.debug("\r\n 【MainActivity】 ----> onKeyUp ========KEYCODE_MENU gId == "+ gId);
 				MusicAddSaveList();
 			}
 			else if (intface_flag == RECENTPLAY_INTFACE)
 			{
-				gId = getSelectItem();
-				if(gId < 0){
+				if(mMenuList.size() <= 0){
 					return true;
 				}
+				
+				gId = getSelectItem();
 				//startPlayMenu(0, gFilePaths.get(getSelectItem()), gFileName.get(getSelectItem()));
 				startPlayMenu(0, gFilePaths.get(getSelectItem()), gFileName.get(getSelectItem()));
 			}
@@ -212,9 +213,6 @@ public class MainActivity extends MenuActivity implements ShowView {
 			keyupBack();
 
 			return true;
-		}
-		else if(keyCode == KeyEvent.KEYCODE_0){
-			testrawplay();
 		}
 		
 		return super.onKeyUp(keyCode, event);
@@ -330,6 +328,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 	}
 
 	// 按键 entern 的处理
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	private void keyupEnter() {
 		Global.debug("\r\n[keyupEnter]======= intface_flag = " + intface_flag);
 		if(MAIN_INTFACE ==  intface_flag){  // 主界面
@@ -570,7 +569,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
 		if (KeyEvent.KEYCODE_MENU == keyCode) {  // 按键 menu	
-			
+			Global.debug("\r\n【MainActivity】 ----> onKeyDown ========KEYCODE_MENU ");
 			return true;
 		}
 		else if(KeyEvent.KEYCODE_ENTER == keyCode ||   // 按键 Enter
@@ -788,6 +787,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 	private void showList(String filePath, String fileName) 
 	{
 		Global.debug("[showList] filePath == " + filePath + " fileName == " + fileName);
+		@SuppressWarnings("unused")
 		int selectId = 0, allId = 0;
 		String  mSelectName = null;
 		
@@ -1263,51 +1263,13 @@ public class MainActivity extends MenuActivity implements ShowView {
     		}
     	}
 	}
-	
-	private void testrawplay() {
-		// TODO 自动生成的方法存根
-		Handler mHandler = null;
-		//((MyPlayer) myPlayer).setOnStateChangedListener((OnStateChangedListener) this);
-		
-		Global.debug("\r\nKeyEvent.KEYCODE_0  ============ ");
-		/*Intent mIntent = new Intent(this , Alarm_receiver_Activity.class);
-		//Bundle bundle = new Bundle();//
-		
-		//bundle.putInt("FLAG", Alarmpublic.BOOT_FLAG); // 修改项
-		mIntent.putExtra("FLAG", Alarmpublic.BOOT_FLAG); // 传入参数 
-		mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(mIntent);	*/
-		
-//		AssetFileDescriptor fd = getResources().openRawResourceFd(R.raw.alarm);
-		
-//		Global.debug("\r\n[4444] gFilename =====fileDescriptor.getFileDescriptor()==" + fd.getFileDescriptor());
 
-	/*	try {
-			myPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			myPlayer.setDataSource(fd.getFileDescriptor());
-			myPlayer.prepare();
-			myPlayer.start();
-		} catch (IllegalArgumentException e) {
-			// TODO 自动生成的 catch 块
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO 自动生成的 catch 块
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO 自动生成的 catch 块
-			e.printStackTrace();
-		}*/
-		Global.debug("\r\n startPlay2   ==========666==");
-		
-		//((MyPlayer) myPlayer).startPlayback2(((MyPlayer) myPlayer).playProgress(), fd.getFileDescriptor(), true);
-	}
-	
-	
 	// 获取当前路径
 	private String getCurPath(){
 		return gPath.get(gPathNum -1);
 	}
 	// 更新界面
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	private void updateShowList(){
 		gName.clear();
 		gPath.clear();

@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
-import android.nfc.cardemulation.OffHostApduService;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
