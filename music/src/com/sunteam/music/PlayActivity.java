@@ -622,6 +622,11 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
     
     // 切换播放
     private void switchAudio(){
+    	gAB_flag = false;
+		playABMode.setVisibility(View.INVISIBLE);
+		gAB_A = 0;
+		gAB_B = 0;
+		
     	mSampleFile = gPlayListName.get(currentIndex);
     	mSampleFilePath = gPlayListPaths.get(currentIndex);
     	
@@ -691,7 +696,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 					
 					@Override
 					public void onComplete() {
-						//switchAudio();;  // 下一首
+						//switchAudio();  // 下一首
 						mHandler_Promt.sendEmptyMessage(Global.MSG_PLAY_SWITCH);
 					}
 				});
