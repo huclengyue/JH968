@@ -9,6 +9,7 @@ import java.util.Comparator;
 import javax.xml.transform.Templates;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,8 +28,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.menu.menulistadapter.ShowView;
 import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
@@ -48,10 +51,13 @@ public class MainActivity extends MenuActivity implements ShowView{
 	private int interface_flag = Global.MAIN_INTERFACE;
 
 	private int[] gSelecyId = null;
+	
+	// 启动文件管理器的类别
+	private int mAction = 0; // 0 默认是从主菜单启动; 1 从蓝牙功能中启动，获取一个文件
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-			
+		getIntentPara();
 		Global.gCopyFlag = false;
 		Global.gCutFlag = false;
 		//gMeunViewFlag = false;
@@ -96,7 +102,9 @@ public class MainActivity extends MenuActivity implements ShowView{
 
 		mMenuList =  Global.gFileName;// ArrayUtils.strArray2List(gFileName); ;
 		
-		mTitle = getResources().getString( R.string.app_name );  // 设置标题	
+		if (null == mTitle) {
+			mTitle = getResources().getString( R.string.app_name );  // 设置标题
+		}
 		
 		Global.debug("222----------------");
 		
@@ -197,6 +205,13 @@ public class MainActivity extends MenuActivity implements ShowView{
 			Global.debug("selectID is file=====mMenuView= " + mMenuList);
 			//Global.debug("****1111**********33333*********mMenuView = \r\n"+ mMenuView);
 			Global.gtempID = selectItem;
+			if (1 == mAction) {
+				Intent intent = new Intent();
+				intent.putExtra("filename", Global.gFilePaths.get(selectItem).toString());
+				setResult(Activity.RESULT_OK, intent);
+				finish();
+				return;
+			}
 			showMenuList();
 		}
 
@@ -839,5 +854,11 @@ public class MainActivity extends MenuActivity implements ShowView{
 		Global.debug("\r\n[*******] Global.gPathNum ====== " + Global.gPathNum);
 		onResume();
 		
+	}
+
+	private void getIntentPara() {
+		Intent intent = getIntent();
+		mAction = intent.getIntExtra("action", 0);
+		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 	}
 }
