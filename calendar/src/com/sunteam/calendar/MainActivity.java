@@ -122,6 +122,8 @@ public class MainActivity extends BaseActivity {
 		if (TtsUtils.getInstance() != null) {
 			TtsUtils.getInstance().destroy();
 		}
+		android.os.Process.killProcess(android.os.Process.myPid());
+		System.exit(1);
 	}	
 	// 初始化
 	private void init() {
