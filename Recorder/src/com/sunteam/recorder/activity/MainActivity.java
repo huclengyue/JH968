@@ -74,6 +74,8 @@ public class MainActivity extends MenuActivity {
 		if (TtsUtils.getInstance() != null) {
 			TtsUtils.getInstance().destroy();
 		}
+		android.os.Process.killProcess(android.os.Process.myPid());
+		System.exit(1);
 	}
 
 	@Override
