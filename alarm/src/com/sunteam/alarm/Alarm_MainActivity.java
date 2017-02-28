@@ -1,7 +1,6 @@
 package com.sunteam.alarm;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.sunteam.alarm.utils.Global;
@@ -10,18 +9,11 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
-import com.sunteam.receiver.Alarm_receiver_Activity;
 import com.sunteam.receiver.Alarmpublic;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
-import android.widget.Toast;
 
 public class Alarm_MainActivity extends MenuActivity {
 
@@ -69,6 +61,8 @@ public class Alarm_MainActivity extends MenuActivity {
 		if (TtsUtils.getInstance() != null) {
 			TtsUtils.getInstance().destroy();
 		}
+		android.os.Process.killProcess(android.os.Process.myPid());
+		System.exit(1);
 	}
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
