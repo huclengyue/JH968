@@ -7,8 +7,6 @@ import java.util.Calendar;
 import com.sunteam.alarmlib.R;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuGlobal;
-import com.sunteam.common.tts.TtsUtils;
-import com.sunteam.common.utils.CommonUtils;
 //import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.dao.Alarminfo;

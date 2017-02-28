@@ -3,7 +3,6 @@ package com.sunteam.receiver;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import com.sunteam.alarmlib.R;
 import com.sunteam.common.utils.SunteamDateUtils;
 import com.sunteam.dao.Alarminfo;
 import com.sunteam.dao.GetDbInfo;
@@ -14,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
-import android.view.GestureDetector;
 
 public class Alarmpublic {
 	public static final String TAG = "alarmlib";
