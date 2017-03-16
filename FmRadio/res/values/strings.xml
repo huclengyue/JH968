@@ -46,7 +46,7 @@
 -->
 <resources>
 <!--  Added for 1.1.94 09/24/2009 -->
-<string name="app_name">"收音机"</string>
+<string name="app_name">"FM收音机"</string>
 <string name="menu_text_presets_title">"预设"</string>
 <string name="menu_text_power_off_title">"关闭"</string>
 <string name="menu_text_settings_title">"设置"</string>
