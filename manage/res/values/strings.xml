@@ -26,8 +26,8 @@
     <string name="pasteing">正在粘贴</string>
     <string name="paste_finsh">粘贴完成</string>
     <string name="del_ask">确认删除</string>
-    <string name="del_finsh">文件已删除</string>
-    <string name="cut_finsh">文件已剪切</string>
+    <string name="del_finsh">删除成功</string>
+    <string name="cut_finsh">已剪切</string>
     <string name="paste_check">请选择其他路径粘贴</string>
     <string name="first_id">已经到开头</string>
     <string name="end_id">已经到结尾</string>
