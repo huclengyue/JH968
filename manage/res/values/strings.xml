@@ -9,10 +9,13 @@
     <string name="Menu_Title">功能菜单</string>
 
     <string-array name="menu_list">
+        
         <item>复制</item>
         <item>剪切</item>
-        <item>删除</item>
         <item>粘贴</item>
+        <item>删除</item>
+        <item>清空</item>
+        
     </string-array>
 
     <string name="menu_copy">复制</string>
@@ -26,6 +29,8 @@
     <string name="pasteing">正在粘贴</string>
     <string name="paste_finsh">粘贴完成</string>
     <string name="del_ask">确认删除</string>
+    <string name="clean_ask">确认清空</string>
+     <string name="clean_finsh">已清空</string>
     <string name="del_finsh">删除成功</string>
     <string name="cut_finsh">已剪切</string>
     <string name="paste_check">请选择其他路径粘贴</string>

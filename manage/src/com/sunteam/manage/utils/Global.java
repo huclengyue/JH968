@@ -33,8 +33,9 @@ public class Global {
 
 	public static final int COPY_ID = 0; // 复制
 	public static final int CUT_ID = 1; // 剪切
-	public static final int DEl_ID = 2; // 删除
-	public static final int PASTE_ID = 3; // 粘贴
+	public static final int DEl_ID = 3; // 删除
+	public static final int PASTE_ID = 2; // 粘贴
+	public static final int CLEAN_ID = 4; // 清空
 	
 	public static String gCopyPath_src = null; // 复制分原始目录
 
@@ -63,6 +64,8 @@ public class Global {
 	public static final int MSG_MAIN = 5; // 开始粘贴
 	
 	public static final int MSG_BACK = 6; // 开始粘贴
+	
+	public static final int MSG_CLEAN_OK = 7; // 清空成功提示
 	
 	public static void debug(String s) {
 		Log.d(TAG, s);
