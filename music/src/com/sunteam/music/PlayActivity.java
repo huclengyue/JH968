@@ -448,7 +448,8 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			return true;
 		}
 		else if(keyCode == KeyEvent.KEYCODE_1){   // 数字 0  A
-			if(myPlayer.state() == MyPlayer.IDLE_STATE||myPlayer.state()==MyPlayer.PLAYING_PAUSED_STATE){
+			if ((myPlayer.state() == MyPlayer.IDLE_STATE) || (myPlayer.state() == MyPlayer.PLAYING_PAUSED_STATE)
+					|| (myPlayer.progress() < 2)) {  // 2秒內不能AB復讀
 				return true;
 			}
 			Global.debug("0000000000000000000000000000000000000000");
@@ -1090,6 +1091,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
         }            
     };
 	
+	@SuppressLint("HandlerLeak")
 	private Handler mHandler_Promt = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
@@ -1135,6 +1137,12 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 	}
 	// A点选中
 	private void showAPromptDialog() {
+		if(gAB_flag == true){
+			gAB_B = 0;
+			gAB_A = 0;
+			gAB_flag = false;
+		}
+		
 		gAB_A = myPlayer.progress();
 		if(gAB_A < 1){
 			gAB_A = 1;

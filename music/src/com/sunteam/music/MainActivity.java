@@ -904,6 +904,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 						gFileName.add(mFileFile.get(i).name);
 						gFilePaths.add(mFileFile.get(i).path);
 					}
+					
 					// 再次清空
 					mFileFile.clear();
 					mFileFolder.clear();
@@ -915,13 +916,17 @@ public class MainActivity extends MenuActivity implements ShowView {
 						mSelectId = 0;
 					}
 					mMenuView.setSelectItem(mSelectId);
+					Global.debug("gFileName.size()   ======= " + gFileName.size());
+					if(gFileName.size() <= 0){
+						PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_file));
+						mPromptDialog.show();
+					}
 				} 
 				else {
 					setListData(gFileName);
 					
 					PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_file));
 					mPromptDialog.show();
-
 				}
 				setTitle(fileName);
 			} 
