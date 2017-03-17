@@ -23,7 +23,7 @@ public class Alarm_Receiver extends BroadcastReceiver {
 
 		mIntent.putExtra("FLAG", Alarmpublic.NORMAL_FLAG); // 传入参数 
 		
-		mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP /*|Intent.FLAG_ACTIVITY_CLEAR_TASK*/);
 		context.startActivity(mIntent);		
     }
 
