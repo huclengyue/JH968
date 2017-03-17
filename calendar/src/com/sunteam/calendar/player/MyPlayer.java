@@ -76,11 +76,7 @@ public class MyPlayer implements OnCompletionListener, OnErrorListener {
 		try {
 			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mPlayer.setDataSource(path);	
-//			mPlayer.setOnCompletionListener(this);
-//			mPlayer.setOnErrorListener(this);
 			mPlayer.prepare();
-			//Global.getTts().stop();
-			TtsUtils.getInstance().stop();
 			mPlayer.start();
 //			Global.debug("\r\n startPlay (int) (percentage * mPlayer.getDuration()) == " + (int) (percentage * mPlayer.getDuration()));
 //			mPlayer.seekTo((int) (percentage * mPlayer.getDuration()));  // baocaho del mp2 文件播放时出现

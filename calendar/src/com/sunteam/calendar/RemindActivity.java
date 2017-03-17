@@ -144,7 +144,7 @@ public class RemindActivity extends MenuActivity {
 				|| keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
 
 			super.onKeyDown(keyCode, event);
-			// playRecordSound();
+			 playRecordSound();
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -198,7 +198,7 @@ public class RemindActivity extends MenuActivity {
 
 			super.onKeyDown(keyCode, event);
 			//playRecordSound();
-			mHandler.sendEmptyMessage(Global.MSG_PLAY_RECORD);
+			//mHandler.sendEmptyMessage(Global.MSG_PLAY_RECORD);
 			return true;
 		}
 		return super.onKeyUp(keyCode, event);
