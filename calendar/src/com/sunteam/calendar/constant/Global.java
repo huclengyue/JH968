@@ -64,6 +64,8 @@ public class Global {
 	public static final int MSG_MSG_NO_REMIND_TOMAIN_OK = 19;  // 保存退出
 	public static final int MSG_BACK = 20;  // 退出
 	
+	public static final int MSG_PLAY_RECORD = 21;  // 播放 录音
+	
 	public static void debug(String s) {
 		Log.d(TAG, s);
 	}

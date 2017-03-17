@@ -289,7 +289,9 @@ public class MainActivity extends BaseActivity {
 						else if((day-1) == j){
 							//gTextViews[i].getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
 							//gTextViews[i].getPaint().setFakeBoldText(true);;//下划线
+							//gTextViews[i].setBackgroundColor(mTools.getFontColor());
 							gTextViews[i].setTextColor(mTools.getHighlightColor());
+							
 						}
 						
 /*						if( (day-1) == j)  // 日需要一直反显
