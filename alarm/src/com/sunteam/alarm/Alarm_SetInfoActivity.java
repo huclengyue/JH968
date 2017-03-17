@@ -148,7 +148,10 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 				
 				return true;
 			}
+		}else if(keyCode ==KeyEvent.KEYCODE_MENU){
+			return true;
 		}
+		
 		return super.onKeyDown(keyCode, event);
 	}
 	// 按键处理 抬起处理

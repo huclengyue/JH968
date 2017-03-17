@@ -72,6 +72,8 @@ public class Alarm_MainActivity extends MenuActivity {
 		{
 		//	TtsUtils.getInstance().stop();
 			return true;
+		}else if(keyCode == KeyEvent.KEYCODE_MENU){
+			return true;
 		}
 		
 		return super.onKeyDown(keyCode, event);

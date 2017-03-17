@@ -167,6 +167,14 @@ public class Alarm_countdownActivity extends BaseActivity {
         }  
     };
     
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    	
+    	if(keyCode == KeyEvent.KEYCODE_MENU){
+    		return true;
+    	}
+    	return super.onKeyDown(keyCode, event);
+    };
+    
     public boolean onKeyUp(int keyCode, KeyEvent event) {
 		
 		if(keyCode == KeyEvent.KEYCODE_ENTER ||
