@@ -482,9 +482,11 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			});		
 			return true;
 		}
+		
 		else if(keyCode == KeyEvent.KEYCODE_2 || keyCode == KeyEvent.KEYCODE_4 ||keyCode == KeyEvent.KEYCODE_5||
 				keyCode == KeyEvent.KEYCODE_6 || keyCode == KeyEvent.KEYCODE_7 ||keyCode == KeyEvent.KEYCODE_8||
-				keyCode == KeyEvent.KEYCODE_9 || keyCode == KeyEvent.KEYCODE_0 ){
+				keyCode == KeyEvent.KEYCODE_9 || keyCode == KeyEvent.KEYCODE_0 || keyCode == KeyEvent.KEYCODE_STAR ||
+				keyCode == KeyEvent.KEYCODE_POUND){
 			if(gAB_flag == true){
 				gAB_flag = false;
 				playABMode.setVisibility(View.INVISIBLE);
