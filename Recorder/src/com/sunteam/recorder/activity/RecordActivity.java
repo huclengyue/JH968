@@ -39,7 +39,8 @@ import com.sunteam.recorder.recorder.ErrorCode;
 
 @SuppressLint({ "HandlerLeak", "SimpleDateFormat" })
 public class RecordActivity extends BaseActivity {
-	private int callerId = 0; // 0: 默认由录音机调用; 1: 热键进入录音; 2: 万年历中提醒录音; 3: 语音备忘  4:FM;
+	private int callerId = 0; // 0: 默认由录音机调用; 1: 热键进入录音; 2: 万年历中提醒录音; 3: 语音备忘
+								// 4:FM;
 								// 后两者在退出时返回到调用者!
 	private String fileName = ""; // 来自Intent的文件名;
 									// 来自Intent的录音文件保存文件夹已经给Global.storagePath赋值了
@@ -49,12 +50,12 @@ public class RecordActivity extends BaseActivity {
 	private TextView tvReady;
 	private TextView tvFilename;
 	private TextView tvTimeRecored;
-	//private TextView tvTitle;
+	// private TextView tvTitle;
 	private TextView tvparameter;
 	private TextView tvtimeLeft;
 	TextView mTvTitle = null;
 	View mLine = null;
-	
+
 	/**
 	 * -1:没再录制
 	 */
@@ -109,7 +110,7 @@ public class RecordActivity extends BaseActivity {
 		@Override
 		public void handleMessage(Message msg) {
 			if (msg.what == 0) {
-				Global.showToast(RecordActivity.this, R.string.saveAndexit,	RecordHandler, 0);
+				Global.showToast(RecordActivity.this, R.string.saveAndexit, RecordHandler, 0);
 			}
 			super.handleMessage(msg);
 		}
@@ -131,14 +132,14 @@ public class RecordActivity extends BaseActivity {
 		// 通过Intent传递调用者id、录音文件保存路径、录音文件名
 		Intent intent = getIntent();
 		callerId = intent.getIntExtra("callerId", callerId);
-		if(callerId == Global.CALL_FM || callerId == 3 || callerId == Global.CALL_FM){
+		if (callerId == Global.CALL_FM || callerId == 3 || callerId == Global.CALL_FM) {
 			TtsUtils.getInstance(this, null);
 		}
 		Global.debug("RecordActivity  [onCreate] =======================callerId ==" + callerId);
 		String path = intent.getStringExtra("path");
 		if (null == path || path.equals("")) {
-			path = Environment.getExternalStorageDirectory().getAbsolutePath()
-					+ "/" + getResources().getString(R.string.storage);
+			path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"
+					+ getResources().getString(R.string.storage);
 		}
 		Global.setSavePath(path);
 		Global.debug("RecordActivity  [onCreate] ========222================path == " + path);
@@ -150,9 +151,9 @@ public class RecordActivity extends BaseActivity {
 
 		mTvTitle = (TextView) this.findViewById(R.id.title); // 获取控件
 		mLine = this.findViewById(R.id.line); // 获取
-		
+
 		tvTime = (TextView) findViewById(R.id.tv_time);
-		//tvTitle = (TextView) findViewById(R.id.tv_recorde);
+		// tvTitle = (TextView) findViewById(R.id.tv_recorde);
 		tvparameter = (TextView) findViewById(R.id.tv_parameter);
 		tvFilename = (TextView) findViewById(R.id.tv_filename);
 		// tvrecording = (TextView) findViewById(R.id.tv_recording);
@@ -165,9 +166,9 @@ public class RecordActivity extends BaseActivity {
 		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
 		mTvTitle.setHeight(mTools.convertSpToPixel(fontSize));
 		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
-		mTvTitle.setTextColor(mTools.getFontColor()); //  设置字体颜色
+		mTvTitle.setTextColor(mTools.getFontColor()); // 设置字体颜色
 		// setTextSize默认单位：sp
-		//tvTitle.setTextSize(rs.getDimensionPixelSize(R.dimen.ts_title));
+		// tvTitle.setTextSize(rs.getDimensionPixelSize(R.dimen.ts_title));
 		tvparameter.setTextSize(rs.getDimensionPixelSize(R.dimen.textsize));
 		tvFilename.setTextSize(rs.getDimensionPixelSize(R.dimen.textsize));
 		// tvrecording.setTextSize(rs.getDimensionPixelSize(R.dimen.ts_recording));
@@ -194,8 +195,7 @@ public class RecordActivity extends BaseActivity {
 			public void onClick(View v) {
 				if (mState == state_no_record) {
 					if (batteryReceiver.getLevel() < 10) { // 电量低情况
-						Global.showToast(RecordActivity.this,
-								R.string.cannot_record, null, -1);
+						Global.showToast(RecordActivity.this, R.string.cannot_record, null, -1);
 					} else if (leftSpace <= 0) { // 空间不足情况
 						speakNotRecord();
 					} else {
@@ -203,26 +203,24 @@ public class RecordActivity extends BaseActivity {
 
 						showSurface();
 
-						TtsUtils.getInstance().setCompletedListener(
-								new TtsCompletedListener() {
+						TtsUtils.getInstance().setCompletedListener(new TtsCompletedListener() {
 
-									@Override
-									public void onCompleted(String arg0) {
-										Log.e("log", "speak finish");
-										RecordHandler.sendEmptyMessage(1);
-										TtsUtils.getInstance().setCompletedListener(null);									
-									}
-								});
+							@Override
+							public void onCompleted(String arg0) {
+								Log.e("log", "speak finish");
+								RecordHandler.sendEmptyMessage(1);
+								TtsUtils.getInstance().setCompletedListener(null);
+							}
+						});
 
 						TtsUtils.getInstance().speak(rs.getString(R.string.startRecord));
-						// showDialog();						
+						// showDialog();
 					}
 				} else if (mState == state_recording) {
 					stop();
-					Global.showToast(RecordActivity.this, R.string.saveAndexit,
-							RecordHandler, 2);
+					Global.showToast(RecordActivity.this, R.string.saveAndexit, RecordHandler, 2);
 					// goback(); // houding@20160902 统一在RecordHandler中处理
-				}else if (mState == state_ready) {
+				} else if (mState == state_ready) {
 					TtsUtils.getInstance().stop();
 					mState = state_no_record;
 					// goback(); // houding@20160902 统一在RecordHandler中处理
@@ -246,7 +244,7 @@ public class RecordActivity extends BaseActivity {
 		batteryReceiver = new BatteryBroadcastReciver();
 		// 创建一个过滤器
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-		
+
 		registerReceiver(batteryReceiver, intentFilter);
 	}
 
@@ -254,17 +252,17 @@ public class RecordActivity extends BaseActivity {
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(batteryReceiver);
-		
-		Global.releaseWakeLock();  // 打开休眠
+
+		Global.releaseWakeLock(); // 打开休眠
 	}
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		int code = event.getKeyCode();
 		int action = event.getAction();
-	//	MyLog.e("dispatchKeyEvent", mState + ",code:" + code + ",action" + action);
-		if ((code == KeyEvent.KEYCODE_DPAD_CENTER || code == KeyEvent.KEYCODE_ENTER)
-				&& action == KeyEvent.ACTION_UP) {
+		// MyLog.e("dispatchKeyEvent", mState + ",code:" + code + ",action" +
+		// action);
+		if ((code == KeyEvent.KEYCODE_DPAD_CENTER || code == KeyEvent.KEYCODE_ENTER) && action == KeyEvent.ACTION_UP) {
 			if (mState == state_no_record) {
 				if (batteryReceiver.getLevel() < 10) {// 电量低情况
 					Global.showToast(RecordActivity.this, R.string.cannot_record, mHandler, Global.MSG_ONRESUM);
@@ -275,36 +273,31 @@ public class RecordActivity extends BaseActivity {
 
 					showSurface();
 
-					TtsUtils.getInstance().setCompletedListener(
-							new TtsCompletedListener() {
-								@Override
-								public void onCompleted(String arg0) {
-									RecordHandler.sendEmptyMessage(1);
-									TtsUtils.getInstance().setCompletedListener(null);
-								}
-							});
-					TtsUtils.getInstance().speak(rs.getString(R.string.startRecord),
-							TextToSpeech.QUEUE_FLUSH);
-					//showDialog();
-					Global.acquireWakeLock(this);   // 禁止休眠
+					TtsUtils.getInstance().setCompletedListener(new TtsCompletedListener() {
+						@Override
+						public void onCompleted(String arg0) {
+							RecordHandler.sendEmptyMessage(1);
+							TtsUtils.getInstance().setCompletedListener(null);
+						}
+					});
+					TtsUtils.getInstance().speak(rs.getString(R.string.startRecord), TextToSpeech.QUEUE_FLUSH);
+					// showDialog();
+					Global.acquireWakeLock(this); // 禁止休眠
 				}
 
-			} else if (mState == state_recording) {  // 正在录音
+			} else if (mState == state_recording) { // 正在录音
 				stop();
-				Global.showToast(RecordActivity.this, R.string.saveAndexit,
-						RecordHandler, 2);
-				Global.releaseWakeLock();   // 打开休眠
+				Global.showToast(RecordActivity.this, R.string.saveAndexit, RecordHandler, 2);
+				Global.releaseWakeLock(); // 打开休眠
 				// goback(); // houding@20160902 统一在RecordHandler中处理
 			} else if (mState == state_ready) {
 				TtsUtils.getInstance().stop();
 				mState = state_no_record;
 				// goback(); // houding@20160902 统一在RecordHandler中处理
-				Global.showToast(RecordActivity.this, R.string.invalid_file,
-						RecordHandler, 2);
-				Global.releaseWakeLock();   // 打开休眠
+				Global.showToast(RecordActivity.this, R.string.invalid_file, RecordHandler, 2);
+				Global.releaseWakeLock(); // 打开休眠
 			}
-		} else if ((code == KeyEvent.KEYCODE_BACK || code == KeyEvent.KEYCODE_ESCAPE)
-				&& action == KeyEvent.ACTION_UP) {
+		} else if ((code == KeyEvent.KEYCODE_BACK || code == KeyEvent.KEYCODE_ESCAPE) && action == KeyEvent.ACTION_UP) {
 			if (mState == state_recording) {
 				stop();
 				showDialog();
@@ -312,8 +305,7 @@ public class RecordActivity extends BaseActivity {
 				TtsUtils.getInstance().stop();
 				mState = state_no_record;
 				// goback(); // houding@20160902 统一在RecordHandler中处理
-				Global.showToast(RecordActivity.this, R.string.invalid_file,
-						RecordHandler, 2);
+				Global.showToast(RecordActivity.this, R.string.invalid_file, RecordHandler, 2);
 			} else if (mState == state_no_record) {
 				TtsUtils.getInstance().stop();
 				finish();
@@ -339,15 +331,14 @@ public class RecordActivity extends BaseActivity {
 		tvReady.setVisibility(View.VISIBLE);
 		sb.delete(0, sb.length());
 		tvTime.setText(getRecordLength());
-		
+
 	}
 
 	/**
 	 * 不保存文件
 	 */
 	private void deleteFile() {
-		File recordFile = new File(Global.storagePath + "/"
-				+ AudioFileFunc.AUDIO_WAV_FILENAME);
+		File recordFile = new File(Global.storagePath + "/" + AudioFileFunc.AUDIO_WAV_FILENAME);
 		if (recordFile.exists()) {
 			recordFile.delete();
 		}
@@ -363,16 +354,16 @@ public class RecordActivity extends BaseActivity {
 		ConfirmDialog confirmDialog = new ConfirmDialog(RecordActivity.this, title, yes, rs.getString(R.string.no));
 		confirmDialog.show();
 		confirmDialog.setConfirmListener(new ConfirmListener() {
-			
+
 			@Override
 			public void doConfirm() {
 				mHandler.sendEmptyMessage(Global.MSG_GOBACK_SAVE);
 			}
-			
+
 			@Override
 			public void doCancel() {
 				mHandler.sendEmptyMessage(Global.MSG_GOBACK);
-				
+
 			}
 		});
 	}
@@ -380,7 +371,7 @@ public class RecordActivity extends BaseActivity {
 	private void speakNotRecord() {
 		TtsUtils.getInstance().stop();
 		if (!isFinishing()) {
-			Global.showToast(RecordActivity.this,R.string.not_enough_space_cannot_record, RecordHandler, 0);
+			Global.showToast(RecordActivity.this, R.string.not_enough_space_cannot_record, RecordHandler, 0);
 		}
 	}
 
@@ -388,14 +379,14 @@ public class RecordActivity extends BaseActivity {
 	 * 播报剩余时间
 	 */
 	private void speakTimeLeft() {
-		if ((Global.CALL_CALENDAR == callerId) || (3 == callerId)||(Global.CALL_FM == callerId)) {
+		if ((Global.CALL_CALENDAR == callerId) || (3 == callerId) || (Global.CALL_FM == callerId)) {
 			return;
 		}
 		if (sb.equals("00:00:00")) {
 			speakNotRecord();
 		} else {
-			TtsUtils.getInstance().speak(
-					rs.getString(R.string.record) + rs.getString(R.string.timeLeft) + sb.toString());
+			TtsUtils.getInstance()
+					.speak(rs.getString(R.string.record) + rs.getString(R.string.timeLeft) + sb.toString());
 		}
 	}
 
@@ -407,8 +398,7 @@ public class RecordActivity extends BaseActivity {
 	@SuppressWarnings("deprecation")
 	private long getAvaliableSpace() {
 		long avaliableSpace = 0;
-		if (Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED)) {// 获取外部存储空间
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {// 获取外部存储空间
 			File path = Environment.getExternalStorageDirectory();
 			StatFs stat = new StatFs(path.getPath());
 			long blockSize = stat.getBlockSize();
@@ -443,8 +433,7 @@ public class RecordActivity extends BaseActivity {
 			s = ((leftSpace + 1024 * 1024) * 8 - h * 512 * 1000 * 60 * 60 - m * 512 * 1000 * 60) / 512 / 1000;
 		}
 
-		return getDisplayFormat((int) h, R.string.hour) + ":"
-				+ getDisplayFormat((int) m, R.string.minute) + ":"
+		return getDisplayFormat((int) h, R.string.hour) + ":" + getDisplayFormat((int) m, R.string.minute) + ":"
 				+ getDisplayFormat((int) s, R.string.second);
 	}
 
@@ -522,6 +511,7 @@ public class RecordActivity extends BaseActivity {
 			break;
 		}
 	}
+
 	/**
 	 * 显示录音中界面
 	 */
@@ -554,10 +544,9 @@ public class RecordActivity extends BaseActivity {
 		AudioRecorder mRecord_1 = AudioRecorder.getInstance();
 		Global.debug("\r\n record === mRecord_1 " + mRecord_1);
 		Global.debug("\r\n record === callerId " + callerId);
-		if(callerId == Global.CALL_FM){
+		if (callerId == Global.CALL_FM) {
 			mResult = mRecord_1.startRecordAndFile_forFm();
-		}
-		else{
+		} else {
 			mResult = mRecord_1.startRecordAndFile();
 		}
 		if (mResult == ErrorCode.SUCCESS) {
@@ -592,8 +581,8 @@ public class RecordActivity extends BaseActivity {
 		msg.setData(b);
 		// uiHandler.sendMessageDelayed(msg, 1000); // 向Handler发送消息,更新UI
 		mState = state_no_record;
-		
-		Global.releaseWakeLock();  // 打开休眠
+
+		Global.releaseWakeLock(); // 打开休眠
 	}
 
 	private final static int CMD_RECORDFAIL = 2001;
@@ -613,8 +602,7 @@ public class RecordActivity extends BaseActivity {
 			switch (vCmd) {
 			case CMD_RECORDFAIL:
 				int vErrorCode = b.getInt("msg");
-				int vMsg = ErrorCode.getErrorInfo(RecordActivity.this,
-						vErrorCode);
+				int vMsg = ErrorCode.getErrorInfo(RecordActivity.this, vErrorCode);
 				Global.showToast(RecordActivity.this, vMsg, null, -1);
 				break;
 			case CMD_STOP:
@@ -634,12 +622,11 @@ public class RecordActivity extends BaseActivity {
 	private void updateTimerView() {
 		if (mState != -1) {
 			long time = ((System.currentTimeMillis() - mSampleStart) / 1000);
-			String timeStr = String.format(mTimerFormat, time / 3600,
-					(time - (time / 3600) * 3600) / 60, time % 60);
+			String timeStr = String.format(mTimerFormat, time / 3600, (time - (time / 3600) * 3600) / 60, time % 60);
 			tvTimeRecored.setText(timeStr);
 			long lefttime = (leftSpace + 1024 * 1024) * 8 / 512 / 1000 - time;
-			timeStr = String.format(mTimerFormat, lefttime / 3600,
-					(lefttime - (lefttime / 3600) * 3600) / 60, lefttime % 60);
+			timeStr = String.format(mTimerFormat, lefttime / 3600, (lefttime - (lefttime / 3600) * 3600) / 60,
+					lefttime % 60);
 			tvTime.setText(timeStr);
 			uiHandler.postDelayed(mUpdateTimer, 1000);
 			if (lefttime <= 0) {
@@ -671,6 +658,9 @@ public class RecordActivity extends BaseActivity {
 				boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
 						|| status == BatteryManager.BATTERY_STATUS_FULL;
 
+				if (isCharging == true) {
+					return;
+				}
 				if (level < 10) {
 					if (mState == 0) {
 						Global.showToast(RecordActivity.this, R.string.stop_record, batteryHandler, 0);
@@ -678,7 +668,8 @@ public class RecordActivity extends BaseActivity {
 						goback();
 					}
 				} else if (level < 20 && !isCharging) {
-				//	Global.showToast(RecordActivity.this, R.string.low_battery,	null, -1);
+					// Global.showToast(RecordActivity.this,
+					// R.string.low_battery, null, -1);
 				}
 			}
 		}
@@ -708,8 +699,8 @@ public class RecordActivity extends BaseActivity {
 	protected void onDestroy() {
 		unregisterReceiver(shutdownReceiver);
 		super.onDestroy();
-		
-		if(callerId == Global.CALL_FM || callerId == 3 || callerId == Global.CALL_FM){
+
+		if (callerId == Global.CALL_FM || callerId == 3 || callerId == Global.CALL_FM) {
 			if (TtsUtils.getInstance() != null) {
 				TtsUtils.getInstance().destroy();
 			}
@@ -739,29 +730,28 @@ public class RecordActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	// 处理弹框
-	private Handler mHandler = new Handler(){
+	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			Global.debug("\r\n [RecordActivity]   ==Handler=  msg.what =="+ msg.what);
-			if(msg.what == Global.MSG_GOBACK){   // 音乐播放结束消息
+			Global.debug("\r\n [RecordActivity]   ==Handler=  msg.what ==" + msg.what);
+			if (msg.what == Global.MSG_GOBACK) { // 音乐播放结束消息
 				Record_goBack();
-			}else if(msg.what == Global.MSG_GOBACK_SAVE){
-				Record_goBackSave();		
-			}
-			else if(msg.what == Global.MSG_ONRESUM){
+			} else if (msg.what == Global.MSG_GOBACK_SAVE) {
+				Record_goBackSave();
+			} else if (msg.what == Global.MSG_ONRESUM) {
 				speakTimeLeft();
 			}
 			super.handleMessage(msg);
 		}
 	};
-	
+
 	private void Record_goBackSave() {
 		goback();
 		speakTimeLeft();
 	}
-	
+
 	private void Record_goBack() {
 		deleteFile();
 		goback();

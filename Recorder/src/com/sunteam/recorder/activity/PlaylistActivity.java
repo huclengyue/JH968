@@ -36,14 +36,14 @@ public class PlaylistActivity extends MenuActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		mTitle = getIntent().getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		mMenuList = getplayList();
-		
+
 		super.onCreate(savedInstanceState);
 		listView = getListView();
 		listView.setOnTouchListener(new OnTouchListener() {
-			
+
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
-				if(arg1.getAction() == MotionEvent.ACTION_MOVE){
+				if (arg1.getAction() == MotionEvent.ACTION_MOVE) {
 					return true;
 				}
 				return false;
@@ -86,7 +86,8 @@ public class PlaylistActivity extends MenuActivity {
 				if (level < 10) {
 
 				} else if (level < 20 && !isCharging) {
-				//	Global.showToast(PlaylistActivity.this, R.string.low_battery, null, -1);
+					// Global.showToast(PlaylistActivity.this,
+					// R.string.low_battery, null, -1);
 				}
 			}
 		}
@@ -100,7 +101,7 @@ public class PlaylistActivity extends MenuActivity {
 	private void enterPlayActivity() {
 		if (receiver.getLevel() < 10) {
 			Global.showToast(PlaylistActivity.this, R.string.cannot_play, mHandler, Global.MSG_ONRESUM);
-			
+
 		} else {
 			Intent intent = new Intent(PlaylistActivity.this, PlayActivity.class);
 			String selectedText = getSelectItemContent();
@@ -146,8 +147,8 @@ public class PlaylistActivity extends MenuActivity {
 		if (resultCode == RESULT_OK) {
 			mMenuView.setSelectItem(data.getIntExtra("currentIndex", 0));
 			visibleItemCount = listView.getLastVisiblePosition() - listView.getFirstVisiblePosition();
-			listView.setSelectionFromTop(mMenuView.getSelectItem(), itemHeight
-					* (mMenuView.getSelectItem() % (visibleItemCount == 0 ? 1 : visibleItemCount)));
+			listView.setSelectionFromTop(mMenuView.getSelectItem(),
+					itemHeight * (mMenuView.getSelectItem() % (visibleItemCount == 0 ? 1 : visibleItemCount)));
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -164,8 +165,8 @@ public class PlaylistActivity extends MenuActivity {
 			} else {
 				mMenuView.setSelectItem(mMenuList.size() - 1, false);
 			}
-			listView.setSelectionFromTop(getSelectItem(), itemHeight
-					* (getSelectItem() % (visibleItemCount == 0 ? 1 : visibleItemCount)));
+			listView.setSelectionFromTop(getSelectItem(),
+					itemHeight * (getSelectItem() % (visibleItemCount == 0 ? 1 : visibleItemCount)));
 		} else {
 			mMenuView.down();
 		}
@@ -183,8 +184,8 @@ public class PlaylistActivity extends MenuActivity {
 			} else {
 				mMenuView.setSelectItem(0, false);
 			}
-			listView.setSelectionFromTop(getSelectItem(), itemHeight
-					* (getSelectItem() % (visibleItemCount == 0 ? 1 : visibleItemCount)));
+			listView.setSelectionFromTop(getSelectItem(),
+					itemHeight * (getSelectItem() % (visibleItemCount == 0 ? 1 : visibleItemCount)));
 			// listView.setSelection(playListAdapter.getSelectItem());
 			// Global.getTts().stop();
 			// Global.getTts().speak(
@@ -220,7 +221,7 @@ public class PlaylistActivity extends MenuActivity {
 
 	@Override
 	public void downSlip() {
-		if(listView == null){
+		if (listView == null) {
 			return;
 		}
 		itemHeight = listView.getChildAt(0).getHeight();
@@ -234,12 +235,13 @@ public class PlaylistActivity extends MenuActivity {
 		}
 		getSelectItemContent(0);
 	}
+
 	// ´¦Àíµ¯¿ò
-	private Handler mHandler = new Handler(){
+	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			
-			if(msg.what == Global.MSG_ONRESUM){
+
+			if (msg.what == Global.MSG_ONRESUM) {
 				onResume();
 			}
 			super.handleMessage(msg);

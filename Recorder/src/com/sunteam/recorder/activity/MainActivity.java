@@ -20,26 +20,26 @@ import com.sunteam.recorder.R;
 
 @SuppressLint({ "DefaultLocale", "HandlerLeak" })
 public class MainActivity extends MenuActivity {
-	
-	
-	
+
 	private BatteryBroadcastReciver reciver;
 
-	private Handler mHandler = new Handler(){
+	private Handler mHandler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
-			if(msg.what == 0){
-				//adapter.setSelectItem(0, 0);
-			}else if(msg.what == 1){
-				//adapter.setSelectItem(menuList.size()-1, 0);
-			}else if(msg.what == 2){
-				TtsUtils.getInstance().speak(getResources().getString(R.string.recorder)+","+getResources().getString(R.string.playback), TtsUtils.TTS_QUEUE_FLUSH);
+			if (msg.what == 0) {
+				// adapter.setSelectItem(0, 0);
+			} else if (msg.what == 1) {
+				// adapter.setSelectItem(menuList.size()-1, 0);
+			} else if (msg.what == 2) {
+				TtsUtils.getInstance().speak(
+						getResources().getString(R.string.recorder) + "," + getResources().getString(R.string.playback),
+						TtsUtils.TTS_QUEUE_FLUSH);
 			}
 			super.handleMessage(msg);
-		}		
+		}
 	};
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +63,15 @@ public class MainActivity extends MenuActivity {
 		// 创建一个过滤器
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(reciver, intentFilter);
-		
+
 		super.onResume();
 	}
+
 	@Override
 	protected void onDestroy() {
 		// TODO 自动生成的方法存根
 		super.onDestroy();
-		
+
 		if (TtsUtils.getInstance() != null) {
 			TtsUtils.getInstance().destroy();
 		}
@@ -82,7 +83,7 @@ public class MainActivity extends MenuActivity {
 	protected void onPause() {
 		unregisterReceiver(reciver);
 		super.onPause();
-		
+
 	}
 
 	private boolean isExistPlayList() {
@@ -119,7 +120,8 @@ public class MainActivity extends MenuActivity {
 				if (level < 10) {
 
 				} else if (level < 20 && !isCharging) {
-			//		Global.showToast(MainActivity.this, R.string.low_battery, null, -1);
+					// Global.showToast(MainActivity.this, R.string.low_battery,
+					// null, -1);
 				}
 			}
 		}
@@ -128,12 +130,12 @@ public class MainActivity extends MenuActivity {
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		switch (selectItem) {
-		case 0:  // 录音
+		case 0: // 录音
 			startActivityFromMenu(RecordActivity.class, menuItem);
 			break;
-		case 1:  // 录音回放
+		case 1: // 录音回放
 			if (!isExistPlayList()) {
-				Global.showToast(MainActivity.this, R.string.no_file,mHandler,2);
+				Global.showToast(MainActivity.this, R.string.no_file, mHandler, 2);
 			} else {
 				startActivityFromMenu(PlaylistActivity.class, menuItem);
 			}
@@ -142,7 +144,8 @@ public class MainActivity extends MenuActivity {
 			break;
 		}
 	}
- // 
+
+	//
 	private void startActivityFromMenu(Class<?> cls, String title) {
 		Intent intent = new Intent();
 		intent.putExtra("title", title); // 标题名称
@@ -153,6 +156,5 @@ public class MainActivity extends MenuActivity {
 		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
 		startActivity(intent);
 	}
-	
-	
+
 }
