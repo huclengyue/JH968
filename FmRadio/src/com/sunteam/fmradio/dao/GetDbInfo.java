@@ -20,7 +20,7 @@ public class GetDbInfo {
 	
 	public GetDbInfo(Context context)// 打开数据库
 	{
-		Global.debug("GetDbInfo ===============111===");
+//		Global.debug("GetDbInfo ===============111===");
 		helper = new DBOpenHelper(context, USER_DBNAME);	
 	}
 
@@ -31,7 +31,7 @@ public class GetDbInfo {
 	 * @param FmInfo
 	 */
 	public void add(FmInfo fmInfo, String tableType) {	
-		Global.debug("\r\n [GetDbInfo] --> [add] ===fmInfo.chanel " + fmInfo.chanel);
+//		Global.debug("\r\n [GetDbInfo] --> [add] ===fmInfo.chanel " + fmInfo.chanel);
 		db = helper.getWritableDatabase();
 		
 		// 增加数据命令
@@ -53,7 +53,7 @@ public class GetDbInfo {
 		String cmd = "update "+ tableType;
 				
 		cmd += " set chanel = ?where _id = ?";
-		Global.debug("\r\n [update] ==" + cmd);
+//		Global.debug("\r\n [update] ==" + cmd);
 		db.execSQL(cmd,
 				new Object[] { musicInfo.getChanel(), musicInfo.getid() });
 	}
@@ -66,7 +66,7 @@ public class GetDbInfo {
 	 * @return
 	 */
 	public FmInfo find(int num, String tableType) {
-		Global.debug("find === num = " + num);
+//		Global.debug("find === num = " + num);
 		if(num <= 0)
 		{
 			num = 1;
@@ -77,7 +77,7 @@ public class GetDbInfo {
 		cmd += tableType;
 		
 		cmd +=" where _id = ?";
-		Global.debug("find === cmd =" + cmd);	
+//		Global.debug("find === cmd =" + cmd);	
 		try{
 			Cursor cursor = db.rawQuery(cmd, new String[] { String.valueOf(num) });// 查找命令字
 			if (cursor.moveToNext())
@@ -216,7 +216,7 @@ public class GetDbInfo {
 		
 		cmd += tableType;//.PLAY_LIST;
 		
-		Global.debug("\r\n getCount cmd =="+ cmd);
+//		Global.debug("\r\n getCount cmd =="+ cmd);
 		try{
 			Cursor cursor = db.rawQuery(cmd,null);//获取列数 命令
 			if (cursor.moveToNext())

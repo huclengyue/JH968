@@ -17,7 +17,7 @@ public class FmInfo {
 		this._id = id;// 为支出编号赋值
 		this.chanel = chanel;
 		
-		Global.debug("alarminfo ===============111===");
+//		Global.debug("alarminfo ===============111===");
 	}
 
 	public int getid()// 获取编号
