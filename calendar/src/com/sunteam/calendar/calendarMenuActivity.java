@@ -34,7 +34,7 @@ public class calendarMenuActivity extends MenuActivity {
 	private int ADD_REMIND_ID = 0; // 增加提醒
 	private int REMIND_ID = 1; // 查看提醒
 	private int DEL_REMIND_ID = 2; // 删除提醒
-	private int DELALL_REMIND_ID = 3; // 删除提醒
+	private int DELALL_REMIND_ID = 3; // 清空提醒
 
 	private int gInterfaceflag = 0; // 界面标志
 	private int INTERFACE_MENU = 0; // 菜单界面
@@ -560,9 +560,9 @@ public class calendarMenuActivity extends MenuActivity {
 	private void showDelALLPromptDialog() {
 
 		Alarmpublic.UpateAlarm(calendarMenuActivity.this);
-		mMenuList = getDbdata();
-		setListData(mMenuList);
-		onResume();
+//		mMenuList = getDbdata();
+//		setListData(mMenuList);
+//		onResume();
 
 		PromptDialog mPromptDialog = new PromptDialog(calendarMenuActivity.this,
 				getResources().getString(R.string.delall_Remind));
