@@ -52,7 +52,7 @@
     <string name="start_record">开始录音</string>
     <string name="title_time_set">时间</string>
     <string name="hour">点</string>
-    <string name="minute">分钟</string>
+    <string name="minute">分</string>
     <string name="time_after">设置时间早于当前时间，请重新设置</string>
     <string name="no_remind">无提醒</string>
     <string name="list_remind">查看提醒</string>

@@ -221,8 +221,80 @@ public class TimeSetActivity extends BaseActivity {
 	
 	// back 键  确认设置
 	private void KeyBack_doConfirm(){
-		mHandler.sendEmptyMessage(Global.MSG_SETOK);
-	
+		//mHandler.sendEmptyMessage(Global.MSG_SETOK);
+		Alarminfo tempinfo = new Alarminfo();  // 
+		
+		
+		tempinfo.year = gyear;
+		tempinfo.month = gmonth;
+		tempinfo.day = gday;
+		
+		tempinfo.hour = ghour;
+		tempinfo.minute = gminute;
+		
+		tempinfo.filename = FileName;
+		tempinfo.path = Path;
+		tempinfo.onoff = gonoff;
+		
+		Global.debug("saveDataForDate gyear = "+ gyear + " gmonth =" + gmonth +  " gday ="+ gday);
+		
+		Global.debug("saveDataForDate time ===111=== \r\n");
+		
+		Calendar calendar = Calendar.getInstance();  // 获取日历
+
+		Calendar tempcalendar = Calendar.getInstance();  // 获取日历
+		
+		tempcalendar.set(Calendar.YEAR, gyear);
+		tempcalendar.set(Calendar.MONTH, gmonth -1);
+		tempcalendar.set(Calendar.DAY_OF_MONTH, gday);
+		tempcalendar.set(Calendar.HOUR_OF_DAY, ghour);
+		tempcalendar.set(Calendar.MINUTE, gminute);
+		
+//		Global.debug("saveDataRemind ==== gyear ="+ gyear);
+//		Global.debug("saveDataRemind ==== gmonth ="+ gmonth);
+//		Global.debug("saveDataRemind ==== gday ="+ gday);
+//		Global.debug("saveDataRemind ==== ghour ="+ ghour);
+//		Global.debug("saveDataRemind ==== gminute ="+ gminute);
+		
+		int time_len = (int) (tempcalendar.getTimeInMillis() - calendar.getTimeInMillis());
+		Global.debug("saveDataRemind ==== time_len ="+ time_len);
+		
+		//Global.debug("maxId ===" + max_num);
+		if(calendar.after(tempcalendar)) // 时间超前 不记录
+		{
+			ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.time_after),
+					getResources().getString(R.string.ok), getResources().getString(R.string.canel));
+			mConfirmDialog.show();
+			mConfirmDialog.setConfirmListener(new ConfirmListener() {
+
+				@Override
+				public void doConfirm() {
+					mHandler.sendEmptyMessage(Global.MSG_ONRESUM);
+				}
+
+				@Override
+				public void doCancel() {
+					//mHandler.sendEmptyMessage(Global.MSG_TIME_AFTER_NO);
+					mHandler.sendEmptyMessage(Global.MSG_BACK);
+				}
+			});
+			
+
+		}
+		else{
+			Global.debug("\r\n ghour ===111=="+ghour);
+			Global.debug("\r\n gminute ==1111==="+gminute);
+		
+			PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.set_ok));
+			mPromptDialog.show();
+			mPromptDialog.setPromptListener(new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					mHandler.sendEmptyMessage(Global.MSG_BACK);
+				}
+			});	
+		}
 	}
 	
 	private void KeyBack() {
@@ -297,7 +369,7 @@ public class TimeSetActivity extends BaseActivity {
 	
 	// 保存提醒数据
 	private void saveDataForDate() {
-		// TODO 自动生成的方法存根
+	
 		Alarminfo tempinfo = new Alarminfo();  // 
 		
 		
@@ -413,7 +485,7 @@ public class TimeSetActivity extends BaseActivity {
 			
 			@Override
 			public void onComplete() {
-				// TODO 自动生成的方法存根
+				
 				Intent intent = new Intent();			
 				Bundle bundle = new Bundle();//
 
