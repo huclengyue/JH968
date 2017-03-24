@@ -152,12 +152,13 @@ public class Alarm_SettingActivity extends BaseActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_MENU){
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			return true;
 		}
 
 		return super.onKeyDown(keyCode, event);
 	}
+
 	// 按键处理
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -350,11 +351,11 @@ public class Alarm_SettingActivity extends BaseActivity {
 				}
 			}
 			return true;
-		}else if(keyCode == KeyEvent.KEYCODE_MENU){
+		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
 			return true;
-			
+
 		}
-		
+
 		return super.onKeyUp(keyCode, event);
 	}
 
