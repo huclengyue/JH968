@@ -195,6 +195,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	// private ArrayList<String> chanel_di = null; // 记录频道数据 数字
 	private int chanel_num = 0; // 记录电台数量
 	private int chanel_frist = 0; // 第一次搜到的电台
+	private int chanel_last = 0; // 上一次搜到的电台
 
 	private boolean mSearchFlag = false; // 搜台标志
 	private int mMax_vol = 0; // 最大音量
@@ -208,11 +209,38 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
+		int freq = 0;
+
+		freq = SharedPrefUtils.getSharedPrefInt(this, Global.FM_CONFIG_FILE, Context.MODE_WORLD_READABLE,
+				Global.FM_SELECT, freq);
+		if (freq != 0) {
+			mRadioFreq = mFrequency = mPendingFrequency = freq;
+		} else {
+			mRadioFreq = mFrequency = mPendingFrequency = Global.DEFAULT_FREQUENCY;
+		}
+
 		// 开启服务
 		if (mFmReceiver == null && !bFinishCalled) { // Avoid calling getProxy
 			Global.debug("\r\n[onCreate   ]Getting FmProxy proxy...");
 			FmProxy.getProxy(this, this);
 		}
+		
+		
+		doSoundEffect(false); // adding
+
+		mSearchFlag = false; // 默认没有搜索电台
+
+		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE); // 音频
+																				// 服务
+
+		mMax_vol = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC); // 音乐最大音量
+		mcur_vol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC); // 当前音乐音量
+
+		mAudioManager.setParameters("linein_en=1"); // adding
+		// 获取 收音机制式
+		updateMinMaxFrequencies();
+		
+	
 		Global.debug("\r\n [onCreate]   mFmReceiver==" + mFmReceiver);
 
 		// Global.debug("vol max == "+max+" current ===" + current);
@@ -273,28 +301,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 
 	// 初始化 界面
 	private void Init() {
-		int freq = 0;
 
-		freq = SharedPrefUtils.getSharedPrefInt(this, Global.FM_CONFIG_FILE, Context.MODE_WORLD_READABLE,
-				Global.FM_SELECT, freq);
-		if (freq != 0) {
-			mRadioFreq = mFrequency = mPendingFrequency = freq;
-		} else {
-			mRadioFreq = mFrequency = mPendingFrequency = Global.DEFAULT_FREQUENCY;
-		}
-
-		doSoundEffect(false); // adding
-
-		mSearchFlag = false; // 默认没有搜索电台
-
-		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE); // 音频
-																				// 服务
-
-		mMax_vol = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC); // 音乐最大音量
-		mcur_vol = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC); // 当前音乐音量
-
-		// 获取 收音机制式
-		updateMinMaxFrequencies();
 
 		/*
 		 * if (mAudioManager.isMusicActive()) { // 获取 是否在播放音乐
@@ -320,6 +327,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		// 定时器
 		mytimer = new Timer();
 		TimerTask mytask = new TimerTask() {
+			int temp_num = 0;
 			@Override
 			public void run() {
 				if (mytimer_first == false) {
@@ -339,15 +347,17 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 					TtsUtils.getInstance().setCompletedListener(mCompletedListener);
 					// updateMuted(!mPendingMute);
 					// updateMuted(!mPendingMute);
-					playThisRadio();
-
-					mytimer.cancel();
-					System.out.println("-----333-----myTime''s up ");
+					if((temp_num ++) > 7){
+						playThisRadio();
+						mytimer.cancel();
+						System.out.println("-----333-----myTime''s up ");
+					}
+					
 				}
 			}
 		};
-		// mytimer.schedule(mytask, 5000, 5000); // 1秒后执行
-		mytimer.schedule(mytask, 7000); // 7秒后执行 才能有声音
+		mytimer.schedule(mytask, 3000, 3000); // 1秒后执行
+		//mytimer.schedule(mytask, 7000); // 7秒后执行 才能有声音
 
 		// updateMuted(true);
 	}
@@ -411,11 +421,16 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-		Global.debug("\r\n  [onResume()]   =====END--=--- ");
+//		Global.debug("\r\n  [onResume()]   =====END--=--- ");
 
-		updateMuted(true);
+	//	updateMuted(true);
 		// TtsUtils.getInstance().stop();
-		TtsUtils.getInstance().setCompletedListener(mCompletedListener);
+		if(mSearchFlag == false){
+			TtsUtils.getInstance().setCompletedListener(mCompletedListener);
+		}
+		else{
+			TtsUtils.getInstance().setCompletedListener(null);
+		}
 	}
 
 	@Override
@@ -791,6 +806,9 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 				|| keyCode == KeyEvent.KEYCODE_POUND) {
 			Global.debug("\r\n[onKeyUp]   Test == " + Test);
 			Test = !Test;
+//			AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//			Global.debug("\r\n[onKeyUp]   mAudioManager.isStreamMute(AudioSystem.STREAM_FM) == " +  mAudioManager.isStreamMute(10));
+			//mAudioManager.isStreamMute(AudioSystem.STREAM_FM);
 			return true;
 		}
 
@@ -834,12 +852,12 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			chanel_str.clear();
 			// chanel_di.clear();
 			radioFreqList.clear();
-
 			mMenuList = chanel_str;
 
 			chanel_num = 0;
 			mSearchFlag = true; // 开始搜索
-
+			chanel_last = 0;
+			
 			delAllChanel();
 
 			try {
@@ -1113,7 +1131,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		vol_bk = volume * (Global.VOL_MAX_FM / mMax_vol); // 收音机最大音量是 255
 															// 系统最大音量是 mMax_vol
 		// Global.debug("\r\n vol_bk === " + vol_bk);
-		Global.debug("\r\n[FmRadio]-->[updateFMVolume] vol_bk === " + vol_bk);
+//		Global.debug("\r\n[FmRadio]-->[updateFMVolume] vol_bk === " + vol_bk);
 		// Global.debug( "updateFMVolume()");
 		if (null != mFmReceiver) {
 			fmVolumeUpdatepending = (FmProxy.STATUS_OK != mFmReceiver.setFMVolume(vol_bk));
@@ -1200,11 +1218,11 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 	 */
 	private void updateMuted(boolean muted) {
 
-		if (muted == true) {
+/*		if (muted == true) {
 			Global.debug("\r\n [FmRadio] updateMuted() = 开启静音");
 		} else {
 			Global.debug("\r\n [FmRadio] updateMuted() = 关闭静音");
-		}
+		}*/
 
 		/* Extract pending data and request these settings. */
 		mPendingMute = muted;
@@ -1240,14 +1258,14 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 
 	/**
 	 * Request station search operation and pend if necessary. 搜索电台 参数 向上或向下搜索
-	 * 
+	 * 更新搜索状态
 	 * @param direction
 	 *            the search direction can be up or down.
 	 */
 	private void updateStationSearch(int direction) {
 		int endFrequency = mPendingFrequency;
 
-		Global.debug("[fmradio]--->[updateStationSearch]  ==========");
+//		Global.debug("[fmradio]--->[updateStationSearch]  ==========");
 
 		/* Extract pending data and request these settings. */
 		mPendingSearchDirection = direction;
@@ -1255,7 +1273,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		// Global.debug( "Sending search direction (" +
 		// Integer.toString(mPendingSearchDirection)+ ")");
 
-		Global.debug("[fmradio]--->[updateStationSearch]     === mFmReceiver = " + mFmReceiver);
+//		Global.debug("[fmradio]--->[updateStationSearch]     === mFmReceiver = " + mFmReceiver);
 		if (mFmReceiver != null) {
 			// Global.debug( "FmConstants.FM_COMBO_SEARCH_ENABLED
 			// "+FmConstants.FM_COMBO_SEARCH_ENABLED);
@@ -1413,7 +1431,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			msg.arg1 = chanel_num;
 			viewUpdateHandler.sendMessage(msg);
 			onResume();
-			if (false) {
+/*			if (false) {
 				if (mPendingFrequency < mMaxFreq) {
 					updateFrequency(mPendingFrequency + mFrequencyStep);
 				} else {
@@ -1426,7 +1444,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 					onResume();
 
 				}
-			}
+			}*/
 		}
 	}
 
@@ -1547,7 +1565,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 				// mView.setSignalStrength(msg.arg1);
 				break;
 			case Global.GUI_UPDATE_MSG_FREQ_STATUS:
-				Global.debug("[FmRadio]--> [handleMessage]   ===msg.what =GUI_UPDATE_MSG_FREQ_STATUS ");
+//				Global.debug("[FmRadio]--> [handleMessage]   ===msg.what =GUI_UPDATE_MSG_FREQ_STATUS ");
 				updateFrequency(msg.arg1, msg.arg2);
 				break;
 			case Global.GUI_UPDATE_MSG_MUTE_STATUS:
@@ -1589,11 +1607,11 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 				mMenuList = chanel_str;
 				setListData(mMenuList);
 
-				mMenuView.setSelectItem(chanel_num - 1);
+				mMenuView.setSelectItem(chanel_num - 1, true);
 
 				// mMenuView.setSelectItem();
 
-				onResume();
+				//onResume();
 				break;
 
 			case Global.MSG_TTSDOCOMPLETES:
@@ -1798,17 +1816,18 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 
 			mSeekInProgress = false;
 
-			Global.debug(
-					"[FmRadio]--->[onSeekCompleteEvent]  chanel_num ==" + chanel_num + " mSearchFlag =" + mSearchFlag);
+//			Global.debug(
+//					"[FmRadio]--->[onSeekCompleteEvent]  chanel_num ==" + chanel_num + " mSearchFlag =" + mSearchFlag);
 			if ((chanel_num == 0) && (mSearchFlag == true)) { // 开始搜索
 				chanel_frist = freq;
 			} else {
 				// int temp_freq = Integer.valueOf(chanel_di.get(0));
 				int temp_freq = chanel_frist;
-				// Global.debug("[FmRadio]--->[onSeekCompleteEvent] freq ==" +
-				// freq + " temp_freq =" + temp_freq);
-				if (freq <= temp_freq || true == getChanelIsHave(freq)) {
+				// Global.debug("[FmRadio]--->[onSeekCompleteEvent] freq ==" +freq + " temp_freq =" + temp_freq + "   getChanelIsHave(freq) ="+getChanelIsHave(freq));
+				 Global.debug("[FmRadio]--->[onSeekCompleteEvent] freq ==" +freq + " chanel_last =" + chanel_last);
+				if (freq < chanel_last  || ((freq <= temp_freq)) /*|| true == getChanelIsHave(freq)*/) {
 					mSearchFlag = false;
+					chanel_last = 0;
 					Message msg = Message.obtain();
 					msg.what = Global.GUI_UPDTAE_CHANEL;
 					msg.arg1 = chanel_num;
@@ -1817,7 +1836,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 					return;
 				}
 			}
-
+			chanel_last = freq;
 			mFrequency = freq;
 
 			if (mSearchFlag == true) { // 调节灵敏度
@@ -1842,7 +1861,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 					msg.what = Global.GUI_UPDTAE_LIST;
 					msg.arg1 = chanel_num;
 					viewUpdateHandler.sendMessage(msg);
-
+					
 					// onResume();
 				}
 
@@ -2447,7 +2466,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 				int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 				boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
 						|| status == BatteryManager.BATTERY_STATUS_FULL;
-				 Global.debug("\r\n[BatteryBroadcastReciver] isCharging == " + isCharging + "  status ="+status + "   level=="+level);
+//				 Global.debug("\r\n[BatteryBroadcastReciver] isCharging == " + isCharging + "  status ="+status + "   level=="+level);
 				if (Test == true) {
 					// level = 5;
 				}
@@ -2506,7 +2525,8 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		@Override
 		public void onCompleted(String arg0) {
 
-			Global.debug("\r\n tts 播放结束===========");
+//			return ;
+			Global.debug("\r\n tts 播放结束========mVolFlag ="+ mVolFlag + "   mSearchFlag ="+mSearchFlag);
 			if (mVolFlag == true) {
 				updateMuted(false);
 				return;
