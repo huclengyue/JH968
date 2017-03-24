@@ -155,6 +155,7 @@ public class RemindActivity extends MenuActivity {
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 
 		if (keyCode == KeyEvent.KEYCODE_BACK) { // 返回
+			myPlayer.stopPlayback();
 			if (gFileName.equals(Global.ALARM_FILE_NAME)) { // 没有保存记录
 				ConfirmDialog mConfirmDialog = new ConfirmDialog(this, getResources().getString(R.string.no_record),
 						getResources().getString(R.string.ok), getResources().getString(R.string.canel));
