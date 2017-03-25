@@ -11,7 +11,10 @@ import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.common.utils.dialog.PromptListener;
+import com.sunteam.player.MyPlayer;
+import com.sunteam.receiver.Alarmpublic;
 
+import android.R.bool;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,7 +25,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
-public class Alarm_countdownActivity extends BaseActivity {
+public class Alarm_countdownActivity extends BaseActivity implements MyPlayer.OnStateChangedListener {
 
 	TextView mTitle = null;
 	TextView mTv1 = null;
@@ -40,7 +43,11 @@ public class Alarm_countdownActivity extends BaseActivity {
 	private int PAUSE_COUNTDOWN = 2; // 倒计时暂停
 
 	private int gCountDown_falg = 0; // 选择是哪个
-
+	
+	private MyPlayer myPlayer = null;
+	
+	private boolean timeout_flag = false; // 选择是哪个
+	
 	Timer timer = new Timer();
 
 	@Override
@@ -108,6 +115,11 @@ public class Alarm_countdownActivity extends BaseActivity {
 
 		TtsUtils.getInstance().speak(getResources().getString(R.string.countdown_start));
 		gCountDown_falg = START_COUNTDOWN;
+		
+		// 新建播放器
+		myPlayer = MyPlayer.getInstance(this,mHandler);
+		myPlayer.setOnStateChangedListener(this);
+		
 	}
 
 	protected void onResume() {
@@ -132,6 +144,7 @@ public class Alarm_countdownActivity extends BaseActivity {
 					if (gCountDown_falg == START_COUNTDOWN) {
 						if (gtime_len > 0) {
 							gtime_len--;
+							timeout_flag = false;
 						}
 						int hour = gtime_len / 60 / 60;
 						int min = gtime_len / 60 % 60;
@@ -176,7 +189,13 @@ public class Alarm_countdownActivity extends BaseActivity {
 	};
 
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-
+		
+		if(timeout_flag == true){
+			
+			myPlayer.stopPlayback();
+			finish();
+			timeout_flag = false;
+		}
 		if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
 			if (gCountDown_falg == START_COUNTDOWN) {
 				gCountDown_falg = PAUSE_COUNTDOWN;
@@ -244,9 +263,10 @@ public class Alarm_countdownActivity extends BaseActivity {
 
 		@Override
 		public void onComplete() {
-			// TODO 自动生成的方法存根
-			finish();
+			
+		//	finish();
 			Global.debug("PromptListener ========ssss==================" + gtime_len);
+			mHandler.sendEmptyMessage(Global.MSG_COUNTDOWN_PLAYMUSIC);
 		}
 	};
 
@@ -262,9 +282,33 @@ public class Alarm_countdownActivity extends BaseActivity {
 		public void handleMessage(Message msg) {
 			if (msg.what == Global.MSG_COUNTDOWN_END) { // 音乐播放结束消息
 				putMsg();
+			} else if(msg.what == Global.MSG_COUNTDOWN_PLAYMUSIC){
+				timer.cancel();
+				myPlayer.startPlayback(myPlayer.playProgress(), Alarmpublic.ALARM_PATH + getResources().getString(R.string.folder) + "/" + Global.FILE_TIMEOUT, true);
+				timeout_flag = true;
 			}
+			
 
 			super.handleMessage(msg);
 		}
 	};
+	// 播放状态改变
+	@Override
+	public void onStateChanged(int state) {
+		if (state == MyPlayer.PLAYING_STATE || state == MyPlayer.RECORDING_STATE) {
+//          mSampleInterrupted = false;
+//          mErrorUiMessage = null;
+		}
+		else if(state == myPlayer.IDLE_STATE){
+			myPlayer.stopPlayback();
+			Global.debug("onStateChanged ===== 1111=================myPlayer.IDLE_STATE==" + myPlayer.IDLE_STATE);
+			finish();  // 在第一个闹钟来时 会改变播放状态 这里也会调 这样会将界面销毁    这里不需要
+		}
+	}
+
+	@Override
+	public void onError(int error) {
+		// TODO 自动生成的方法存根
+		
+	}
 }

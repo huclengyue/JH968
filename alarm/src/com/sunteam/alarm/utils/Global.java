@@ -50,10 +50,14 @@ public class Global {
 
 	public static int MSG_SETTING_ASK_DATEBACK = 4; // 设置后返回
 
+	public static int MSG_COUNTDOWN_PLAYMUSIC = 6;   //  倒计时结束 播放音乐 
+	
 	public static int TIME_LEN0 = 30 * 60;
 	public static int TIME_LEN1 = 60 * 60;
 	public static int TIME_LEN2 = 90 * 60;
 	public static int TIME_LEN3 = 120 * 60;
+	
+	public static String FILE_TIMEOUT = "timeout.mp3";
 
 	// public static final String ALARM_FILE_PATH =
 	// Environment.getExternalStorageDirectory() + "//Alarms//" +
