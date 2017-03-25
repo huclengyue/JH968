@@ -16,7 +16,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -26,7 +25,6 @@ import android.widget.TextView;
 
 import com.sunteam.common.tts.TtsCompletedListener;
 import com.sunteam.common.tts.TtsUtils;
-import com.sunteam.common.utils.CommonUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.ConfirmListener;
@@ -68,7 +66,9 @@ public class RecordActivity extends BaseActivity {
 	 * 1：准备录音，尚未开始
 	 */
 	private int state_ready = 1;
-
+	
+	private boolean FM_RecordStart = false;
+	
 	private int mState = state_no_record;
 
 	// private TextView tvrecording;
@@ -178,16 +178,7 @@ public class RecordActivity extends BaseActivity {
 		tvTime.setTextSize(rs.getDimensionPixelSize(R.dimen.textsize));
 
 		tvTime.setText(getRecordLength());
-		Global.debug("\r\n leftSpace =====" + leftSpace);
-		if (leftSpace <= 0) {
-			speakNotRecord();
-		} else {
-			Global.debug("\r\n callerId =====" + callerId);
-			if ((Global.CALL_CALENDAR == callerId) || (3 == callerId) || (Global.CALL_FM == callerId)) {
-				CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_ENTER);
-			}
-			speakTimeLeft();
-		}
+		
 
 		tvReady.setOnClickListener(new OnClickListener() {
 
@@ -201,18 +192,19 @@ public class RecordActivity extends BaseActivity {
 					} else {
 						mState = state_ready;
 
-						showSurface();
+						showSurface();   // 显示录音中界面
 
-						TtsUtils.getInstance().setCompletedListener(new TtsCompletedListener() {
+						/*TtsUtils.getInstance().setCompletedListener(new TtsCompletedListener() {
 
 							@Override
 							public void onCompleted(String arg0) {
-								Log.e("log", "speak finish");
+							//	Log.e("log", "speak finish");
+								Global.debug("【onClick】  TTS 发音结束 ==== send 1");
 								RecordHandler.sendEmptyMessage(1);
 								TtsUtils.getInstance().setCompletedListener(null);
 							}
-						});
-
+						});*/
+						TtsUtils.getInstance().setCompletedListener(mCompletedListener);
 						TtsUtils.getInstance().speak(rs.getString(R.string.startRecord));
 						// showDialog();
 					}
@@ -234,7 +226,20 @@ public class RecordActivity extends BaseActivity {
 		shutdownReceiver = new ShutdownReceiver();
 		IntentFilter shutdownFilter = new IntentFilter(Intent.ACTION_SHUTDOWN);
 		registerReceiver(shutdownReceiver, shutdownFilter);
-
+		
+		
+		Global.debug("\r\n leftSpace =====" + leftSpace);
+		if (leftSpace <= 0) {
+			speakNotRecord();
+		} else {
+			Global.debug("\r\n callerId =====" + callerId);
+			/*if ((Global.CALL_CALENDAR == callerId) || (3 == callerId) || (Global.CALL_FM == callerId)) {
+				//CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_ENTER);
+				Entern_KeyUp();
+			}*/
+			speakTimeLeft();
+		}
+		FM_RecordStart = false;
 	}
 
 	@Override
@@ -246,6 +251,16 @@ public class RecordActivity extends BaseActivity {
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 
 		registerReceiver(batteryReceiver, intentFilter);
+		
+		//TtsUtils.getInstance().setCompletedListener(mCompletedListener);
+		
+		if (((Global.CALL_CALENDAR == callerId) || (3 == callerId) || (Global.CALL_FM == callerId)) && (FM_RecordStart == false)) {
+			//CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_ENTER);
+			
+			Entern_KeyUp();
+			FM_RecordStart = true;
+			
+		}
 	}
 
 	@Override
@@ -255,7 +270,49 @@ public class RecordActivity extends BaseActivity {
 
 		Global.releaseWakeLock(); // 打开休眠
 	}
+	// OK 键处理
+	private void Entern_KeyUp(){
+		Global.debug("[Entern_KeyUp]   ====mState =" + mState);
+		if (mState == state_no_record) {
+			if (batteryReceiver.getLevel() < 10) {// 电量低情况
+				Global.showToast(RecordActivity.this, R.string.cannot_record, mHandler, Global.MSG_ONRESUM);
+			} else if (leftSpace <= 0) { // 空间不足情况
+				speakNotRecord();
+			} else {
+				mState = state_ready;
 
+				showSurface();
+				Global.debug("[Entern_KeyUp]   ====state_ready =" + state_ready);
+//			//	RecordHandler.sendEmptyMessage(1);
+//				TtsUtils.getInstance().setCompletedListener(new TtsCompletedListener() {
+//					@Override
+//					public void onCompleted(String arg0) {
+//						Global.debug("[Entern_KeyUp]   ====sendEmptyMessage(1) =" );	
+//						RecordHandler.sendEmptyMessage(1);
+//						TtsUtils.getInstance().setCompletedListener(null);
+//					}
+//				});
+				TtsUtils.getInstance().setCompletedListener(mCompletedListener);
+				//TtsUtils.getInstance().speak(rs.getString(R.string.startRecord), TextToSpeech.QUEUE_FLUSH);
+				TtsUtils.getInstance().speak(rs.getString(R.string.startRecord));
+				// showDialog();
+				Global.acquireWakeLock(this); // 禁止休眠
+				//RecordHandler.sendEmptyMessage(1);
+			}
+
+		} else if (mState == state_recording) { // 正在录音
+			stop();
+			Global.showToast(RecordActivity.this, R.string.saveAndexit, RecordHandler, 2);
+			Global.releaseWakeLock(); // 打开休眠
+			// goback(); // houding@20160902 统一在RecordHandler中处理
+		} else if (mState == state_ready) {
+			TtsUtils.getInstance().stop();
+			mState = state_no_record;
+			// goback(); // houding@20160902 统一在RecordHandler中处理
+			Global.showToast(RecordActivity.this, R.string.invalid_file, RecordHandler, 2);
+			Global.releaseWakeLock(); // 打开休眠
+		}
+	}
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		int code = event.getKeyCode();
@@ -263,40 +320,9 @@ public class RecordActivity extends BaseActivity {
 		// MyLog.e("dispatchKeyEvent", mState + ",code:" + code + ",action" +
 		// action);
 		if ((code == KeyEvent.KEYCODE_DPAD_CENTER || code == KeyEvent.KEYCODE_ENTER) && action == KeyEvent.ACTION_UP) {
-			if (mState == state_no_record) {
-				if (batteryReceiver.getLevel() < 10) {// 电量低情况
-					Global.showToast(RecordActivity.this, R.string.cannot_record, mHandler, Global.MSG_ONRESUM);
-				} else if (leftSpace <= 0) { // 空间不足情况
-					speakNotRecord();
-				} else {
-					mState = state_ready;
+			
+			Entern_KeyUp();
 
-					showSurface();
-
-					TtsUtils.getInstance().setCompletedListener(new TtsCompletedListener() {
-						@Override
-						public void onCompleted(String arg0) {
-							RecordHandler.sendEmptyMessage(1);
-							TtsUtils.getInstance().setCompletedListener(null);
-						}
-					});
-					TtsUtils.getInstance().speak(rs.getString(R.string.startRecord), TextToSpeech.QUEUE_FLUSH);
-					// showDialog();
-					Global.acquireWakeLock(this); // 禁止休眠
-				}
-
-			} else if (mState == state_recording) { // 正在录音
-				stop();
-				Global.showToast(RecordActivity.this, R.string.saveAndexit, RecordHandler, 2);
-				Global.releaseWakeLock(); // 打开休眠
-				// goback(); // houding@20160902 统一在RecordHandler中处理
-			} else if (mState == state_ready) {
-				TtsUtils.getInstance().stop();
-				mState = state_no_record;
-				// goback(); // houding@20160902 统一在RecordHandler中处理
-				Global.showToast(RecordActivity.this, R.string.invalid_file, RecordHandler, 2);
-				Global.releaseWakeLock(); // 打开休眠
-			}
 		} else if ((code == KeyEvent.KEYCODE_BACK || code == KeyEvent.KEYCODE_ESCAPE) && action == KeyEvent.ACTION_UP) {
 			if (mState == state_recording) {
 				stop();
@@ -542,13 +568,14 @@ public class RecordActivity extends BaseActivity {
 		int mResult = -1;
 		// int mResult = 1000;
 		AudioRecorder mRecord_1 = AudioRecorder.getInstance();
-		Global.debug("\r\n record === mRecord_1 " + mRecord_1);
-		Global.debug("\r\n record === callerId " + callerId);
+		Global.debug("\r\n [record] === mRecord_1 " + mRecord_1);
+		Global.debug("\r\n [record] === callerId " + callerId);
 		if (callerId == Global.CALL_FM) {
 			mResult = mRecord_1.startRecordAndFile_forFm();
 		} else {
 			mResult = mRecord_1.startRecordAndFile();
 		}
+		Global.debug("\r\n [record] === mResult " + mResult);
 		if (mResult == ErrorCode.SUCCESS) {
 			mState = mFlag;
 			mSampleStart = System.currentTimeMillis();
@@ -644,7 +671,7 @@ public class RecordActivity extends BaseActivity {
 	 * 
 	 */
 	public class BatteryBroadcastReciver extends BroadcastReceiver {
-		private int level;
+		private int level = 100;
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -657,12 +684,13 @@ public class RecordActivity extends BaseActivity {
 				int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 				boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
 						|| status == BatteryManager.BATTERY_STATUS_FULL;
-
+//				Global.debug("[BatteryBroadcastReciver]  isCharging =" + isCharging + "  level=" + level);
 				if (isCharging == true) {
 					return;
-				}
-				if (level < 10) {
+				} else if (level < 10) {
+//					Global.debug("[BatteryBroadcastReciver] ======111");
 					if (mState == 0) {
+						Global.debug("[BatteryBroadcastReciver] ======2222");
 						Global.showToast(RecordActivity.this, R.string.stop_record, batteryHandler, 0);
 						stop();
 						goback();
@@ -757,4 +785,16 @@ public class RecordActivity extends BaseActivity {
 		goback();
 		speakTimeLeft();
 	}
+	
+	// TTS 回调函数
+	TtsCompletedListener mCompletedListener = new TtsCompletedListener() {
+		
+		@Override
+		public void onCompleted(String arg0) {
+			// TODO 自动生成的方法存根
+			Global.debug(" tts 发音结束==========");
+			RecordHandler.sendEmptyMessage(1);
+			TtsUtils.getInstance().setCompletedListener(null);
+		}
+	};
 }

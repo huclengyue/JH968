@@ -35,6 +35,7 @@ public class AudioRecorder {
 
 	public int startRecordAndFile() {
 		// 判断是否有外部存储设备sdcard
+		Global.debug("[startRecordAndFile]  AudioFileFunc.isSdcardExit() ="+AudioFileFunc.isSdcardExit() + "  isRecord ="+isRecord);
 		if (AudioFileFunc.isSdcardExit()) {
 			if (isRecord) {
 				return ErrorCode.E_STATE_RECODING;
@@ -60,10 +61,10 @@ public class AudioRecorder {
 			if (isRecord) {
 				return ErrorCode.E_STATE_RECODING;
 			} else {
-				Global.debug("\r\n startRecordAndFile_forFm   ---- audioRecord ="+audioRecord);
-				//if (audioRecord == null) {
-					creatAudioRecord_forFm();
-			//	}
+				Global.debug("\r\n startRecordAndFile_forFm   ---- audioRecord =" + audioRecord);
+				// if (audioRecord == null) {
+				creatAudioRecord_forFm();
+				// }
 				audioRecord.startRecording();
 				// 让录制状态为true
 				isRecord = true;
@@ -75,7 +76,7 @@ public class AudioRecorder {
 			return ErrorCode.E_NOSDCARD;
 		}
 	}
-	
+
 	public void stopRecordAndFile() {
 		close();
 	}
@@ -103,27 +104,25 @@ public class AudioRecorder {
 		NewAudioName = AudioFileFunc.getWavFilePath();
 
 		// 获得缓冲区字节大小
-		bufferSizeInBytes = AudioRecord.getMinBufferSize(
-				AudioFileFunc.AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_STEREO,
+		bufferSizeInBytes = AudioRecord.getMinBufferSize(AudioFileFunc.AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_STEREO,
 				AudioFormat.ENCODING_PCM_16BIT);
 
 		// int BufferElements2Rec = 1024; // want to play 2048 (2K) since 2
 		// bytes we use only 1024
 		// int BytesPerElement = 2; // 2 bytes in 16bit format
-
+		Global.debug("[creatAudioRecord]   NewAudioName =" + NewAudioName + "  bufferSizeInBytes =" + bufferSizeInBytes);
 		// 创建AudioRecord对象
-		audioRecord = new AudioRecord(AudioFileFunc.AUDIO_INPUT,
-				AudioFileFunc.AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_STEREO,
-				AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
+		audioRecord = new AudioRecord(AudioFileFunc.AUDIO_INPUT, AudioFileFunc.AUDIO_SAMPLE_RATE,
+				AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
 	}
+
 	private void creatAudioRecord_forFm() {
 		Global.debug("\r\n[creatAudioRecord_forFm]    1111==== \r\n");
 		// 获取音频文件路径
 		NewAudioName = AudioFileFunc.getWavFilePath();
 
 		// 获得缓冲区字节大小
-		bufferSizeInBytes = AudioRecord.getMinBufferSize(
-				AudioFileFunc.AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_STEREO,
+		bufferSizeInBytes = AudioRecord.getMinBufferSize(AudioFileFunc.AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_STEREO,
 				AudioFormat.ENCODING_PCM_16BIT);
 
 		// int BufferElements2Rec = 1024; // want to play 2048 (2K) since 2
@@ -131,14 +130,14 @@ public class AudioRecorder {
 		// int BytesPerElement = 2; // 2 bytes in 16bit format
 
 		// 创建AudioRecord对象
-		audioRecord = new AudioRecord(AudioFileFunc.AUDIO_INPUT2,
-				AudioFileFunc.AUDIO_SAMPLE_RATE, AudioFormat.CHANNEL_IN_STEREO,
-				AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
+		audioRecord = new AudioRecord(AudioFileFunc.AUDIO_INPUT2, AudioFileFunc.AUDIO_SAMPLE_RATE,
+				AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
 	}
 
 	class AudioRecordThread implements Runnable {
 		@Override
 		public void run() {
+			Global.debug("[AudioRecordThread] ---");
 			writeDateTOFile();// 往文件中写入裸数据
 			addHeader(NewAudioName);// 给裸数据加上头文件
 		}
@@ -163,6 +162,7 @@ public class AudioRecorder {
 		}
 		while (isRecord == true) {
 			readsize = audioRecord.read(audiodata, 0, bufferSizeInBytes);
+			//Global.debug("[writeDateTOFile]  readsize ="+readsize);
 			if (AudioRecord.ERROR_INVALID_OPERATION != readsize && fos != null) {
 				try {
 					fos.write(audiodata);
@@ -181,6 +181,7 @@ public class AudioRecorder {
 
 	/**
 	 * 得到可播放的音频文件
+	 * 
 	 * @param inFilename
 	 * @param outFilename
 	 */
@@ -191,11 +192,10 @@ public class AudioRecorder {
 		int channels = 2;
 		long byteRate = 16 * AudioFileFunc.AUDIO_SAMPLE_RATE * channels / 8;
 		try {
-			RandomAccessFile raf = new RandomAccessFile(outFilename,"rw");
+			RandomAccessFile raf = new RandomAccessFile(outFilename, "rw");
 			totalAudioLen = raf.getChannel().size();
 			totalDataLen = totalAudioLen + 36;
-			WriteWaveFileHeader(raf, totalAudioLen, totalDataLen,
-					longSampleRate, channels, byteRate);
+			WriteWaveFileHeader(raf, totalAudioLen, totalDataLen, longSampleRate, channels, byteRate);
 			raf.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -207,9 +207,8 @@ public class AudioRecorder {
 	/**
 	 * 这里提供一个头信息。插入这些信息就可以得到可以播放的文件。
 	 */
-	private void WriteWaveFileHeader(RandomAccessFile out, long totalAudioLen,
-			long totalDataLen, long longSampleRate, int channels, long byteRate)
-			throws IOException {
+	private void WriteWaveFileHeader(RandomAccessFile out, long totalAudioLen, long totalDataLen, long longSampleRate,
+			int channels, long byteRate) throws IOException {
 		byte[] header = new byte[44];
 		header[0] = 'R'; // RIFF/WAVE header
 		header[1] = 'I';
