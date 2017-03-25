@@ -320,8 +320,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		 * "Airplane mode ====================\r\n"); finish(); }
 		 */
 		registerReceiver(mMediaStateReceiver, new IntentFilter(PLAYSTATE_CHANGED));
-		registerReceiver(mAirplaneModeReceiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED)); // 飞行模式
-																										// 改变
+		registerReceiver(mAirplaneModeReceiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED)); // 飞行模式// 改变
 		registerHeadsetPlugReceiver(); // 注册耳机消息
 		registerBatReceiver();
 		// 定时器
@@ -340,7 +339,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 					mytimer_first = true;
 
 					//System.out.println("--mFmReceiver.getStatus() = " + mFmReceiver.getStatus() + "  mFmReceiver.getRadioIsOn() = " + mFmReceiver.getRadioIsOn());	
-					if (gheadin == true) {
+					if ((gheadin == true)) {
 						playThisRadio();
 					}
 				}/* else {
@@ -831,7 +830,8 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		super.onActivityResult(requestCode, resultCode, data);
 		Global.debug("\r\nonActivityResult ==================111 requestCode =" + requestCode + " resultCode =="
 				+ resultCode);
-		updateMuted(false); // 静音
+		updateMuted(true); // 静音
+		//updateMuted(false); // 静音
 		if (requestCode != resultCode || null == data) { // 在子菜单中回传的标志
 			Global.debug("onActivityResult === error =");
 
@@ -870,7 +870,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			} else { // 外放
 				setWiredDeviceConnectionState(true);
 			}
-			super.onResume();
+			onResume();
 		} else if (selectItem == Global.SAVE_CHANEL_ID) { // 保存频道
 			chanel_str.clear();
 			// chanel_di.clear();
