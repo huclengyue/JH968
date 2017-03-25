@@ -27,7 +27,7 @@ public class Alarmpublic {
 	public static final String REMIND_TABLE = "remind";  // 数据库行程提醒 table
 	public static final String CMD_TABLE = " (_id integer primary key, year integer, month integer,day integer, hour integer, minute integer, filename string, path string, type integer, onoff integer)";  // 数据库行程提醒 table
 	
-	public static final int MAX_NUM = 8;  // 数据最大记录数
+	public static final int MAX_NUM = 16;  // 数据最大记录数
 		
 	public static final int DEF_HOUR = 8;  //  默认小时
 	public static final int DEF_MIN = 0;  //  默认分

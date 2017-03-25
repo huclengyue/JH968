@@ -287,15 +287,16 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 	
 	@Override
 	protected void onDestroy() {
-		// TODO 自动生成的方法存根
+	
 		super.onDestroy();
 //		if (!CommonUtils.isAppOnForeground(this)) { // 如果是自己启动自己，则不必销毁TtsUtils实例!
 //			TtsUtils.getInstance().destroy();
 //		}
+		releaseWakeLock();
 	}
 	@Override
 	protected void onResume() {
-		// TODO 自动生成的方法存根
+		
 		super.onResume();
 		//MenuGlobal.debug("[alarmlib-Alarm_receiver_Activity][onResume], this = " + this);
 
@@ -310,7 +311,7 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 
 	@Override
 	public void onPanelClosed(int featureId, Menu menu) {
-		// TODO 自动生成的方法存根
+		
 		super.onPanelClosed(featureId, menu);
 		releaseWakeLock();
 	}
