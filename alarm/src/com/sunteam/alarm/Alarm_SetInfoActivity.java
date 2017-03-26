@@ -119,7 +119,8 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 	protected void onResume() {
 	
 		super.onResume();
-
+		TtsUtils.getInstance().setCompletedListener(mCompletedListener);
+		
 		if (true == gonFileFlag) {
 			PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.no_file));
 			mPromptDialog.show();
@@ -128,11 +129,11 @@ public class Alarm_SetInfoActivity extends MenuActivity {
 				@Override
 				public void onComplete() {
 					
-					// finish();
+					 mHandler.sendEmptyMessage(Global.MSG_SETTING_FINISH);
 				}
 			});
 		}
-		TtsUtils.getInstance().setCompletedListener(mCompletedListener);
+		
 	}
 
 	@Override
