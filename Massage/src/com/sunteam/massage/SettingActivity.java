@@ -308,7 +308,7 @@ public class SettingActivity extends BaseActivity {
 			
 		case KeyEvent.KEYCODE_MENU:
 			//mAdapter.menu_key();;  // 
-			break;
+			return true;
 			
 			// 数字键
 		case KeyEvent.KEYCODE_0:
@@ -324,7 +324,7 @@ public class SettingActivity extends BaseActivity {
 //			TtsUtils.getInstance().stop();
 //			setNumberKey(keyCode);//   -- 暂时去除数字输入
 			
-			break;
+			return true;
 		
 		case KeyEvent.KEYCODE_POUND:  // #键
 			Global.debug("\r\n [KEYCODE_POUND] ==================== ");
@@ -333,7 +333,7 @@ public class SettingActivity extends BaseActivity {
 		
 			cNum = Double.toString(d_temp);
 			showview(false);
-			break;
+			return true;
 			
 		case KeyEvent.KEYCODE_BACK:  // 返回键
 			if(gday != gday_bk || gmonth != gmonth_bk || gyear != gyear_bk || 
