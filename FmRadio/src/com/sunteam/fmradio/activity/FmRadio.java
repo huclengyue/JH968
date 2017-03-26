@@ -422,7 +422,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		int flag = TtsUtils.getInstance().getSunteamParameter();
 		flag = flag & (~TtsUtils.COMMON_SPEAKING_VOLUME); // 关闭
 		TtsUtils.getInstance().setSunteamParameter(0);
-		Global.debug("\r\n  [onResume()]   =====END--=--- flag =" + flag);
+		Global.debug("\r\n  [onResume()]   =====END--=--- flag =" + flag + "mSearchFlag ="+mSearchFlag) ;
 		
 		if(mSearchFlag == false){
 			TtsUtils.getInstance().setCompletedListener(mCompletedListener);
@@ -965,6 +965,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			 */
 			updateshow(true);
 		} else if (selectItem == Global.RECORD_CHANEL_ID) { // 内录
+			updateMuted(false);
 			startRecord();
 			super.onResume();
 		}
