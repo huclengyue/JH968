@@ -275,7 +275,7 @@ public class TimeSetActivity extends BaseActivity {
 				@Override
 				public void doCancel() {
 					//mHandler.sendEmptyMessage(Global.MSG_TIME_AFTER_NO);
-					mHandler.sendEmptyMessage(Global.MSG_BACK);
+					mHandler.sendEmptyMessage(Global.MSG_FINISH);
 				}
 			});
 			
