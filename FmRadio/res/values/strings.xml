@@ -128,7 +128,7 @@
 	<item>保存电台</item>
 	<item>删除电台</item>
 	<item>清空电台</item>
-	<item>内录电台</item>
+<!-- 	<item>内录电台</item> 暂时屏蔽 -->  
 </string-array>
 
 </resources>
