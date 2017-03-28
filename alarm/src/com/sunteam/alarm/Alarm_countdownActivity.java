@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.sunteam.alarm.utils.Global;
+
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ConfirmDialog;
@@ -284,11 +285,13 @@ public class Alarm_countdownActivity extends BaseActivity implements MyPlayer.On
 				putMsg();
 			} else if(msg.what == Global.MSG_COUNTDOWN_PLAYMUSIC){
 				timer.cancel();
-				myPlayer.startPlayback(myPlayer.playProgress(), Alarmpublic.ALARM_PATH + getResources().getString(R.string.folder) + "/" + Global.FILE_TIMEOUT, true);
+//				String path = Alarmpublic.ALARM_PATH + getResources().getString(R.string.folder) + "/" + Global.FILE_TIMEOUT;
+//				myPlayer.startPlayback(myPlayer.playProgress(), path, true);
+				//myPlayer.startPlayback2(this, R.raw.timerout, true);
+				myPlayer.startPlayback2(Alarm_countdownActivity.this, R.raw.timerout, true);
 				timeout_flag = true;
 			}
 			
-
 			super.handleMessage(msg);
 		}
 	};
