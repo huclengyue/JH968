@@ -806,7 +806,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 					ArrayList<FileInfo> mFileFile = new ArrayList<FileInfo>();
 					ArrayList<FileInfo> mFileFolder = new ArrayList<FileInfo>();
 					mFileFile.clear();
-					mFileFile.clear();
+					mFileFolder.clear();
 
 					for (File mCurrentFile : mFiles) {
 						if (mCurrentFile.getName().equals("LOST.DIR")) // 去除LOST.DIR
@@ -1097,6 +1097,10 @@ public class MainActivity extends MenuActivity implements ShowView {
 				// 获取文件夹内文件
 				File[] mFiles = mFile.listFiles(ff);
 
+				ArrayList<FileInfo> mFileFile = new ArrayList<FileInfo>();
+				mFileFile.clear();
+			
+				
 				gPlayListName.clear();
 				gPlayListPaths.clear();
 
@@ -1132,14 +1136,23 @@ public class MainActivity extends MenuActivity implements ShowView {
 								|| prefix.equals("3GP") || prefix.equals("avi") || prefix.equals("AVI")
 								|| prefix.equals("mov") || prefix.equals("MOV") || prefix.equals("mp4")
 								|| prefix.equals("MP4") || prefix.equals("mpg") || prefix.equals("MPG")) {
-							gPlayListName.add(mCurrentFile.getName());
-							// gPlayListPaths.add(filePath);
-							gPlayListPaths.add(mCurrentFile.getPath());
+							
+							FileInfo mFileInfo = new FileInfo();
+							mFileInfo.name = mCurrentFile.getName();
+							mFileInfo.path = mCurrentFile.getPath();
+							
+							mFileFile.add(mFileInfo);
+
 						}
 					}
 				}
-				Collections.sort(gPlayListName); // 排序gPlayListName
-				Collections.sort(gPlayListPaths); // 排序gPlayListPaths
+				Collections.sort(mFileFile, new UsernameComparator());
+				
+				// 重新赋值 文件在后
+				for (int i = 0; i < mFileFile.size(); i++) {
+					gPlayListName.add(mFileFile.get(i).name);
+					gPlayListPaths.add(mFileFile.get(i).path);
+				}
 			}
 		} else {
 			// 没有读写权限时
