@@ -322,23 +322,28 @@ public class RecordActivity extends BaseActivity {
 		if ((code == KeyEvent.KEYCODE_DPAD_CENTER || code == KeyEvent.KEYCODE_ENTER) && action == KeyEvent.ACTION_UP) {
 			
 			Entern_KeyUp();
+			return true;
 
 		} else if ((code == KeyEvent.KEYCODE_BACK || code == KeyEvent.KEYCODE_ESCAPE) && action == KeyEvent.ACTION_UP) {
-			if (mState == state_recording) {
+			Global.debug("[dispatchKeyEvent] back mState ==="+mState);
+			if (mState == state_recording) { // 正在录音
 				stop();
 				showDialog();
-			} else if (mState == state_ready) {
+			} else if (mState == state_ready) { // 就绪界面
 				TtsUtils.getInstance().stop();
 				mState = state_no_record;
 				// goback(); // houding@20160902 统一在RecordHandler中处理
 				Global.showToast(RecordActivity.this, R.string.invalid_file, RecordHandler, 2);
-			} else if (mState == state_no_record) {
+			} else if (mState == state_no_record) {  // 没有录音界面
 				TtsUtils.getInstance().stop();
 				finish();
 			}
+			return true;
+		} else if((code == KeyEvent.KEYCODE_MENU) && action == KeyEvent.ACTION_UP){
+			return true;
 		}
-		return false;
-		// return super.dispatchKeyEvent(event);
+		//return false;
+		return super.dispatchKeyEvent(event);
 	}
 
 	/**
@@ -376,7 +381,9 @@ public class RecordActivity extends BaseActivity {
 	private void showDialog() {
 		String title = rs.getString(R.string.whether_save);
 		String yes = rs.getString(R.string.yes);
-		TtsUtils.getInstance().speak(title + "," + yes);
+		
+		TtsUtils.getInstance().setCompletedListener(null);  // 设为空 
+		//TtsUtils.getInstance().speak(title + "," + yes);		
 		ConfirmDialog confirmDialog = new ConfirmDialog(RecordActivity.this, title, yes, rs.getString(R.string.no));
 		confirmDialog.show();
 		confirmDialog.setConfirmListener(new ConfirmListener() {
@@ -389,7 +396,7 @@ public class RecordActivity extends BaseActivity {
 			@Override
 			public void doCancel() {
 				mHandler.sendEmptyMessage(Global.MSG_GOBACK);
-
+//				TtsUtils.getInstance().setCompletedListener(mCompletedListener);
 			}
 		});
 	}
@@ -686,6 +693,7 @@ public class RecordActivity extends BaseActivity {
 						|| status == BatteryManager.BATTERY_STATUS_FULL;
 //				Global.debug("[BatteryBroadcastReciver]  isCharging =" + isCharging + "  level=" + level);
 				if (isCharging == true) {
+					level = 100;
 					return;
 				} else if (level < 10) {
 //					Global.debug("[BatteryBroadcastReciver] ======111");
@@ -791,7 +799,6 @@ public class RecordActivity extends BaseActivity {
 		
 		@Override
 		public void onCompleted(String arg0) {
-			// TODO 自动生成的方法存根
 			Global.debug(" tts 发音结束==========");
 			RecordHandler.sendEmptyMessage(1);
 			TtsUtils.getInstance().setCompletedListener(null);

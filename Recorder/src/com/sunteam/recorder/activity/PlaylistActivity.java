@@ -83,6 +83,9 @@ public class PlaylistActivity extends MenuActivity {
 				int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 				boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
 						|| status == BatteryManager.BATTERY_STATUS_FULL;
+				if(isCharging == true){
+					level = 100;
+				}
 				if (level < 10) {
 
 				} else if (level < 20 && !isCharging) {
