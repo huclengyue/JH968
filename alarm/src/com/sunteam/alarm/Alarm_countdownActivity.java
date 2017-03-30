@@ -13,9 +13,6 @@ import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.player.MyPlayer;
-import com.sunteam.receiver.Alarmpublic;
-
-import android.R.bool;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -207,7 +204,7 @@ public class Alarm_countdownActivity extends BaseActivity implements MyPlayer.On
 
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
+						
 						TtsUtils.getInstance()
 								.speak(gtime_len / 60 / 60 + getResources().getString(R.string.hour_time)
 										+ (gtime_len / 60) % 60 + getResources().getString(R.string.min_time)
@@ -222,7 +219,7 @@ public class Alarm_countdownActivity extends BaseActivity implements MyPlayer.On
 
 					@Override
 					public void onComplete() {
-						// TODO 自动生成的方法存根
+						
 						gCountDown_falg = START_COUNTDOWN;
 						TtsUtils.getInstance()
 								.speak(gtime_len / 60 / 60 + getResources().getString(R.string.hour_time)
@@ -302,9 +299,9 @@ public class Alarm_countdownActivity extends BaseActivity implements MyPlayer.On
 //          mSampleInterrupted = false;
 //          mErrorUiMessage = null;
 		}
-		else if(state == myPlayer.IDLE_STATE){
+		else if(state == MyPlayer.IDLE_STATE){
 			myPlayer.stopPlayback();
-			Global.debug("onStateChanged ===== 1111=================myPlayer.IDLE_STATE==" + myPlayer.IDLE_STATE);
+			Global.debug("onStateChanged ===== 1111=================myPlayer.IDLE_STATE==" + MyPlayer.IDLE_STATE);
 			finish();  // 在第一个闹钟来时 会改变播放状态 这里也会调 这样会将界面销毁    这里不需要
 		}
 	}
