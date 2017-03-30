@@ -233,14 +233,14 @@ public class MainActivity extends BaseActivity {
 	
 	// 获取万年历信息
 	private int getWeakOfDay(int year, int month, int day) {
-		// TODO 自动生成的方法存根
+		
 		
 		return sc.getWeekdayOfMonthAndDay(year, month, day);
 	}
 	
 	// 显示界面
 	private void SetTextView(int year, int month, int day, boolean flag) {
-		// TODO 自动生成的方法存根
+	
 		Tools mTools = new Tools(this);
 		//int fontSize = mTools.getFontSize();
 		for(int i = 0; i < MAX_TEXT; i++)
@@ -348,7 +348,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void speakInfo() {
-		// TODO 自动生成的方法存根
+	
 		String str = null; 
 		String str1 = null;
 		// 判断是 阴历还是阳历
@@ -421,7 +421,7 @@ public class MainActivity extends BaseActivity {
 	}
 	
 	private void speakInfo_forstart() {
-		// TODO 自动生成的方法存根
+		
 		String str = null; 
 		String str1 = null;
 		
