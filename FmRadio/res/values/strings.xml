@@ -105,7 +105,7 @@
 
 <string name="fm_setting">"功能菜单"</string>
 <string name="save_ok">"保存成功"</string>
-<string name="save_error">"保存失败， 频道已存在"</string>
+<string name="save_error">"频道已存在"</string>
 <string name="del_error">"删除失败， 频道不存在"</string>
 <string name="del_ok">"删除成功"</string>
 <string name="ask_del">"确认删除"</string>
