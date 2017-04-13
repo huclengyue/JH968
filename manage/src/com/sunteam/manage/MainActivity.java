@@ -93,10 +93,10 @@ public class MainActivity extends MenuActivity implements ShowView {
 
 		Global.gFileName.add(getResources().getString(R.string.sdcard));
 		Global.gFilePaths.add(Global.USER_PATH);
-
+/*
 		Global.gFileName.add(getResources().getString(R.string.udisk));
 		Global.gFilePaths.add(Global.USB_PATH);
-
+*/
 		mMenuList = Global.gFileName;// ArrayUtils.strArray2List(gFileName); ;
 
 		if (null == mTitle) {
@@ -343,10 +343,10 @@ public class MainActivity extends MenuActivity implements ShowView {
 
 					Global.gFileName.add(getResources().getString(R.string.sdcard));
 					Global.gFilePaths.add(Global.USER_PATH);
-
+/*
 					Global.gFileName.add(getResources().getString(R.string.udisk));
 					Global.gFilePaths.add(Global.USB_PATH);
-
+*/
 					setListData(Global.gFileName);
 					mMenuView.setSelectItem(gSelecyId[Global.gPathNum]);
 					Global.debug("[******]gSelecyId[gPathNum] === " + gSelecyId[Global.gPathNum]);
@@ -660,10 +660,10 @@ public class MainActivity extends MenuActivity implements ShowView {
 
 		Global.gFileName.add(getResources().getString(R.string.sdcard));
 		Global.gFilePaths.add(Global.USER_PATH);
-
+/*  去除U盘 
 		Global.gFileName.add(getResources().getString(R.string.udisk));
 		Global.gFilePaths.add(Global.USB_PATH);
-
+*/
 		interface_flag = Global.MAIN_INTERFACE;
 
 		setListData(Global.gFileName);
