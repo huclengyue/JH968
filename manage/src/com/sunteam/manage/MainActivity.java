@@ -722,75 +722,155 @@ public class MainActivity extends MenuActivity implements ShowView {
 		}
 	};
 
-	// 文件排序 按照
 	private class UsernameComparator implements Comparator<FileInfo> {
 		public int compare(FileInfo entity1, FileInfo entity2) {
+			/*
+			try {
+				String str1 = CharacterParser.getInstance().getSelling( entity1.name );
+				String str2 = CharacterParser.getInstance().getSelling( entity2.name );
+				return str1.compareToIgnoreCase(str2);
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
 
+				return 0;
+			}
+			*/
+			
 			String str1 = "";
 			String str2 = "";
-
+			
 			String str10 = "";
 			String str11 = "";
 			String str20 = "";
 			String str21 = "";
-
-			try {
-
-				str1 = Pinyin4jUtils.converterToSpell(entity1.name);
-				str2 = Pinyin4jUtils.converterToSpell(entity2.name);
-
-				for (int i = 0; i < str1.length(); i++) {
-					String str = str1.substring(i, i + 1);
-					if (isNumber(str)) {
+			
+			try 
+			{
+				str1 = sort(Pinyin4jUtils.converterToSpell( entity1.name ));
+				str2 = sort(Pinyin4jUtils.converterToSpell( entity2.name ));
+				
+				for( int i = 0; i < str1.length(); i++ )
+				{
+					String str = str1.substring(i, i+1);
+					if( isNumber( str ) )
+					{
 						str10 += str;
-					} else {
+					}
+					else
+					{
 						str11 += str1.substring(i);
 						break;
 					}
 				}
-
-				for (int i = 0; i < str2.length(); i++) {
-					String str = str2.substring(i, i + 1);
-					if (isNumber(str)) {
+				
+				for( int i = 0; i < str2.length(); i++ )
+				{
+					String str = str2.substring(i, i+1);
+					if( isNumber( str ) )
+					{
 						str20 += str;
-					} else {
+					}
+					else
+					{
 						str21 += str2.substring(i);
 						break;
 					}
 				}
-
-				if (!TextUtils.isEmpty(str10) && !TextUtils.isEmpty(str20)) {
+				
+				if( !TextUtils.isEmpty(str10) && !TextUtils.isEmpty(str20) )
+				{
 					float f1 = Float.parseFloat(str10);
 					float f2 = Float.parseFloat(str20);
-
-					if (f1 > f2) {
-						return 1;
-					} else if (f1 < f2) {
-						return -1;
-					} else {
+					
+					if( f1 > f2 )
+					{
+						return	1;
+					}
+					else if( f1 < f2 )
+					{
+						return	-1;
+					}
+					else
+					{
 						return str11.compareToIgnoreCase(str21);
 					}
-				} else {
+				}
+				else
+				{
 					return str1.compareToIgnoreCase(str2);
 				}
-			} catch (Exception e) {
+			} 
+			catch (Exception e) 
+			{
 				e.printStackTrace();
 
 				return str1.compareToIgnoreCase(str2);
 			}
 		}
-
-		private boolean isNumber(String str) {
-			if ("0".equals(str) || "1".equals(str) || "2".equals(str) || "3".equals(str) || "4".equals(str)
-					|| "5".equals(str) || "6".equals(str) || "7".equals(str) || "8".equals(str) || "9".equals(str)
-					|| ".".equals(str)) {
-				return true;
+		
+		private boolean isNumber( String str )
+		{
+			if( "0".equals(str) || "1".equals(str) || "2".equals(str) || "3".equals(str) || "4".equals(str) || "5".equals(str) || 
+				"6".equals(str) || "7".equals(str) || "8".equals(str) || "9".equals(str) || ".".equals(str) )
+			{
+				return	true;
 			}
-
-			return false;
+			
+			return	false;
 		}
-	}
+		
+		//对多音字排序
+		private String sort( String pinyin )
+		{
+			if( ( null == pinyin ) || ( TextUtils.isEmpty(pinyin) ) )
+			{
+				return	pinyin;
+			}
+			
+			String[] strSplit = pinyin.split(",");
+			if( ( null == strSplit ) || ( 0 == strSplit.length ) )
+			{
+				return	pinyin;
+			}
+			
+			ArrayList<String> list = new ArrayList<String>();
+			for( int i = 0; i < strSplit.length; i++ )
+			{
+				boolean isInsert = false;
+				for( int j = 0; j < list.size(); j++ )
+				{
+					if( strSplit[i].compareToIgnoreCase(list.get(j)) < 0 )
+					{
+						isInsert = true;
+						list.add(j, strSplit[i]);
+						break;
+					}
+				}
+				
+				if( !isInsert )
+				{
+					list.add(strSplit[i]);
+				}
+			}
+			
+			String result = "";
+			for( int i = 0; i < list.size(); i++ )
+			{
+				if( i > 0 )
+				{
+					result += ",";
+				}
+				result += list.get(i);
+			}
+			
+			return	result;
+		}
+	}	
 
+
+	// 显示 
 	private class FileInfo {
 		String name; // // 菜单名称
 		String path; // // 图片
