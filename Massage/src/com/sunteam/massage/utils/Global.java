@@ -1,5 +1,6 @@
 package com.sunteam.massage.utils;
 
+import android.os.Environment;
 import android.util.Log;
 
 public class Global {
@@ -9,6 +10,10 @@ public class Global {
 	public static int MAX_MONTH = 12;  // 最大月份
 
 	public static int MAX_HOUR = 24;  // 最大小时
+	
+	public static final String DB_PATH_DIR = "//.S918P" ;
+	public static final String DB_PATH = Environment.getExternalStorageDirectory() + DB_PATH_DIR + "//massage.db"; // 数据库路径
+
 	
 	// 焦点标志
 	public static int AT_YEAR = 0;  // 焦点在年

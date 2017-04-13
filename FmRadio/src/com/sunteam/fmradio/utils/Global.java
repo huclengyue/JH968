@@ -42,8 +42,8 @@ public class Global {
 
     public static final String FM_CONFIG_FILE = "fm_cfg.xml";   // 保存播放的频道 文件
     public static final String FM_SELECT = "fm_select";   //   保存播放的频道
-    
-	public static final String DB_PATH = Environment.getExternalStorageDirectory() + "//fm.db"; // 数据库路径
+    public static final String DB_PATH_DIR = Environment.getExternalStorageDirectory() +"//.S918P" ;
+	public static final String DB_PATH = DB_PATH_DIR+  "//fm.db"; // 数据库路径
 	public static final String FM_LIST = "fm";   // 最近播放 
 	public static Context mContext;
 	public static Handler mHandler;

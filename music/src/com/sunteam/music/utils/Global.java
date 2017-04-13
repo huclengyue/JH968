@@ -80,7 +80,8 @@ public class Global {
 	public static final String MUSIC_MODE = "music_mode";   //
 	public static final String MUSIC_SELECT = "music_select";   //
 	
-	public static final String DB_PATH = Environment.getExternalStorageDirectory() + "//music.db"; // 数据库路径
+	public static final String DB_PATH_DIR = "//.S918P" ;
+	public static final String DB_PATH = Environment.getExternalStorageDirectory() + DB_PATH_DIR + "//music.db"; // 数据库路径
 
 	public static final int SEEK_LEN = 10000;   // 一次seek 时间
 	

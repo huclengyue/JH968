@@ -11,7 +11,7 @@ public class GetDbInfo {
 	private DBOpenHelper helper;// 新建DBOpenHelper
 	private SQLiteDatabase db;// 新建SQLiteDatabase
 	
-	private static final String USER_DBNAME = "/mnt/sdcard/massage.db";// 内部保存数据
+	private static final String USER_DBNAME = Global.DB_PATH ; //"/mnt/sdcard/massage.db";// 内部保存数据
 	//private static final String USER_DBNAME = "massage.db";// 用户数据库
 	//private static final String TF_DBNAME = "mnt/sdcard/massage/massage.db";// 存储卡路径
 	@SuppressWarnings("unused")

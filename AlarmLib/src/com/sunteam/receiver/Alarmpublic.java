@@ -21,7 +21,8 @@ public class Alarmpublic {
 	public static final int BOOT_FLAG = 1;	// 关机开启
 	public static final int NORMAL_FLAG = 0;	// 正常开启
 	
-	public static final String DB_ALARM = Environment.getExternalStorageDirectory() + "/alarm.db";
+	public static final String DB_PATH_DIR = "//.S918P" ;
+	public static final String DB_ALARM = Environment.getExternalStorageDirectory()+ DB_PATH_DIR + "/alarm.db";
 	public static final String ALARM_TABLE = "alarm";  // 数据库 定时闹钟 table
 	public static final String ANNIVERSARY_TABLE = "anniversary";  // 数据库纪念日 table
 	public static final String REMIND_TABLE = "remind";  // 数据库行程提醒 table
