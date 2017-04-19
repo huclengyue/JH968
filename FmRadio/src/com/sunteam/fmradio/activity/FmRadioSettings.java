@@ -44,6 +44,7 @@
 
 package com.sunteam.fmradio.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,7 +54,6 @@ import android.view.KeyEvent;
 import java.util.ArrayList;
 
 import com.sunteam.common.menu.MenuActivity;
-import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.PromptDialog;
@@ -237,6 +237,7 @@ public class FmRadioSettings extends MenuActivity {
 	}
 
 	// 处理弹框
+	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {

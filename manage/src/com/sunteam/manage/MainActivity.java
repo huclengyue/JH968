@@ -129,6 +129,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 	protected void onResume() {
 		// TODO 自动生成的方法存根
 		super.onResume();
+		
 		if (mMenuList.size() <= 0) { // 提示无文件
 			Global.debug("\r\n***************222**********mMenuList.size() ==" + mMenuList.size());
 			/*

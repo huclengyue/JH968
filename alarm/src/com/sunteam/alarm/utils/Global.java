@@ -1,7 +1,6 @@
 package com.sunteam.alarm.utils;
 
 import android.content.Context;
-import android.os.Environment;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;

@@ -591,7 +591,8 @@ public final class FmProxy {
     
 	public static boolean getProxy(Context ctx, IFmProxyCallback cb) {
        // boolean status = false;
-        FmProxy p = null;
+        @SuppressWarnings("unused")
+		FmProxy p = null;
         Global.debug("\r\n [getProxy]    =====111==");
         try {
             p = new FmProxy(ctx, cb);

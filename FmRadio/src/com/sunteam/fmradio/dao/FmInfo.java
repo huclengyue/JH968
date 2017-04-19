@@ -1,7 +1,5 @@
 package com.sunteam.fmradio.dao;
 
-import com.sunteam.fmradio.utils.Global;
-
 public class FmInfo {
 	public int _id;// 存储 编号
 	public int chanel;// 文件名 

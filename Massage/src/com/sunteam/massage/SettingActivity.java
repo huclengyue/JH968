@@ -10,7 +10,7 @@ import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.massage.utils.Global;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -393,6 +393,7 @@ public class SettingActivity extends BaseActivity {
 		return super.onKeyUp(keyCode, event);
 	}
 	// 数字键
+	@SuppressWarnings("unused")
 	private void setNumberKey(int num) {
 		
 		if(gNumberFlag == false){
@@ -1412,6 +1413,7 @@ public class SettingActivity extends BaseActivity {
 		{}
 	}
 	
+	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
