@@ -16,5 +16,11 @@
         <item>确定</item>
         <item>退出</item>
     </string-array>
+    <string-array name="escape_character_maplist">
+        <item>点</item>
+        <item>逗号</item>
+        <item>问号</item>
+        <item>冒号</item>
+    </string-array>
 
 </resources>
