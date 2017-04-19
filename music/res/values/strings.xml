@@ -25,8 +25,8 @@
     <string-array name="main1_list">
         <item>内存</item>
         <item>存储卡</item>
-        <item>优盘</item>
     </string-array>
+     <!--    <item>优盘</item> -->
     <string-array name="menu_list">
         <item>删除文件</item>
         <item>清空列表</item>
