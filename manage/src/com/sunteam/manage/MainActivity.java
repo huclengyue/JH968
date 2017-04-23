@@ -76,8 +76,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 		imPhone = BitmapFactory.decodeResource(this.getResources(), R.drawable.phone);
 		imUsb = BitmapFactory.decodeResource(this.getResources(), R.drawable.usbdisk);
 
-		Global.gFileName.clear();
-		Global.gFilePaths.clear();
+
 		Global.gPath.clear();
 		Global.gName.clear();
 
@@ -87,16 +86,9 @@ public class MainActivity extends MenuActivity implements ShowView {
 
 		interface_flag = Global.MAIN_INTERFACE;
 		/* 获取一级界面 */
+		getTopDirList();
+		
 
-		Global.gFileName.add(getResources().getString(R.string.phone));
-		Global.gFilePaths.add(Global.ROOT_PATH);
-
-		Global.gFileName.add(getResources().getString(R.string.sdcard));
-		Global.gFilePaths.add(Global.USER_PATH);
-/*
-		Global.gFileName.add(getResources().getString(R.string.udisk));
-		Global.gFilePaths.add(Global.USB_PATH);
-*/
 		mMenuList = Global.gFileName;// ArrayUtils.strArray2List(gFileName); ;
 
 		if (null == mTitle) {
@@ -218,6 +210,23 @@ public class MainActivity extends MenuActivity implements ShowView {
 	}
 
 	// 显示菜单界面
+	private void getTopDirList() {
+		
+		Global.gFileName.clear();
+		Global.gFilePaths.clear();
+		
+		Global.gFileName.add(getResources().getString(R.string.phone));
+		Global.gFilePaths.add(Global.ROOT_PATH);
+
+		Global.gFileName.add(getResources().getString(R.string.sdcard));
+		Global.gFilePaths.add(Global.USER_PATH);
+/*
+		Global.gFileName.add(getResources().getString(R.string.udisk));
+		Global.gFilePaths.add(Global.USB_PATH);
+*/
+	}
+	
+	// 显示菜单界面
 	private void showMenuList() {
 		Global.debug("showMenuList ====qq=== 111===");
 
@@ -336,18 +345,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 					Global.gName.remove(1);
 					Global.gPath.remove(1);
 
-					Global.gFilePaths.clear();
-					Global.gFileName.clear();
-
-					Global.gFileName.add(getResources().getString(R.string.phone));
-					Global.gFilePaths.add(Global.ROOT_PATH);
-
-					Global.gFileName.add(getResources().getString(R.string.sdcard));
-					Global.gFilePaths.add(Global.USER_PATH);
-/*
-					Global.gFileName.add(getResources().getString(R.string.udisk));
-					Global.gFilePaths.add(Global.USB_PATH);
-*/
+					getTopDirList();
 					setListData(Global.gFileName);
 					mMenuView.setSelectItem(gSelecyId[Global.gPathNum]);
 					Global.debug("[******]gSelecyId[gPathNum] === " + gSelecyId[Global.gPathNum]);
@@ -653,18 +651,7 @@ public class MainActivity extends MenuActivity implements ShowView {
 		Global.gName.add(getResources().getString(R.string.app_name));
 		Global.gPathNum = 1;
 
-		Global.gFilePaths.clear();
-		Global.gFileName.clear();
-
-		Global.gFileName.add(getResources().getString(R.string.phone));
-		Global.gFilePaths.add(Global.ROOT_PATH);
-
-		Global.gFileName.add(getResources().getString(R.string.sdcard));
-		Global.gFilePaths.add(Global.USER_PATH);
-/*  去除U盘 
-		Global.gFileName.add(getResources().getString(R.string.udisk));
-		Global.gFilePaths.add(Global.USB_PATH);
-*/
+		getTopDirList();
 		interface_flag = Global.MAIN_INTERFACE;
 
 		setListData(Global.gFileName);
