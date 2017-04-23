@@ -611,7 +611,7 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 
 	// 复制文件
 	private static void copyFile(String oldFile, String newFile) {
-		int i;
+	
 		FileInputStream fis;
 		FileOutputStream fos;
 
@@ -619,15 +619,13 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		try {
 			fis = new FileInputStream(oldFile);
 			fos = new FileOutputStream(newFile);
-			do {
-				// 按字节读写
-				if ((i = fis.read()) != -1) {
-					fos.write(i);
-				}
-				if (gPastFlag == false) {
-					break;
-				}
-			} while (i != -1);
+			
+			 byte[] bt = new byte[1024];  
+	         int c;
+	         
+	         while((c=fis.read(bt)) > 0){  
+	        	 fos.write(bt,0,c);  
+	         }			
 			// 关闭文件
 			if (fis != null) {
 				fis.close();
