@@ -51,8 +51,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.w3c.dom.Comment;
-
 import android.R.bool;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
