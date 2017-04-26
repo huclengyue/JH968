@@ -290,12 +290,14 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			mMenuList = mTmpList;
 			mTitle = getResources().getString(R.string.title_nohearphone); //
 //			updateMuted(true);
-			gheadin = false;
+			gheadin = false;		
 		}
 
 		Global.debug("\r\n [onCreate]=============111 " + mTitle);
 		super.onCreate(savedInstanceState);
-
+		
+		TtsUtils.getInstance().speak(getResources().getString(R.string.hearphone_notin));
+		
 		Init();
 	}
 
@@ -424,13 +426,12 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		TtsUtils.getInstance().setSunteamParameter(0);
 		Global.debug("\r\n  [onResume()]   =====END--=--- flag =" + flag + "mSearchFlag ="+mSearchFlag) ;
 		
-		if(mSearchFlag == false){
+		if(mSearchFlag == false){ // 正常状态
 			TtsUtils.getInstance().setCompletedListener(mCompletedListener);
 		}
-		else{
+		else{ // 电台搜索
 			TtsUtils.getInstance().setCompletedListener(null);
-		}		
-
+		}
 	}
 
 	@Override
