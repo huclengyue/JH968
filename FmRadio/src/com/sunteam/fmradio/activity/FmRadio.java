@@ -51,6 +51,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.w3c.dom.Comment;
+
 import android.R.bool;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -89,6 +91,7 @@ import com.iflytek.cloud.InitListener;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.tts.TtsCompletedListener;
 import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.CommonConstant;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.SharedPrefUtils;
 import com.sunteam.common.utils.dialog.PromptListener;
@@ -368,7 +371,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		TtsUtils.getInstance().setCompletedListener(null);
 		
 		int flag = TtsUtils.getInstance().getSunteamParameter();
-		flag = flag | TtsUtils.COMMON_SPEAKING_VOLUME ; // 关闭
+		flag = flag | CommonConstant.BACKGROUND_SPEAKING_VOLUME ; // 关闭
 		TtsUtils.getInstance().setSunteamParameter(flag);
 		
 		mytimer.cancel();
@@ -422,7 +425,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 		// TtsUtils.getInstance().stop();
 		
 		int flag = TtsUtils.getInstance().getSunteamParameter();
-		flag = flag & (~TtsUtils.COMMON_SPEAKING_VOLUME); // 关闭
+		flag = flag & (~CommonConstant.BACKGROUND_SPEAKING_VOLUME); // 关闭
 		TtsUtils.getInstance().setSunteamParameter(0);
 		Global.debug("\r\n  [onResume()]   =====END--=--- flag =" + flag + "mSearchFlag ="+mSearchFlag) ;
 		
