@@ -7,6 +7,7 @@ import java.util.Calendar;
 import com.sunteam.alarmlib.R;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuGlobal;
+import com.sunteam.common.utils.BrightnessUtils;
 //import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.dao.Alarminfo;
@@ -546,22 +547,5 @@ public class Alarm_receiver_Activity extends BaseActivity implements MyPlayer.On
 		finish();
 		return true;
 	//	return super.onKeyUp(keyCode, event);	
-	}
-	
-	
-	@SuppressWarnings("deprecation")
-	private void acquireWakeLock(Context context) {
-		if (null == mWakeLock) {
-			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, context.getClass().getName());
-			mWakeLock.acquire();
-		}
-	}
-
-	private void releaseWakeLock() {
-		if (null != mWakeLock && mWakeLock.isHeld()) {
-			mWakeLock.release();
-			mWakeLock = null;
-		}
 	}
 }

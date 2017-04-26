@@ -203,9 +203,9 @@ public class PlayActivity extends RecordBaseActivity implements MyPlayer.OnState
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(receiver, intentFilter);
 		if (myPlayer.state() == MyPlayer.PLAYING_PAUSED_STATE) {
-			Global.releaseWakeLock(); // ÔÝÍ£Ê± ¿ÉÒÔÐÝÃß
+			releaseWakeLock(); // ÔÝÍ£Ê± ¿ÉÒÔÐÝÃß
 		} else {
-			Global.acquireWakeLock(this); // ½ûÖ¹ÐÝÃß
+			acquireWakeLock(this); // ½ûÖ¹ÐÝÃß
 		}
 	}
 
@@ -215,7 +215,7 @@ public class PlayActivity extends RecordBaseActivity implements MyPlayer.OnState
 		super.onPause();
 		unregisterReceiver(receiver);
 
-		Global.releaseWakeLock(); // ´ò¿ªÐÝÃß
+		releaseWakeLock(); // ´ò¿ªÐÝÃß
 	}
 
 	private void updateUI() {
@@ -265,11 +265,11 @@ public class PlayActivity extends RecordBaseActivity implements MyPlayer.OnState
 					tvTotalTime.setText(String.format(mTimerFormatMS, total / 60, total % 60));
 				}
 				updateUI();
-				Global.acquireWakeLock(this); // ²¥·Å×´Ì¬½ûÖ¹ÐÝÃß
+				acquireWakeLock(this); // ²¥·Å×´Ì¬½ûÖ¹ÐÝÃß
 			} else if (myPlayer.state() == MyPlayer.PLAYING_STATE) {
 				myPlayer.pausePlayback();
 				imageButton.setBackgroundResource(R.drawable.pause);
-				Global.releaseWakeLock(); // ÔÝÍ£Ê± ¿ÉÒÔÐÝÃß
+				releaseWakeLock(); // ÔÝÍ£Ê± ¿ÉÒÔÐÝÃß
 			}
 		} else if (keyCode == KeyEvent.KEYCODE_DPAD_UP && action == KeyEvent.ACTION_UP) {
 			previous();

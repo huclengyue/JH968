@@ -123,12 +123,12 @@ public class Alarm_countdownActivity extends BaseActivity implements MyPlayer.On
 	protected void onResume() {
 		super.onResume();
 
-		Global.acquireWakeLock(this);
+		acquireWakeLock(this);
 	};
 
 	protected void onPause() {
 		super.onPause();
-		Global.releaseWakeLock();
+		releaseWakeLock();
 	};
 
 	// 1秒钟定时
@@ -197,7 +197,7 @@ public class Alarm_countdownActivity extends BaseActivity implements MyPlayer.On
 		if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
 			if (gCountDown_falg == START_COUNTDOWN) {
 				gCountDown_falg = PAUSE_COUNTDOWN;
-				Global.releaseWakeLock();
+				releaseWakeLock();
 				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.countdown_Pause));
 				mPromptDialog.show();
 				mPromptDialog.setPromptListener(new PromptListener() {
@@ -212,7 +212,7 @@ public class Alarm_countdownActivity extends BaseActivity implements MyPlayer.On
 					}
 				});
 			} else if (gCountDown_falg == PAUSE_COUNTDOWN) {
-				Global.acquireWakeLock(this);
+				acquireWakeLock(this);
 				PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.countdown_resum));
 				mPromptDialog.show();
 				mPromptDialog.setPromptListener(new PromptListener() {

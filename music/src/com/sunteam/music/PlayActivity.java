@@ -1010,7 +1010,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 		}
 		setPalyst(true);
 	}
-
+/*
 	@SuppressWarnings("deprecation")
 	private void acquireWakeLock(Context context) {
 		if (null == mWakeLock) {
@@ -1026,7 +1026,7 @@ public class PlayActivity extends BaseActivity implements MyPlayer.OnStateChange
 			mWakeLock = null;
 		}
 	}
-
+*/
 	// 获取当前路径
 	private String getCurPath() {
 		return gPlayListPaths.get(currentIndex);

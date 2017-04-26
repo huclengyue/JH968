@@ -108,7 +108,7 @@ public class Alarmpublic {
 			Calendar calendar = Calendar.getInstance();  
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			calendar.add(Calendar.SECOND, min_sec);
-			//calendar.add(Calendar.SECOND, 5);
+			//calendar.add(Calendar.SECOND, 30);
 	
 			Alarmpublic.debug("\r\n calendar.getTimeInMillis() - calendar_now.getTimeInMillis() =  "+ (calendar.getTimeInMillis() - System.currentTimeMillis())/1000);
 
@@ -349,7 +349,6 @@ public class Alarmpublic {
 		dbAlarmInfo.closeDb();  // 关闭数据库
 				
 		//Alarmpublic.debug("\r\n[GetNearRemind] min_sec == "+ min_sec);
-		
 		return min_sec;		
 	}
 	

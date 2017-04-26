@@ -682,13 +682,13 @@ public class ManageMenuActivity extends MenuActivity implements PromptListener, 
 		Global.debug("1111111111111111111111111111");
 		try {
 			gPastFlag = true;
-			Global.acquireWakeLock(this); // 禁止休眠
+			acquireWakeLock(this); // 禁止休眠
 			pasteFile();
 			if (gPastFlag == true) {
 				gPastFlag = false;
 				// onComplete();
 			}
-			Global.releaseWakeLock();
+			releaseWakeLock();
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
