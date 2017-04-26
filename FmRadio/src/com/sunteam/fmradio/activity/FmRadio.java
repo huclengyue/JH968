@@ -2229,7 +2229,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 
 		}
 	}
-
+/*
 	private void acquireWakeLock(Context context) {
 		if (null == mWakeLock) {
 			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -2247,7 +2247,7 @@ public class FmRadio extends MenuActivity implements IRadioViewRxTouchEventHandl
 			// Global.debug("\r\n [releaseWakeLock] === 可以休眠=======");
 		}
 	}
-
+*/
 	/*
 	 * private void setWiredDeviceConnectionState1() { AudioManager audioManager
 	 * = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

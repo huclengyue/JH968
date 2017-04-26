@@ -1,5 +1,7 @@
 package com.sunteam.alarm.utils;
 
+import com.sunteam.common.utils.BrightnessUtils;
+
 import android.content.Context;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -68,7 +70,7 @@ public class Global {
 	public static void debug(String s) {
 		Log.d(TAG, s);
 	}
-
+/*
 	public static WakeLock mWakeLock; // 禁止休眠
 
 	@SuppressWarnings("deprecation")
@@ -81,10 +83,11 @@ public class Global {
 	}
 
 	public static void releaseWakeLock() {
+		BrightnessUtils.setWakeDisp(5);  // 唤醒系统 防止出现开锁进休眠的问题
 		if (null != mWakeLock && mWakeLock.isHeld()) {
 			mWakeLock.release();
 			mWakeLock = null;
 		}
 	}
-
+	*/
 }

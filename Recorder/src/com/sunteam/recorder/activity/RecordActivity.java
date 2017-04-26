@@ -268,7 +268,7 @@ public class RecordActivity extends BaseActivity {
 		super.onPause();
 		unregisterReceiver(batteryReceiver);
 
-		Global.releaseWakeLock(); // 打开休眠
+		releaseWakeLock(); // 打开休眠
 	}
 	// OK 键处理
 	private void Entern_KeyUp(){
@@ -296,21 +296,21 @@ public class RecordActivity extends BaseActivity {
 				//TtsUtils.getInstance().speak(rs.getString(R.string.startRecord), TextToSpeech.QUEUE_FLUSH);
 				TtsUtils.getInstance().speak(rs.getString(R.string.startRecord));
 				// showDialog();
-				Global.acquireWakeLock(this); // 禁止休眠
+				acquireWakeLock(this); // 禁止休眠
 				//RecordHandler.sendEmptyMessage(1);
 			}
 
 		} else if (mState == state_recording) { // 正在录音
 			stop();
 			Global.showToast(RecordActivity.this, R.string.saveAndexit, RecordHandler, 2);
-			Global.releaseWakeLock(); // 打开休眠
+			releaseWakeLock(); // 打开休眠
 			// goback(); // houding@20160902 统一在RecordHandler中处理
 		} else if (mState == state_ready) {
 			TtsUtils.getInstance().stop();
 			mState = state_no_record;
 			// goback(); // houding@20160902 统一在RecordHandler中处理
 			Global.showToast(RecordActivity.this, R.string.invalid_file, RecordHandler, 2);
-			Global.releaseWakeLock(); // 打开休眠
+			releaseWakeLock(); // 打开休眠
 		}
 	}
 	@Override
@@ -616,7 +616,7 @@ public class RecordActivity extends BaseActivity {
 		// uiHandler.sendMessageDelayed(msg, 1000); // 向Handler发送消息,更新UI
 		mState = state_no_record;
 
-		Global.releaseWakeLock(); // 打开休眠
+		releaseWakeLock(); // 打开休眠
 	}
 
 	private final static int CMD_RECORDFAIL = 2001;

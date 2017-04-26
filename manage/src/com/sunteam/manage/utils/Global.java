@@ -70,7 +70,7 @@ public class Global {
 	public static void debug(String s) {
 		Log.d(TAG, s);
 	}
-	
+/*	
 	public static WakeLock mWakeLock; // 禁止休眠
 	
 	@SuppressWarnings("deprecation")
@@ -88,4 +88,5 @@ public class Global {
 			mWakeLock = null;
 		}
 	}
+	*/
 }

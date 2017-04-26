@@ -31,6 +31,7 @@ public class Global {
 	public static int MSG_GOBACK_SAVE = 2;  // ½çÃæ·µ»Ø
 	public static int MSG_ONRESUM = 3;
 	public static int MSG_BACK = 4;   // back
+/*
 	public static WakeLock mWakeLock; // ½ûÖ¹ÐÝÃß
 	
 	@SuppressWarnings("deprecation")
@@ -48,7 +49,7 @@ public class Global {
 			mWakeLock = null;
 		}
 	}
-	
+	*/
 	public static final String TAG = "zbc";
 	
 	
